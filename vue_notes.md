@@ -20,3 +20,8 @@
 
 ### import { ref } from 'vue' 
 ### const count = ref(0)
+
+
+## Si flex-grow: 1 no hace nada
+
+### Esto solo funciona si el header está dentro de un contenedor flexible que le permite crecer.

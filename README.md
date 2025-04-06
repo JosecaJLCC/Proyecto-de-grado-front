@@ -34,9 +34,22 @@ npm run build
 npm run lint
 ```
 
-### instalar axios 
-
+### instalar axios
 
 ```sh
 npm install axios -E
 ```
+
+### instalar CoreUI
+
+```sh
+
+npm install @coreui/icons
+npm install @coreui/icons-vue 
+```
+### instalar Sweet alert para alertas
+
+``` sh
+npm install sweetalert2
+```
+
