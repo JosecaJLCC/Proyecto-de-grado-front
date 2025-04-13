@@ -53,3 +53,16 @@ npm install @coreui/icons-vue
 npm install sweetalert2
 ```
 
+### instalar Pinia para utilizar variables globales
+``` sh
+npm install pinia
+```
+## HAcer lo siguiente en el main.js para usar Pinia en el main.js
+``` js
+import { createPinia } from 'pinia'
+const pinia = createPinia();
+
+createApp(App)
+.use(pinia).mount('#app')
+
+```

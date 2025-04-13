@@ -22,7 +22,7 @@
                   <CIcon :icon="cilSettings" class="icon-sidebar"/>
                   <span>Configuracion</span>
                 </a>
-                <a href="">
+                <a href="" v-on:click="cerrarSesion">
                   <CIcon :icon="cilPowerStandby" class="icon-sidebar"/>
                   <span>Cerrar Sesion</span>
                 </a>
@@ -65,7 +65,7 @@
                 </li>
                 <li>
                         <RouterLink class="rutas-sidebar" :to="{ name: 'registrar-usuario' }">
-                          <CIcon :icon="cilSettings" class="icon-sidebar"/>
+                          <CIcon :icon="cilPeople" class="icon-sidebar"/>
                           <span>Administrador</span>
                         </RouterLink>
                 </li>
@@ -80,7 +80,7 @@
   import { CIcon } from '@coreui/icons-vue';
   import { cilHome, cilUserPlus, cilClipboard, cilNoteAdd,
     cilSettings, cilMenu, cilArrowLeft, cilChevronBottom,
-    cilChatBubble, cilPowerStandby, cilBell, cilUserFemale } from '@coreui/icons';
+    cilChatBubble, cilPowerStandby, cilBell, cilUserFemale, cilPeople } from '@coreui/icons';
   import { ref, watch } from 'vue';
   let tamanioSidebar = ref('300px');
   let cambioIcon = ref(true);
@@ -91,6 +91,16 @@
     console.log("Nuevo tamaño:", newTamanioSidebar);
   }, { immediate: true });
 
+/* al pulsar el boton de cerrar sesion se ejecutara esta funcion */
+  const cerrarSesion = () => {
+    localStorage.removeItem('token');
+    token.value = null;
+    nombre_usuario.value = "";
+    correo.value = "";
+    router.push({ name: 'login' });
+  };
+
+  /* Funcion que maneja el tamaño del sidebar y algunos de sus componentes que cambian de tamaño, ademas del titulo del header*/
 const mostrarSidebar = () => {
   tamanioSidebar.value = tamanioSidebar.value === "300px" ? "50px" : "300px";
   cambioIcon.value ? cambioIcon.value=false : cambioIcon.value=true;
