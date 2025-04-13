@@ -31,10 +31,10 @@
 
         </section>
     </header>
-
-    <div :class='claseTamanioSidebar'>
+<!-- hasta aca puedo volver borrando lo que hice -->
+    <div class="sidebar" :style='{width: tamanioSidebar}'>
         <section class="section-logo-sidebar">
-            <img src="../assets/CapacabanaLogo.png" alt="" :class="claseLogo">
+            <img src="../assets/CapacabanaLogo.png" alt="" class="logo-sidebar" :style="{width: tamanioLogo, height: tamanioLogo}">
         </section>
 
         <nav class="nav-sidebar">
@@ -81,11 +81,18 @@
   import { cilHome, cilUserPlus, cilClipboard, cilNoteAdd,
     cilSettings, cilMenu, cilArrowLeft, cilChevronBottom,
     cilChatBubble, cilPowerStandby, cilBell, cilUserFemale, cilPeople } from '@coreui/icons';
-  import { ref, watch } from 'vue';
-  let tamanioSidebar = ref('300px');
+  import { ref, watch, computed } from 'vue';
+
+/* uso de variables globales con pinia */
+  import { useSidebarStore } from '@/store/sidebar.js';
+/* fsdgfhghdsdfgfghkjhgsfdffghjkj */
+  let sidebarStore = useSidebarStore();
+  /* el ancho del div del sidebar */
+  let tamanioSidebar = computed(() => sidebarStore.tamanioSidebar);
   let cambioIcon = ref(true);
-  let claseLogo=ref('logo-sidebar');
-  let claseTamanioSidebar=ref('sidebar');
+  /* el ancho de la img de la institucion que esta dentro del sidebar */
+  let tamanioLogo=ref('100px');
+
 
   watch(tamanioSidebar, (newTamanioSidebar) => {
     console.log("Nuevo tamaño:", newTamanioSidebar);
@@ -102,10 +109,11 @@
 
   /* Funcion que maneja el tamaño del sidebar y algunos de sus componentes que cambian de tamaño, ademas del titulo del header*/
 const mostrarSidebar = () => {
-  tamanioSidebar.value = tamanioSidebar.value === "300px" ? "50px" : "300px";
+  /* tamanioSidebar.value = tamanioSidebar.value === "300px" ? "50px" : "300px"; */
+  sidebarStore.toggleSidebar();
   cambioIcon.value ? cambioIcon.value=false : cambioIcon.value=true;
-  claseLogo.value=='logo-sidebar'? claseLogo.value = 'logo-sidebar2' :  claseLogo.value = 'logo-sidebar';
-  claseTamanioSidebar.value=='sidebar' ? claseTamanioSidebar.value='sidebar2' : claseTamanioSidebar.value='sidebar';
+  tamanioLogo.value = tamanioLogo.value === "100px" ? "30px" : "100px";
+
 };
 
 </script>
@@ -151,38 +159,32 @@ const mostrarSidebar = () => {
 
     /* Los cambios aca se los debe hacer al sidebar2 */
     .sidebar{
-        /* background-color: rgb(224, 63, 62); */
         height: 100vh;
-        width: 300px;
+        /* width: 300px; */
         display: flex;
         flex-direction: column;
-        /* align-items: center; */
         row-gap: 10px;
         background-color: rgb(0, 128, 128);
         transition: width 0.3s ease;
         position: fixed;
         top: 82px;
-        /* border: 3px solid orange; */
         padding-top:10px;
         border-radius: 0px 20px 20px 0px;
         z-index: 100;
     }
-    .sidebar2{
-        /* background-color: rgb(224, 63, 62); */
+    /* .sidebar2{
         height: 100vh;
         width: 50px;
         display: flex;
         flex-direction: column;
-        /* align-items: center; */
         row-gap: 10px;
         background-color: rgb(0, 128, 128);
         transition: width 0.3s ease;
         position: fixed;
         top: 82px;
-        /* border: 3px solid orange; */
         padding-top:10px;
         border-radius: 0px 20px 20px 0px;
-    }
+    } */
 
     .section-logo-sidebar{
         display: flex;
@@ -198,17 +200,14 @@ const mostrarSidebar = () => {
  }
 
  .logo-sidebar {
-    width: 100px;
-    height: 100px;
     border-radius: 50%;
-    padding: 5px;
  }
 
- .logo-sidebar2{
+/*  .logo-sidebar2{
     width: 30px;
     height: 30px;
     border-radius: 50%;
- }
+ } */
 
  .perfil-sidebar{
     width: 40px;

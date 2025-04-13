@@ -1,7 +1,7 @@
 <template>
   <div>
     <Sidebar/>
-    <div class="container-newregister">
+    <div class="container-newregister" :style="{paddingLeft: tamanioSidebar}">
 
       <fieldset class="form-newregister">
         <legend class="legend-newregister">
@@ -100,11 +100,15 @@
 import Sidebar from '@/components/Sidebar.vue';
 import { CIcon } from '@coreui/icons-vue';
 import { cilUserPlus, cilCheckAlt, cilX } from '@coreui/icons';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import { Persona } from '@/models/Persona.js';
 
+/* pinia */
+import { useSidebarStore } from '@/store/sidebar.js';
+let sidebarStore = useSidebarStore();
+let tamanioSidebar = computed(()=>sidebarStore.tamanioSidebar);
 
 let ci=ref("");
 let extension=ref("");
@@ -157,7 +161,7 @@ const registrarPersona = async() =>{
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-left: 300px;
+    /* padding-left: 300px; */
     /* min-height: 100vh; */
     /* border: 2px solid gold; */
   }
@@ -186,9 +190,6 @@ const registrarPersona = async() =>{
     display: flex;
     flex-direction: column;
     row-gap: 20px;
-    /* flex-grow: 1; */
-    /* min-height: 100vh; */
-   /*border: 2px solid green;*/
   }
 
   .content-newregister > input{
