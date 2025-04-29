@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Sidebar/>
+
     <div class="container-newregister">
 
       <fieldset class="form-newregister">
@@ -8,7 +8,7 @@
           <!-- <CIcon :icon="cilUserPlus" class="icon-newregister"/> -->
            <span class="titulo-newregister">DATOS ADICIONALES</span>
         </legend>
-          
+
 
       </fieldset>
     </div>
@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import Sidebar from '@/components/Sidebar.vue';
+
 import { CIcon } from '@coreui/icons-vue';
 import { cilUserPlus, cilCheckAlt, cilX } from '@coreui/icons';
 

@@ -6,12 +6,12 @@
       </legend>
       <h2 id="title-login">INICIO DE SESION</h2>
       <br />
-      <label for=""> <i>CORREO</i></label>
+      <label for=""> CORREO</label>
       <div class="entrada-icon-login">
         <input class="input-login" v-model="correo" type="email" />
         <CIcon :icon="cilUser" class="icon-login"/>
       </div>
-      <label for=""><i>CONTRASEÑA</i></label>
+      <label for="">CONTRASEÑA</label>
 
       <div class="entrada-icon-login">
         <input class="input-login" v-model="clave" :type="tipoClave" />

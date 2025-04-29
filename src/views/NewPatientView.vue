@@ -1,8 +1,6 @@
 <template>
   <div>
-    <Sidebar/>
-    <div class="container-newregister" :style="{paddingLeft: tamanioSidebar}">
-
+    <div class="container-newregister">
       <fieldset class="form-newregister">
         <legend class="legend-newregister">
           <!-- <CIcon :icon="cilUserPlus" class="icon-newregister"/> -->
@@ -60,7 +58,6 @@
               <option value="FEMENINO">FEMENINO</option>
               <option value="FEMENINO">OTRO</option>
             </select>
-
           </section>
 
           <section class="content-newregister">
@@ -97,18 +94,16 @@
 </template>
 
 <script setup>
-import Sidebar from '@/components/Sidebar.vue';
+
 import { CIcon } from '@coreui/icons-vue';
 import { cilUserPlus, cilCheckAlt, cilX } from '@coreui/icons';
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import { Persona } from '@/models/Persona.js';
-
-/* pinia */
-import { useSidebarStore } from '@/store/sidebar.js';
-let sidebarStore = useSidebarStore();
-let tamanioSidebar = computed(()=>sidebarStore.tamanioSidebar);
+/* router */
+import { useRouter } from 'vue-router';
+let router = useRouter();
 
 let ci=ref("");
 let extension=ref("");
@@ -128,30 +123,38 @@ let av_calle=ref("");
 let nro_puerta=ref("");
 
 
+
 const registrarPersona = async() =>{
   /* Llamamos al modal persona para recoger los datos */
-  let persona = new Persona(ci, extension, nombre, paterno, materno, nacionalidad,
-               estado_civil, nro_telf, sexo, fecha_nacimiento,
-               departamento, municipio, zona, av_calle, nro_puerta);
-
-  let resultSwal = await Swal.fire({
-  title: "Are you sure?",
-  text: "You won't be able to revert this!",
-  icon: "warning",
-  showCancelButton: true,
-  confirmButtonColor: "#3085d6",
-  cancelButtonColor: "#d33",
-  confirmButtonText: "Yes, delete it!"
-})
-/* me quede aca en frontend */
+  let persona = new Persona(ci.value, extension.value, nombre.value, paterno.value, materno.value, nacionalidad.value,
+               estado_civil.value, nro_telf.value, sexo.value, fecha_nacimiento.value,
+               departamento.value, municipio.value, zona.value, av_calle.value, nro_puerta.value/* , centro_salud.value */);
+               console.log("persona", persona)
+  try {
+    let resultSwal = await Swal.fire({
+    title: "¿Estas seguro?",
+    text: "Se registrara nuevos datos",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Agregar registro"
+  })
+/* me quede aca en esta vista, el front sigue avanzando */
   if (resultSwal.isConfirmed) {
     const resultado = await axios.post('http://localhost:3000/api/v1/people/register', persona);
+    console.log("myRes",resultado)
     Swal.fire({
       title: "¡Registro Exitoso!",
       text: "Tus datos han sido registrados",
       icon: "success"
     });
+    router.push({name: 'nuevo-registro'})
   };
+  } catch (error) {
+    console.log("errorPatient", error)
+  }
+
 }
 
 </script>
@@ -171,7 +174,7 @@ const registrarPersona = async() =>{
     flex-direction: column;
     background-color: rgb(0, 128, 128);
     border: none;
-    margin-top: 80px;
+
     /* border: 2px solid black; */
     border-radius: 20px;
     padding: 20px;

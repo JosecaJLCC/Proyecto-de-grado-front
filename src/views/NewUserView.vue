@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Sidebar/>
+
     <div class="container-newuser">
 
       <fieldset class="form-newuser">
@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import Sidebar from '@/components/Sidebar.vue';
+
 import { CIcon } from '@coreui/icons-vue';
 import { cilUserPlus, cilCheckAlt, cilX } from '@coreui/icons';
 import { ref } from 'vue';

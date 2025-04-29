@@ -1,14 +1,13 @@
 <template>
   <div>
-    <Sidebar/>
-    
+    <TableAttention/>
   </div>
 
 </template>
 
 <script setup>
-import Sidebar from '@/components/Sidebar.vue';
 
+import TableAttention from '@/components/TableAttention.vue';
 
 </script>
 

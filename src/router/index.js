@@ -6,7 +6,8 @@ import HomeView from '@/views/HomeView.vue'
 import NewPatientView from '@/views/NewPatientView.vue'
 import NewAttentionView from '@/views/NewAttentionView.vue'
 import GeneralHistoryView from '@/views/GeneralHistoryView.vue'
-import PatientDirectionView from '@/views/PatientDirectionView.vue'
+
+import MainLayout from '@/layouts/MainLayout.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,32 +18,38 @@ const router = createRouter({
       component: LoginView,
     },
     {
-      path: '/inicio',
-      name: 'inicio',
-      component: HomeView,
-    },
-    {
-      path: '/nuevo-paciente',
-      name: 'nuevo-paciente',
-      component: NewPatientView,
-    },
-    /* despues de datos personales viene datos de direccion */
-    
-    {
-      path: '/nuevo-registro',
-      name: 'nuevo-registro',
-      component: NewAttentionView,
-    },
-    {
-      path: '/historial-general',
-      name: 'historial-general',
-      component: GeneralHistoryView,
-    },
+      path: '/app',
+      component: MainLayout,
+      children:[
+        {
+          path: 'inicio',
+          name: 'inicio',
+          component: HomeView,
+        },
+        {
+          path: 'nuevo-paciente',
+          name: 'nuevo-paciente',
+          component: NewPatientView,
+        },
+        /* despues de datos personales viene datos de direccion */
 
-    {
-      path: '/registrar-usuario',
-      name: 'registrar-usuario',
-      component: NewUserView,
+        {
+          path: 'nuevo-registro',
+          name: 'nuevo-registro',
+          component: NewAttentionView,
+        },
+        {
+          path: 'historial-general',
+          name: 'historial-general',
+          component: GeneralHistoryView,
+        },
+
+        {
+          path: 'registrar-usuario',
+          name: 'registrar-usuario',
+          component: NewUserView,
+        },
+      ]
     },
 
   ],
