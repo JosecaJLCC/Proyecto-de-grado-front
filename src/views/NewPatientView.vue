@@ -1,5 +1,4 @@
 <template>
-  <div>
     <div class="container-newregister">
       <fieldset class="form-newregister">
         <legend class="legend-newregister">
@@ -90,7 +89,6 @@
 
       </fieldset>
     </div>
-  </div>
 </template>
 
 <script setup>
@@ -166,17 +164,19 @@ const registrarPersona = async() =>{
     align-items: center;
     /* padding-left: 300px; */
     /* min-height: 100vh; */
+    width: 100%;
     /* border: 2px solid gold; */
   }
 
   .form-newregister{
     display: flex;
     flex-direction: column;
-    background-color: rgb(0, 128, 128);
+    /* background-color: rgba(0, 128, 128, .4); */
+    background-color: rgba(0, 128, 128, .5);
     border: none;
 
     /* border: 2px solid black; */
-    border-radius: 20px;
+    /* border-radius: 20px; */
     padding: 20px;
     row-gap: 20px;
   }
@@ -216,7 +216,8 @@ const registrarPersona = async() =>{
 
   .titulo-newregister {
     display: flex;
-    background-color: rgb(224, 63, 62);
+    /* background-color: rgb(224, 63, 62); */
+    background-color: rgb(0, 128, 128);
     border-radius: 20px;
     padding: 5px;
     font-weight: bold;
@@ -235,7 +236,7 @@ const registrarPersona = async() =>{
   }
 
   .form-btn{
-    background-color: rgb(224, 63, 62);
+    background-color: rgb(0, 128, 128);
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -249,7 +250,7 @@ const registrarPersona = async() =>{
   }
 
   .form-btn:hover{
-    background-color: #00ffc8;
+    background-color: rgb(224, 63, 62);
   }
 
   /* Tres columnas en pantallas grandes */
@@ -257,9 +258,7 @@ const registrarPersona = async() =>{
   .form-content-newregister {
     grid-template-columns: repeat(3, 1fr);
   }
-  .form-content-newregister2{
-    /* flex-direction: column; */
-  }
+
 }
 
 /* Dos columnas en pantallas medianas */
@@ -267,10 +266,6 @@ const registrarPersona = async() =>{
   .form-content-newregister {
     grid-template-columns: repeat(2, 1fr);
   }
-  /* .form-content-newregister2{
-    flex-direction: column;
-    row-gap: 20px;
-  } */
 }
 
 /* Una columna en pantallas pequeñas */

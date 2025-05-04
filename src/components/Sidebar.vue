@@ -19,14 +19,18 @@
         <CIcon :icon="cilChatBubble" class="icon-sidebar" />
         <CIcon :icon="cilBell" class="icon-sidebar" />
         <!-- <img src="../assets/logo.svg" class="perfil-sidebar"> -->
-        <CIcon :icon="cilUserFemale" class="perfil-sidebar" />
+        <div class="perfil-section">
+          <CIcon :icon="cilUserFemale" class="perfil-sidebar" />
+          <p>{{ nombre_usuario }}</p>
+          <p>{{ rol }}</p>
+        </div>
         <div class="dropdown-sidebar">
           <CIcon
             :icon="cilChevronBottom"
             class="icon-sidebar desplegar-dropdown"
             @click="desplegarDropDown"
           />
-          <div class="dropdown-content">
+          <div v-show="mostrarDropDown" class="dropdown-content">
             <a href="">
               <CIcon :icon="cilSettings" class="icon-sidebar" />
               <span>Configuracion</span>
@@ -78,8 +82,26 @@
           </li>
           <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'registrar-usuario' }">
-              <CIcon :icon="cilPeople" class="icon-sidebar" />
-              <span>Administrador</span>
+              <CIcon :icon="cilChevronBottom" class="icon-sidebar" />
+              <span>Nuevo Usuario</span>
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink class="rutas-sidebar" :to="{ name: 'registrar-centro-salud' }">
+              <CIcon :icon="cilChevronBottom" class="icon-sidebar" />
+              <span>Nuevo Centro de Salud</span>
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-usuarios' }">
+              <CIcon :icon="cilChevronBottom" class="icon-sidebar" />
+              <span>Usuarios Registrados</span>
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-centro-salud' }">
+              <CIcon :icon="cilChevronBottom" class="icon-sidebar" />
+              <span>Establecimientos de Salud</span>
             </RouterLink>
           </li>
         </ul>
@@ -119,21 +141,34 @@ let cambioIcon = computed(() => sidebarStore.cambioIcon)
 /* el ancho de la img de la institucion que esta dentro del sidebar */
 let tamanioLogo = computed(() => sidebarStore.tamanioLogo)
 
-watch(
-  tamanioSidebar,
-  (newTamanioSidebar) => {
+/* para el despliegue de dropdown  */
+let mostrarDropDown=ref(false);
+
+/* Datos de usuario desde auth.js de store */
+import { useUsuarioStore } from '@/store/usuario.js'
+let authStore = useUsuarioStore();
+let usuario = computed(() => authStore.usuario)
+console.log('usuario sidebar', usuario)
+/* faltan detalles */
+let nombre_usuario = computed(()=>usuario.value?.nombre_usuario ?? 'x');
+
+let rol=computed(()=>usuario.value?.rol ?? 'x');
+
+watch(tamanioSidebar,(newTamanioSidebar) => {
     console.log('Nuevo tamaño:', newTamanioSidebar)
   },
   { immediate: true },
 )
 
+/*  */
+const desplegarDropDown = () => {
+  mostrarDropDown.value = !mostrarDropDown.value
+}
+
 /* al pulsar el boton de cerrar sesion se ejecutara esta funcion */
 const cerrarSesion = () => {
-  localStorage.removeItem('token')
-
-  router.push({
-    name: 'login',
-  })
+  authStore.cerrarSesion();
+  router.push({ name: 'login' });
 }
 
 /* Funcion que maneja el tamaño del sidebar y algunos de sus componentes que cambian de tamaño, ademas del titulo del header*/
@@ -313,5 +348,14 @@ const mostrarSidebar = () => {
   /* padding: 10px; */
   right: 0px;
   row-gap: 10px;
+}
+
+.perfil-section{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  /* border: 2px solid red; */
 }
 </style>

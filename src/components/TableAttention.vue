@@ -1,7 +1,6 @@
 <template>
     <div class="container-tableattention" >
       <div class="header-tableattention">
-
         <section class="search-tableattention">
           <section class="input-tableattention">
             <input type="text" placeholder="INGRESE SU CI" class="input-text-search">
@@ -25,28 +24,24 @@
             <tr v-for="(data, Nro) of datos" v-bind:key="data.cedula">
               <!--  -->
                 <td data-title="N°">{{ Nro + 1 }}</td>
-                <td data-title="cedula">{{ data.cedula }}</td>
-                <td data-title="paterno">{{ data.paterno }}</td>
-                <td data-title="materno">{{ data.materno }}</td>
-                <td data-title="nombre">{{ data.nombre }}</td>
-                <td><button>VER</button><button>ATENDER</button></td>
-
+                <td data-title="CI">{{ data.cedula }}</td>
+                <td data-title="PATERNO">{{ data.paterno }}</td>
+                <td data-title="MATERNO">{{ data.materno }}</td>
+                <td data-title="NOMBRES">{{ data.nombre }}</td>
+                <td data-title="ACCIONES"><button>VER MÁS</button><button>ATENDER</button></td>
             </tr>
-
         </tbody>
     </table>
     </div>
 </template>
 
 <script setup>
-import { useSidebarStore } from '@/store/sidebar.js';
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { CIcon } from '@coreui/icons-vue';
 import { cilUser, cilLockLocked, cilLowVision, cilLockUnlocked, cilSearch } from '@coreui/icons';
 import axios from 'axios';
 
-let sidebarStore = useSidebarStore();
-let tamanioSidebar = computed(()=>sidebarStore.tamanioSidebar)
+
 let datos = ref([]);
 onMounted(async()=>{
   const resultado = await axios.get('http://localhost:3000/api/v1/people/show');
@@ -57,13 +52,17 @@ onMounted(async()=>{
 </script>
 
 <style scoped>
-.container-tableattention{
+.container-tableattention {
   color: black;
-  border: 3px solid green;
+  /* border: 3px solid green; */
+  padding-left: 3px;
   transition: width 0.3s ease;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-.header-tableattention{
+.header-tableattention {
   display: flex;
   justify-content: end;
   align-items: center;
@@ -71,29 +70,26 @@ onMounted(async()=>{
   padding: 10px;
 }
 
-.search-tableattention{
+.search-tableattention {
   display: flex;
   justify-content: space-between;
   column-gap: 10px;
 }
 
-.input-tableattention{
+.input-tableattention {
   display: flex;
   position: relative;
-
   align-items: center;
-
-
 }
-.icon-tableattention{
+
+.icon-tableattention {
   width: 20px;
   height: 20px;
   position: absolute;
   left: 5px;
-
 }
 
-.btn-search{
+.btn-search {
   background-color: rgb(0, 128, 128);
   color: white;
   width: 150px;
@@ -103,84 +99,89 @@ onMounted(async()=>{
   font-weight: bold;
 }
 
-.input-text-search{
+.input-text-search {
   padding-left: 25px;
   border-radius: 20px;
 }
 
-.btn-search, .input-text-search{
+.btn-search, .input-text-search {
   font-size: 1.3em;
   height: 35px;
 }
 
-.date-tableattention{
+.date-tableattention {
   background-color: rgb(0, 128, 128);
   color: white;
   padding: 5px;
   border-radius: 20px;
 }
 
-/*  */
-table{
-    border-collapse: collapse;
-    margin: 0;
-    width: 100%;
-    box-shadow: 0 0 5px rgba(0,0,0,-25);
-    border: 3px solid white;
-
+/* Tabla */
+table {
+  border-collapse: collapse;
+  margin: 0;
+  width: 100%;
+  box-shadow: 0 0 5px rgba(0, 0, 0, -25);
+  /* border: 3px solid black; */
 }
 
-table tr{
-    padding: .45em;
+table tr {
+  padding: .45em;
 }
 
-thead tr{
-    background-color: rgb(0, 128, 128);
+thead tr {
+  background-color: rgb(0, 128, 128);
 }
 
-tbody   tr:nth-child(even){
-    background-color: rgba(0, 128, 128, .1);
+tbody tr:nth-child(even) {
+  background-color: rgba(0, 128, 128, .3);
 }
 
-table th, table td{
-    font-size: 1em;
-    padding: 1em;
-    text-align: center;
+table th, table td {
+  font-size: 1em;
+  padding: 1em;
+  text-align: center;
 }
 
-thead th{
-    color: white;
-    font-size: 1.15em;
+thead th {
+  color: white;
+  font-size: 1.15em;
 }
 
-@media (max-width:500px){
-  .container-tableattention{
+
+@media (max-width: 800px) {
+  /* .container-tableattention {
     border: 3px solid red;
+  } */
+
+  table thead tr {
+    display: none;
   }
 
-    table thead tr{
-        display: none;
-    }
+  table tr {
+    display: block;
+  }
 
-    table tr{
-        display: block;
-    }
-    table th, table td{
-        padding: .5em
-    }
-    table td{
-        text-align: right;
-        display: block;
-        font-size: 1em;
-    }
-    table td::before{
-        content: attr(data-title)": ";
-        float: left;
-    }
+  table th, table td {
+    padding: .5em;
+    text-align: right;
+  }
 
-    tbody tr:nth-child(even){
-        background-color: 0 0 5px rgba(0,0,0,-25);;
-        /* color: white; */
-    }
+  table td {
+    text-align: right;
+    display: block;
+    font-size: 1em;
+  }
+
+  table td::before {
+    content: attr(data-title)": ";
+    float: left;
+    font-weight: bold;
+    color: #333;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: rgba(0, 128, 128, 0.1);
+  }
 }
 </style>

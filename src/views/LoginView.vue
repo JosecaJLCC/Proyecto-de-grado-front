@@ -1,6 +1,7 @@
 <template>
   <div id="container-login">
-    <fieldset id="formulario-login">
+    <form @submit.prevent="iniciarSesion">
+      <fieldset id="formulario-login">
       <legend id="legend-login">
         <img class="logo-login" src="../assets/CapacabanaLogo.png" alt="" />
       </legend>
@@ -18,10 +19,11 @@
         <CIcon :icon="cilLockLocked" class="icon-login"/>
         <CIcon :icon="cilLowVision" class="icon-login-vision" v-on:click="verClave"/>
       </div>
-      <button id="button-login" v-on:click="iniciarSesion">INGRESAR</button>
+      <button id="button-login" type="submit">INGRESAR</button>
       <a id="link-login" href="">¿Olvidó sus credenciales?</a>
 
     </fieldset>
+    </form>
   </div>
 </template>
 
@@ -39,6 +41,11 @@ const router = useRouter()
 let correo = ref('')
 let clave = ref('')
 let tipoClave = ref('password');
+
+/* Para la autenticacion y guardado de info del usuario */
+import { useUsuarioStore } from '@/store/usuario.js';
+let usuarioStore = useUsuarioStore();
+
 const iniciarSesion = async () => {
   /* Validar si los inputs no esten vacios */
     try {
@@ -54,6 +61,8 @@ const iniciarSesion = async () => {
           text: ``,
         });
         localStorage.setItem('token', resultado.data.token)
+        /* mi store usuario */
+        await usuarioStore.cargarUsuario();
         router.push({
           name: 'inicio',
         })

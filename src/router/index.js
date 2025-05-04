@@ -9,6 +9,11 @@ import GeneralHistoryView from '@/views/GeneralHistoryView.vue'
 
 import MainLayout from '@/layouts/MainLayout.vue'
 
+import { useUsuarioStore } from '@/store/usuario.js'
+import NewHospitalView from '@/views/NewHospitalView.vue'
+import HistoryUsersView from '@/views/HistoryUsersView.vue'
+import HistoryHospitalsView from '@/views/HistoryHospitalsView.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -49,10 +54,36 @@ const router = createRouter({
           name: 'registrar-usuario',
           component: NewUserView,
         },
+        {
+          path: 'registrar-centro-salud',
+          name: 'registrar-centro-salud',
+          component: NewHospitalView,
+        },
+        {
+          path: 'historial-usuarios',
+          name: 'historial-usuarios',
+          component: HistoryUsersView,
+        },
+        {
+          path: 'historial-centro-salud',
+          name: 'historial-centro-salud',
+          component: HistoryHospitalsView,
+        },
       ]
     },
 
   ],
+})
+
+router.beforeEach(async (to, from, next) => {
+  const usuarioStore = useUsuarioStore()
+  const token = localStorage.getItem('token')
+
+  if (token && !usuarioStore.usuario) {
+    await usuarioStore.cargarUsuario()
+  }
+
+  next()
 })
 
 export default router;

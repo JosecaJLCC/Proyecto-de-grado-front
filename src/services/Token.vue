@@ -62,7 +62,7 @@ import { ref, watch, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import Sidebar from '@/components/Sidebar.vue';
-import Table from '@/components/TableAttention.vue';
+
 
 let nombre_usuario = ref("");
 let correo = ref("");
@@ -77,9 +77,7 @@ if (!token.value) {
 console.log("Token al inicio:", token.value);
 
 // Función para obtener perfil
-/* const obtenerPerfil = async () => {
-  if (!token.value) return;
-
+const obtenerPerfil = async () => {
   try {
     const { data } = await axios.get("http://localhost:3000/api/v1/users/profile", {
       headers: { Authorization: `Bearer ${token.value}` }
@@ -95,7 +93,7 @@ console.log("Token al inicio:", token.value);
       cerrarSesion();
     }
   }
-}; */
+};
 
 // Cerrar sesión y limpiar datos
 const cerrarSesion = () => {
