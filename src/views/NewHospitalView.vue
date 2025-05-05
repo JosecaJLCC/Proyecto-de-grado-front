@@ -1,13 +1,13 @@
 <template>
-  <div class="container-newregister">
-    <fieldset class="form-newregister">
-      <legend class="legend-newregister">
-        <!-- <CIcon :icon="cilUserPlus" class="icon-newregister"/> -->
-         <span class="titulo-newregister">DATOS DEL CENTRO DE SALUD</span>
+  <div class="container-newhospital">
+    <fieldset class="form-newhospital">
+      <legend class="legend-newhospital">
+        <!-- <CIcon :icon="cilUserPlus" class="icon-newhospital"/> -->
+         <span class="titulo-newhospital">DATOS DEL CENTRO DE SALUD</span>
       </legend>
 
-      <div class="form-content-newregister">
-        <section class="content-newregister">
+      <div class="form-content-newhospital">
+        <section class="content-newhospital">
           <label for="">DEPARTAMENTO</label>
             <select name="" id="" v-model="departamento">
               <option value="LA PAZ">LA PAZ</option>
@@ -29,10 +29,11 @@
           <label for="">ESTABLECIMIENTO</label>
           <input type="text" v-model="nombre_establecimiento">
         </section>
+
       </div>
-      <div class="form-content-newregister2">
-        <button class="form-btn btn-cancel" ><CIcon :icon="cilX" class="icon-newregister"/>CANCELAR</button>
-        <button class="form-btn btn-accept" v-on:click="registrarPersona"><CIcon :icon="cilCheckAlt" class="icon-newregister"/>CONTINUAR</button>
+      <div class="form-content-newhospital2">
+        <button class="form-btn btn-cancel" v-on:click="retornarInicio"><CIcon :icon="cilX" class="icon-newhospital"/>CANCELAR</button>
+        <button class="form-btn btn-accept" v-on:click="registrarHospital"><CIcon :icon="cilCheckAlt" class="icon-newhospital"/>CONTINUAR</button>
       </div>
 
     </fieldset>
@@ -42,40 +43,39 @@
 <script setup>
 
 import { CIcon } from '@coreui/icons-vue';
-import { cilUserPlus, cilCheckAlt, cilX } from '@coreui/icons';
+import { cilCheckAlt, cilX } from '@coreui/icons';
 import { ref } from 'vue';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import { Persona } from '@/models/Persona.js';
+import { Establecimiento } from '@/models/Establecimiento.js';
 /* router */
 import { useRouter } from 'vue-router';
 let router = useRouter();
-
-let ci=ref("");
-let extension=ref("");
-let nombre=ref("");
-let paterno=ref("");
-let materno=ref("");
-let nacionalidad=ref("");
-let fecha_nacimiento=ref("");
-let sexo=ref("");
-let estado_civil=ref("");
-let nro_telf=ref("");
 
 let departamento=ref("");
 let municipio=ref("");
 let zona=ref("");
 let av_calle=ref("");
-let nro_puerta=ref("");
+let nombre_establecimiento=ref("");
 
+const retornarInicio = () => {
+  router.push({name: 'inicio'})
+}
 
+const registrarHospital = async() =>{
+  if(!departamento.value || !municipio.value || !zona.value || !av_calle.value || !nombre_establecimiento.value) {
+    Swal.fire({
+      icon: "error",
+      title: "Campos vacios",
+      text: `Por favor complete todos los campos`,
+    });
+    return;
+  }
 
-const registrarPersona = async() =>{
 /* Llamamos al modal persona para recoger los datos */
-let persona = new Persona(ci.value, extension.value, nombre.value, paterno.value, materno.value, nacionalidad.value,
-             estado_civil.value, nro_telf.value, sexo.value, fecha_nacimiento.value,
-             departamento.value, municipio.value, zona.value, av_calle.value, nro_puerta.value/* , centro_salud.value */);
-             console.log("persona", persona)
+let establecimiento = new Establecimiento(
+                      departamento.value, municipio.value, zona.value, av_calle.value, nombre_establecimiento.value);
+             console.log("persona", establecimiento)
 try {
   let resultSwal = await Swal.fire({
   title: "¿Estas seguro?",
@@ -86,16 +86,16 @@ try {
   cancelButtonColor: "#d33",
   confirmButtonText: "Agregar registro"
 })
-/* me quede aca en esta vista, el front sigue avanzando */
+
 if (resultSwal.isConfirmed) {
-  const resultado = await axios.post('http://localhost:3000/api/v1/people/register', persona);
+  const resultado = await axios.post('http://localhost:3000/api/v1/stablishment/create', establecimiento);
   console.log("myRes",resultado)
   Swal.fire({
     title: "¡Registro Exitoso!",
     text: "Tus datos han sido registrados",
     icon: "success"
   });
-  router.push({name: 'nuevo-registro'})
+  router.push({name: 'inicio'})
 };
 } catch (error) {
   console.log("errorPatient", error)
@@ -106,44 +106,43 @@ if (resultSwal.isConfirmed) {
 </script>
 
 <style scoped>
-.container-newregister{
+/* contenedor principal que abarca toda la pantalla */
+.container-newhospital{
   display: flex;
   justify-content: center;
   align-items: center;
-  /* padding-left: 300px; */
-  /* min-height: 100vh; */
   width: 100%;
-  /* border: 2px solid gold; */
 }
 
-.form-newregister{
+.form-newhospital{
   display: flex;
   flex-direction: column;
   /* background-color: rgba(0, 128, 128, .4); */
   background-color: rgba(0, 128, 128, .5);
   border: none;
-
-  /* border: 2px solid black; */
-  /* border-radius: 20px; */
   padding: 20px;
   row-gap: 20px;
 }
 
 /* NOTA: no funciona con grid maldita sea cambiare a flex */
-.form-content-newregister {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px; /* Espacio entre columnas y filas */
-  max-width: 800px;
+.form-content-newhospital {
+
+  /* grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); */
+  gap: 20px;
+  /* border: 2px solid black; */
+
+  width: 100%;
 }
 
-.content-newregister{
+.content-newhospital{
   display: flex;
   flex-direction: column;
   row-gap: 20px;
+  /* background-color: rgba(0, 128, 128, .5); */
+  width: 100%;
 }
 
-.content-newregister > input{
+.content-newhospital > input{
   padding-left:5px;
 }
 
@@ -155,14 +154,14 @@ input, select/* , .form-btn  */{
   height: 20px;
 }
 
-.legend-newregister{
+.legend-newhospital{
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
 }
 
-.titulo-newregister {
+.titulo-newhospital {
   display: flex;
   /* background-color: rgb(224, 63, 62); */
   background-color: rgb(0, 128, 128);
@@ -171,16 +170,16 @@ input, select/* , .form-btn  */{
   font-weight: bold;
 }
 
-.icon-newregister{
+.icon-newhospital{
   width: 20px;
   height: 20px;
   /* background-color: rgb(224, 63, 62) */;
 }
 
-.form-content-newregister2{
+.form-content-newhospital2{
   display: flex;
-
   justify-content: space-around;
+  column-gap: 20px;
 }
 
 .form-btn{
@@ -201,28 +200,11 @@ input, select/* , .form-btn  */{
   background-color: rgb(224, 63, 62);
 }
 
-/* Tres columnas en pantallas grandes */
-@media (min-width: 1024px) {
-.form-content-newregister {
-  grid-template-columns: repeat(3, 1fr);
-}
 
-}
-
-/* Dos columnas en pantallas medianas */
-@media (min-width: 768px) and (max-width: 1023px) {
-.form-content-newregister {
-  grid-template-columns: repeat(2, 1fr);
-}
-}
 
 /* Una columna en pantallas pequeñas */
 @media (max-width: 767px) {
-.form-content-newregister {
-  grid-template-columns: repeat(1, 1fr);
-}
-
-.form-content-newregister2{
+.form-content-newhospital2{
   flex-direction: column;
   row-gap: 20px;
 }

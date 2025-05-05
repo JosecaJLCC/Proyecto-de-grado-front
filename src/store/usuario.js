@@ -14,7 +14,7 @@ export const useUsuarioStore = defineStore('usuario', {
         /* data[0] porque es un array de objetos */
         this.usuario = data[0]
       } catch (error) {
-        console.error('Error al cargar el usuario:', error)
+        console.log('Error al cargar el usuario:', error)
         this.usuario = null
       }
     },

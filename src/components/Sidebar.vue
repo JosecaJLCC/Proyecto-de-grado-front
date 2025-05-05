@@ -173,11 +173,6 @@ const cerrarSesion = () => {
 
 /* Funcion que maneja el tamaño del sidebar y algunos de sus componentes que cambian de tamaño, ademas del titulo del header*/
 const mostrarSidebar = () => {
-  /* tamanioSidebar.value = tamanioSidebar.value === "300px" ? "50px" : "300px";
-    cambioIcon.value ? cambioIcon.value=false : cambioIcon.value=true;
-    tamanioLogo.value = tamanioLogo.value === "100px" ? "30px" : "100px";
-  */
-  /* Estas lineas estan en una tienda con pinia */
   sidebarStore.toggleSidebar()
 }
 </script>
@@ -220,7 +215,6 @@ const mostrarSidebar = () => {
   height: 20px;
 }
 
-/* Los cambios aca se los debe hacer al sidebar2 */
 .sidebar {
   min-height: 100vh;
   /* width: 300px; */
@@ -355,7 +349,5 @@ const mostrarSidebar = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  /* border: 2px solid red; */
 }
 </style>

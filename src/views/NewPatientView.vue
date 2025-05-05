@@ -55,7 +55,7 @@
             <select name="" id="" v-model="sexo">
               <option value="MASCULINO">MASCULINO</option>
               <option value="FEMENINO">FEMENINO</option>
-              <option value="FEMENINO">OTRO</option>
+              <option value="OTRO">OTRO</option>
             </select>
           </section>
 
@@ -83,7 +83,7 @@
           </section>
         </div>
         <div class="form-content-newregister2">
-          <button class="form-btn btn-cancel" ><CIcon :icon="cilX" class="icon-newregister"/>CANCELAR</button>
+          <button class="form-btn btn-cancel" v-on:click="retornarInicio"><CIcon :icon="cilX" class="icon-newregister"/>CANCELAR</button>
           <button class="form-btn btn-accept" v-on:click="registrarPersona"><CIcon :icon="cilCheckAlt" class="icon-newregister"/>CONTINUAR</button>
         </div>
 
@@ -92,9 +92,8 @@
 </template>
 
 <script setup>
-
 import { CIcon } from '@coreui/icons-vue';
-import { cilUserPlus, cilCheckAlt, cilX } from '@coreui/icons';
+import { cilCheckAlt, cilX } from '@coreui/icons';
 import { ref } from 'vue';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -120,13 +119,26 @@ let zona=ref("");
 let av_calle=ref("");
 let nro_puerta=ref("");
 
-
+const retornarInicio = () => {
+  router.push({name: 'inicio'})
+}
 
 const registrarPersona = async() =>{
-  /* Llamamos al modal persona para recoger los datos */
-  let persona = new Persona(ci.value, extension.value, nombre.value, paterno.value, materno.value, nacionalidad.value,
+  if(!ci.value || !extension.value || !nombre.value || !paterno.value || !materno.value || !nacionalidad.value ||
+               !estado_civil.value || !nro_telf.value || !sexo.value || !fecha_nacimiento.value ||
+               !departamento.value || !municipio.value || !zona.value || !av_calle.value || !nro_puerta.value) {
+    Swal.fire({
+      icon: "error",
+      title: "Campos vacios",
+      text: `Por favor complete todos los campos`,
+    });
+    return;
+  }
+
+   /* Llamamos al modal persona para recoger los datos */
+   let persona = new Persona(ci.value, extension.value, nombre.value, paterno.value, materno.value, nacionalidad.value,
                estado_civil.value, nro_telf.value, sexo.value, fecha_nacimiento.value,
-               departamento.value, municipio.value, zona.value, av_calle.value, nro_puerta.value/* , centro_salud.value */);
+               departamento.value, municipio.value, zona.value, av_calle.value, nro_puerta.value);
                console.log("persona", persona)
   try {
     let resultSwal = await Swal.fire({
@@ -142,6 +154,13 @@ const registrarPersona = async() =>{
   if (resultSwal.isConfirmed) {
     const resultado = await axios.post('http://localhost:3000/api/v1/people/register', persona);
     console.log("myRes",resultado)
+    if(!resultado.data.ok){
+      Swal.fire({
+        title: "¡Error!",
+        text: "El registro ya existe",
+        icon: "error"
+      });
+    }
     Swal.fire({
       title: "¡Registro Exitoso!",
       text: "Tus datos han sido registrados",
@@ -162,21 +181,15 @@ const registrarPersona = async() =>{
     display: flex;
     justify-content: center;
     align-items: center;
-    /* padding-left: 300px; */
-    /* min-height: 100vh; */
     width: 100%;
-    /* border: 2px solid gold; */
+
   }
 
   .form-newregister{
     display: flex;
     flex-direction: column;
-    /* background-color: rgba(0, 128, 128, .4); */
     background-color: rgba(0, 128, 128, .5);
     border: none;
-
-    /* border: 2px solid black; */
-    /* border-radius: 20px; */
     padding: 20px;
     row-gap: 20px;
   }
@@ -185,8 +198,8 @@ const registrarPersona = async() =>{
   .form-content-newregister {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px; /* Espacio entre columnas y filas */
-    max-width: 800px;
+    gap: 20px;
+    /* max-width: 800px; */
   }
 
   .content-newregister{
@@ -261,14 +274,12 @@ const registrarPersona = async() =>{
 
 }
 
-/* Dos columnas en pantallas medianas */
 @media (min-width: 768px) and (max-width: 1023px) {
   .form-content-newregister {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Una columna en pantallas pequeñas */
 @media (max-width: 767px) {
   .form-content-newregister {
     grid-template-columns: repeat(1, 1fr);
