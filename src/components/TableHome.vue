@@ -28,7 +28,12 @@
               <td data-title="PATERNO">{{ data.paterno }}</td>
               <td data-title="MATERNO">{{ data.materno }}</td>
               <td data-title="NOMBRES">{{ data.nombre }}</td>
-              <td data-title="ACCIONES"><button>VER MÁS</button><button>ATENDER</button></td>
+              <td data-title="ACCIONES">
+                <div class="content-btn-attention">
+                  <button class="btn-attention" v-on:click="agregarPaciente">VER MÁS</button>
+                  <button class="btn-attention">ATENDER</button>
+                </div>
+              </td>
           </tr>
       </tbody>
   </table>
@@ -40,9 +45,17 @@ import { onMounted, ref } from 'vue';
 import { CIcon } from '@coreui/icons-vue';
 import { cilUser, cilLockLocked, cilLowVision, cilLockUnlocked, cilSearch } from '@coreui/icons';
 import axios from 'axios';
+import { useUsuarioStore } from '@/store/usuario.js';
 
+let usuarioStore = useUsuarioStore();
+let usuario = usuarioStore.usuario;
 
 let datos = ref([]);
+
+const agregarPaciente = async() => {
+const resultado = await axios.get('http://localhost:3000/api/v1/people/show');
+}
+
 onMounted(async()=>{
 const resultado = await axios.get('http://localhost:3000/api/v1/people/show');
 console.log("myres", resultado.data.resultado);
@@ -116,6 +129,24 @@ padding: 5px;
 border-radius: 20px;
 }
 
+.content-btn-attention {
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: center;
+column-gap: 10px;
+}
+
+.btn-attention{
+background-color: rgb(0, 128, 128);
+color: white;
+width: 100px;
+border-radius: 20px;
+outline: none;
+border: none;
+font-weight: bold;
+}
+
 /* Tabla */
 table {
 border-collapse: collapse;
@@ -150,9 +181,11 @@ font-size: 1.15em;
 
 
 @media (max-width: 800px) {
-/* .container-tableattention {
-  border: 3px solid red;
-} */
+.content-btn-attention {
+
+  justify-content: end;
+
+}
 
 table thead tr {
   display: none;

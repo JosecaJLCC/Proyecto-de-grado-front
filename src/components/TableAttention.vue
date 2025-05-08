@@ -3,7 +3,7 @@
       <div class="header-tableattention">
         <section class="search-tableattention">
           <section class="input-tableattention">
-            <input type="text" placeholder="INGRESE SU CI" class="input-text-search">
+            <input type="text" placeholder="INGRESE SU CI" class="input-text-search" v-model="ciBuscado">
             <CIcon :icon="cilSearch" class="icon-tableattention"/>
           </section>
           <button class="btn-search">BUSCAR</button>
@@ -21,7 +21,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(data, Nro) of datos" v-bind:key="data.cedula">
+            <tr v-for="(data, Nro) of datosFiltrados" v-bind:key="data.cedula">
               <!--  -->
                 <td data-title="N°">{{ Nro + 1 }}</td>
                 <td data-title="CI">{{ data.cedula }}</td>
@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { CIcon } from '@coreui/icons-vue';
 import { cilUser, cilLockLocked, cilLowVision, cilLockUnlocked, cilSearch } from '@coreui/icons';
 import axios from 'axios';
@@ -51,15 +51,27 @@ let usuarioStore = useUsuarioStore();
 let usuario = usuarioStore.usuario;
 
 let datos = ref([]);
+let datosOriginales = ref([])
+let ciBuscado = ref("");
 
-const agregarPaciente = async() => {
-  const resultado = await axios.get('http://localhost:3000/api/v1/people/show');
-}
+const datosFiltrados = computed(() => {
+  const ci = ciBuscado.value.trim();
+  return ci === ""
+    ? datos.value
+    : datosOriginales.value.filter(data => data.cedula.toString().includes(ci));
+});
+
 
 onMounted(async()=>{
-  const resultado = await axios.get('http://localhost:3000/api/v1/people/show');
-  console.log("myres", resultado.data.resultado);
-  datos.value=resultado.data.resultado
+  try {
+    const resultado = await axios.get('http://localhost:3000/api/v1/people/show');
+    console.log("myres", resultado.data.resultado);
+    datos.value=resultado.data.resultado
+    datosOriginales.value = [...resultado.data.resultado];
+  } catch (error) {
+    console.log("Error al obtener los datos:", error)
+  }
+
 })
 
 </script>
@@ -131,9 +143,10 @@ onMounted(async()=>{
 
 .content-btn-attention {
   display: flex;
-  flex-direction: column;
-  align-items: end;
-  row-gap: 10px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  column-gap: 10px;
 }
 
 .btn-attention{
@@ -180,9 +193,11 @@ thead th {
 
 
 @media (max-width: 800px) {
-  /* .container-tableattention {
-    border: 3px solid red;
-  } */
+  .content-btn-attention {
+
+    justify-content: end;
+
+  }
 
   table thead tr {
     display: none;

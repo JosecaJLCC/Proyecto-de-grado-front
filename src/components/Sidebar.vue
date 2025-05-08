@@ -76,7 +76,7 @@
           </li>
           <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'historial-general' }">
-              <CIcon :icon="cilClipboard" class="icon-sidebar" />
+              <CIcon :icon="cilHistory" class="icon-sidebar" />
               <span>Historial General</span>
             </RouterLink>
           </li>
@@ -88,13 +88,13 @@
           </li>
           <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'registrar-centro-salud' }">
-              <CIcon :icon="cilChevronBottom" class="icon-sidebar" />
+              <CIcon :icon="cilHospital" class="icon-sidebar" />
               <span>Nuevo Centro de Salud</span>
             </RouterLink>
           </li>
           <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'historial-usuarios' }">
-              <CIcon :icon="cilChevronBottom" class="icon-sidebar" />
+              <CIcon :icon="cilPeople" class="icon-sidebar" />
               <span>Usuarios Registrados</span>
             </RouterLink>
           </li>
@@ -113,6 +113,8 @@
 <script setup>
 import { CIcon } from '@coreui/icons-vue'
 import {
+  cilHospital,
+  cilHistory,
   cilHome,
   cilUserPlus,
   cilClipboard,
@@ -285,16 +287,11 @@ const mostrarSidebar = () => {
     display: none;
   }
 /* Mi sidebar adoptara automaticamente ese ancho */
-  .sidebar {
-    width: 50px !important;
-  }
-/*  */
   .logo-sidebar {
-    width: 30px !important;
-    height: 30px !important;
     border-radius: 50%;
     padding: 0;
   }
+
 }
 /* dropdown */
 .desplegar-dropdown {

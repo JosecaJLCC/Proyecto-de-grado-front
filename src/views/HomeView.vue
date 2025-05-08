@@ -19,7 +19,7 @@
 <style scoped>
 .container-homeview{
     color: black;
-    border: 3px solid green;
+    /* border: 3px solid green; */
     transition: width 0.3s ease;
     width: 100%;
     max-width: 100%;

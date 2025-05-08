@@ -19,8 +19,8 @@ let paddingLeft=computed(()=>sidebarStore.tamanioSidebar);
 
 let authStore = useUsuarioStore();
 let router = useRouter();
-onMounted(()=> {
-  authStore.cargarUsuario()
+onMounted(async()=> {
+  await authStore.cargarUsuario()
   if (!authStore.usuario) {
     // Si no está autenticado, redirige al login
     router.push({ name: 'login' });
@@ -43,8 +43,9 @@ onMounted(()=> {
     width: 100%
   }
   @media (max-width: 620px) {
-    .main-layout {
-    padding-left: 50px !important;
+    .main-layout{
+      padding-left: 50px !important;
+    }
   }
-}
+
 </style>
