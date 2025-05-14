@@ -35,7 +35,7 @@ onMounted(async()=> {
     /* border: 2px solid blue; */
   }
   .main-layout{
-    padding-top: 80px;
+    padding-top: 83px;
     transition: padding-left 0.3s ease;
     display: flex;
     /* border: 2px solid red; */

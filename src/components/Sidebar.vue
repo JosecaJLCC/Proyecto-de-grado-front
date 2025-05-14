@@ -83,25 +83,19 @@
           <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'registrar-usuario' }">
               <CIcon :icon="cilChevronBottom" class="icon-sidebar" />
-              <span>Nuevo Usuario</span>
-            </RouterLink>
-          </li>
-          <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'registrar-centro-salud' }">
-              <CIcon :icon="cilHospital" class="icon-sidebar" />
-              <span>Nuevo Centro de Salud</span>
-            </RouterLink>
-          </li>
-          <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-usuarios' }">
-              <CIcon :icon="cilPeople" class="icon-sidebar" />
-              <span>Usuarios Registrados</span>
+              <span>Usuarios</span>
             </RouterLink>
           </li>
           <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'historial-centro-salud' }">
               <CIcon :icon="cilChevronBottom" class="icon-sidebar" />
               <span>Establecimientos de Salud</span>
+            </RouterLink>
+          </li>
+           <li>
+            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-centro-salud' }">
+              <CIcon :icon="cilChevronBottom" class="icon-sidebar" />
+              <span>Reportes</span>
             </RouterLink>
           </li>
         </ul>

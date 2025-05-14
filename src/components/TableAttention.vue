@@ -6,7 +6,7 @@
             <input type="text" placeholder="INGRESE SU CI" class="input-text-search" v-model="ciBuscado">
             <CIcon :icon="cilSearch" class="icon-tableattention"/>
           </section>
-          <button class="btn-search">BUSCAR</button>
+
         </section>
       </div>
       <table class="table-attention">
@@ -30,8 +30,13 @@
                 <td data-title="NOMBRES">{{ data.nombre }}</td>
                 <td data-title="ACCIONES">
                   <div class="content-btn-attention">
-                    <button class="btn-attention" v-on:click="agregarPaciente">VER MÁS</button>
-                    <button class="btn-attention">ATENDER</button>
+                    <router-link class="btn-attention" :to='{name:"datos-paciente", params: {id: data.cedula}}'>
+                      VER MÁS
+                    </router-link>
+
+                    <button class="btn-attention" v-on:click="atenderPaciente(data.cedula)">
+                      ATENDER
+                    </button>
                   </div>
                 </td>
             </tr>
@@ -53,6 +58,10 @@ let usuario = usuarioStore.usuario;
 let datos = ref([]);
 let datosOriginales = ref([])
 let ciBuscado = ref("");
+
+const atenderPaciente = (id_persona) =>{
+  console.log("id: ",id_persona)
+}
 
 const datosFiltrados = computed(() => {
   const ci = ciBuscado.value.trim();

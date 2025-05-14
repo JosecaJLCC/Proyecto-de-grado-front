@@ -78,13 +78,13 @@ const iniciarSesion = async () => {
     }
     try {
       let resultSwal = await Swal.fire({
-        title: "¿Estas seguro?",
-        text: "Se registrara nuevos datos",
+        title: `Estas seguro de iniciar sesión`,
+        text: `Correo: ${correo.value}`,
         icon: "question",
         showCancelButton: true,
         confirmButtonColor: "#008080",
         cancelButtonColor: "#E03F3E",
-        confirmButtonText: "Agregar registro"
+        confirmButtonText: "Iniciar Sesión"
     })
 /* me quede aca en esta vista, el front sigue avanzando */
   if (resultSwal.isConfirmed) {

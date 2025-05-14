@@ -13,6 +13,7 @@ import { useUsuarioStore } from '@/store/usuario.js'
 import NewHospitalView from '@/views/NewHospitalView.vue'
 import HistoryUsersView from '@/views/HistoryUsersView.vue'
 import HistoryHospitalsView from '@/views/HistoryHospitalsView.vue'
+import PatientView from '@/views/PatientView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,6 +43,11 @@ const router = createRouter({
           path: 'nuevo-registro',
           name: 'nuevo-registro',
           component: NewAttentionView,
+        },
+        {
+          path: 'datos-paciente/:id',
+          name: 'datos-paciente',
+          component: PatientView,
         },
         {
           path: 'historial-general',

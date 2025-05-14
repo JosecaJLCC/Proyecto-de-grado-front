@@ -3,10 +3,10 @@
     <div class="header-tableattention">
       <section class="search-tableattention">
         <section class="input-tableattention">
-          <input type="text" placeholder="INGRESE SU CI" class="input-text-search">
+          <input type="text" placeholder="INGRESE SU CI" class="input-text-search" v-model="ciBuscado">
           <CIcon :icon="cilSearch" class="icon-tableattention"/>
         </section>
-        <button class="btn-search">BUSCAR</button>
+
       </section>
     </div>
     <table class="table-attention">
@@ -21,7 +21,7 @@
           </tr>
       </thead>
       <tbody>
-          <tr v-for="(data, Nro) of datos" v-bind:key="data.cedula">
+          <tr v-for="(data, Nro) of datosFiltrados" v-bind:key="data.cedula">
             <!--  -->
               <td data-title="N°">{{ Nro + 1 }}</td>
               <td data-title="CI">{{ data.cedula }}</td>
@@ -30,8 +30,12 @@
               <td data-title="NOMBRES">{{ data.nombre }}</td>
               <td data-title="ACCIONES">
                 <div class="content-btn-attention">
-                  <button class="btn-attention" v-on:click="agregarPaciente">VER MÁS</button>
-                  <button class="btn-attention">ATENDER</button>
+                  <button class="btn-attention" v-on:click="verPaciente">
+                    <router-link  :to="{ name: 'datos-paciente', params: { id: data.id_persona } }">
+                      VER MÁS
+                    </router-link>
+                  </button>
+                  <button class="btn-attention" v-on:click="agregarPaciente">ATENDER</button>
                 </div>
               </td>
           </tr>
@@ -41,7 +45,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { CIcon } from '@coreui/icons-vue';
 import { cilUser, cilLockLocked, cilLowVision, cilLockUnlocked, cilSearch } from '@coreui/icons';
 import axios from 'axios';
@@ -51,15 +55,30 @@ let usuarioStore = useUsuarioStore();
 let usuario = usuarioStore.usuario;
 
 let datos = ref([]);
+let datosOriginales = ref([])
+let ciBuscado = ref("");
 
-const agregarPaciente = async() => {
-const resultado = await axios.get('http://localhost:3000/api/v1/people/show');
+const datosFiltrados = computed(() => {
+const ci = ciBuscado.value.trim();
+return ci === ""
+  ? datos.value
+  : datosOriginales.value.filter(data => data.cedula.toString().includes(ci));
+});
+
+verPaciente = () => {
+
 }
 
 onMounted(async()=>{
-const resultado = await axios.get('http://localhost:3000/api/v1/people/show');
-console.log("myres", resultado.data.resultado);
-datos.value=resultado.data.resultado
+try {
+  const resultado = await axios.get('http://localhost:3000/api/v1/people/show');
+  console.log("myres", resultado.data.resultado);
+  datos.value=resultado.data.resultado
+  datosOriginales.value = [...resultado.data.resultado];
+} catch (error) {
+  console.log("Error al obtener los datos:", error)
+}
+
 })
 
 </script>
