@@ -6,6 +6,7 @@ export const useSidebarStore = defineStore('sidebar', {
             tamanioSidebar: '300px',
             tamanioLogo: '100px',
             cambioIcon: true,
+
         }
     },
 

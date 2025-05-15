@@ -188,7 +188,7 @@ const registrarPersona = async() =>{
   .form-newregister{
     display: flex;
     flex-direction: column;
-    background-color: rgba(0, 128, 128, .5);
+    background-color: rgba(0, 128, 128, .7);
     border: none;
     padding: 20px;
     row-gap: 20px;

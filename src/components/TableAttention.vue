@@ -30,11 +30,13 @@
                 <td data-title="NOMBRES">{{ data.nombre }}</td>
                 <td data-title="ACCIONES">
                   <div class="content-btn-attention">
-                    <router-link class="btn-attention" :to='{name:"datos-paciente", params: {id: data.cedula}}'>
+                    <!-- <router-link class="btn-attention" :to='{name:"datos-paciente", params: {id: data.cedula}}'>
                       VER MÁS
-                    </router-link>
-
-                    <button class="btn-attention" v-on:click="atenderPaciente(data.cedula)">
+                    </router-link> -->
+                    <button class="btn-attention" v-on:click="verPaciente(data.cedula)">
+                      VER MÁS
+                    </button>
+                    <button class="btn-attention" v-on:click="atenderPaciente(data.id_persona)">
                       ATENDER
                     </button>
                   </div>
@@ -51,16 +53,23 @@ import { CIcon } from '@coreui/icons-vue';
 import { cilUser, cilLockLocked, cilLowVision, cilLockUnlocked, cilSearch } from '@coreui/icons';
 import axios from 'axios';
 import { useUsuarioStore } from '@/store/usuario.js';
+/* import router from '@/router'; */
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 let usuarioStore = useUsuarioStore();
-let usuario = usuarioStore.usuario;
+let usuario = computed(() => usuarioStore.usuario)
 
 let datos = ref([]);
 let datosOriginales = ref([])
 let ciBuscado = ref("");
 
 const atenderPaciente = (id_persona) =>{
-  console.log("id: ",id_persona)
+  console.log("id: ",id_persona, usuario.value.id_usuario, usuario.value.id_establecimiento)
+}
+
+const verPaciente = (id_persona) =>{
+  router.push({name: 'datos-paciente', params: {id: id_persona}})
 }
 
 const datosFiltrados = computed(() => {

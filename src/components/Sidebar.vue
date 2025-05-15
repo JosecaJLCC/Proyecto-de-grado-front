@@ -52,6 +52,7 @@
           class="logo-sidebar"
           :style="{ width: tamanioLogo, height: tamanioLogo }"
         />
+        <h3 v-if="mostrarTitulo">"{{ establecimiento }}"</h3>
       </section>
 
       <nav class="nav-sidebar">
@@ -137,6 +138,8 @@ let cambioIcon = computed(() => sidebarStore.cambioIcon)
 /* el ancho de la img de la institucion que esta dentro del sidebar */
 let tamanioLogo = computed(() => sidebarStore.tamanioLogo)
 
+const mostrarTitulo = computed(() => sidebarStore.tamanioSidebar !== '50px');
+
 /* para el despliegue de dropdown  */
 let mostrarDropDown=ref(false);
 
@@ -144,11 +147,13 @@ let mostrarDropDown=ref(false);
 import { useUsuarioStore } from '@/store/usuario.js'
 let authStore = useUsuarioStore();
 let usuario = computed(() => authStore.usuario)
-console.log('usuario sidebar', usuario)
+console.log('usuario sidebar', usuario.value)
 /* faltan detalles */
 let nombre_usuario = computed(()=>usuario.value?.nombre_usuario ?? 'x');
 
 let rol=computed(()=>usuario.value?.rol ?? 'x');
+
+let establecimiento=computed(()=>usuario.value?.nombre_establecimiento ?? 'x');
 
 watch(tamanioSidebar,(newTamanioSidebar) => {
     console.log('Nuevo tamaño:', newTamanioSidebar)
@@ -229,7 +234,10 @@ const mostrarSidebar = () => {
 
 .section-logo-sidebar {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  row-gap: 10px;
 }
 
 .icon-sidebar {
@@ -286,6 +294,9 @@ const mostrarSidebar = () => {
     padding: 0;
   }
 
+  /* .section-logo-sidebar > h3{
+    display: none
+  } */
 }
 /* dropdown */
 .desplegar-dropdown {
