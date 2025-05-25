@@ -1,8 +1,10 @@
 <template>
-  <div class="container-tableattention" >
+  <div v-if="registros > 0" class="container-tableattention" >
     <div class="header-tableattention">
       <section class="search-tableattention">
+
         <section class="input-tableattention">
+
           <input type="text" placeholder="INGRESE SU CI" class="input-text-search" v-model="ciBuscado">
           <CIcon :icon="cilSearch" class="icon-tableattention"/>
         </section>
@@ -14,9 +16,9 @@
           <tr>
               <th>N°</th>
               <th>CI</th>
-              <th>PATERNO</th>
-              <th>MATERNO</th>
               <th>NOMBRES</th>
+              <th>ESTABLECIMIENTO</th>
+              <th>FECHA</th>
               <th>ACCIONES</th>
           </tr>
       </thead>
@@ -25,19 +27,23 @@
             <!--  -->
               <td data-title="N°">{{ Nro + 1 }}</td>
               <td data-title="CI">{{ data.cedula }}</td>
-              <td data-title="PATERNO">{{ data.paterno }}</td>
-              <td data-title="MATERNO">{{ data.materno }}</td>
-              <td data-title="NOMBRES">{{ data.nombre }}</td>
+              <td data-title="NOMBRES">{{ data.nombres }}</td>
+              <td data-title="ESTABLECIMIENTO">{{ data.establecimiento }}</td>
+              <td data-title="FECHA">{{ data.fecha_atencion.split("T")[0] }}</td>
               <td data-title="ACCIONES">
                 <div class="content-btn-attention">
-                  <button class="btn-attention" v-on:click="agregarPaciente">VER MÁS</button>
-                  <button class="btn-attention">ATENDER</button>
+                    <router-link  :to="{ name: 'datos-paciente', params: { id: data.cedula } }">
+                      VER MÁS
+                    </router-link>
                 </div>
               </td>
           </tr>
       </tbody>
   </table>
   </div>
+  <div v-else class="alternative-div">
+    <h2 >NO SE ENCONTRARON REGISTROS</h2>
+  </div >
 </template>
 
 <script setup>
@@ -49,6 +55,9 @@ import { useUsuarioStore } from '@/store/usuario.js';
 
 let usuarioStore = useUsuarioStore();
 let usuario = usuarioStore.usuario;
+let date = new Date();
+date = date.toISOString().split("T")[0];
+let registros=ref(0)
 
 let datos = ref([]);
 let datosOriginales = ref([])
@@ -61,13 +70,17 @@ return ci === ""
   : datosOriginales.value.filter(data => data.cedula.toString().includes(ci));
 });
 
+/* verPaciente = () => {
 
+}
+ */
 onMounted(async()=>{
 try {
-  const resultado = await axios.get('http://localhost:3000/api/v1/people/show');
-  console.log("myres", resultado.data.resultado);
+  let resultado = await axios.get('http://localhost:3000/api/v1/attention/showall');
+  registros.value = resultado.data.resultado.length;
   datos.value=resultado.data.resultado
   datosOriginales.value = [...resultado.data.resultado];
+
 } catch (error) {
   console.log("Error al obtener los datos:", error)
 }
@@ -87,19 +100,30 @@ max-width: 100%;
 box-sizing: border-box;
 }
 
+.alternative-div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
 .header-tableattention {
 display: flex;
 justify-content: end;
 align-items: center;
 height: 80px;
 padding: 10px;
+
 }
 
 .search-tableattention {
 display: flex;
-justify-content: space-between;
+justify-content: end;
 column-gap: 10px;
+width: 100%;
 }
+
+
 
 .input-tableattention {
 display: flex;

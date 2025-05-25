@@ -1,13 +1,13 @@
 <template>
   <main class="container-homeview">
-    <TableAttention/>
+    <TableHome/>
   </main>
 </template>
 
 <script setup>
   import { Usuario } from '@/services/Usuario.js';
   import { onMounted } from 'vue';
-  import TableAttention from '@/components/TableAttention.vue';
+  import TableHome from '@/components/TableHome.vue';
   onMounted(async() => {
     let usuario = new Usuario();
     let data = await usuario.obtenerUsuario();

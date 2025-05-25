@@ -64,8 +64,21 @@ let datos = ref([]);
 let datosOriginales = ref([])
 let ciBuscado = ref("");
 
-const atenderPaciente = (id_persona) =>{
-  console.log("id: ",id_persona, usuario.value.id_usuario, usuario.value.id_establecimiento)
+const atenderPaciente = async(id_persona) =>{
+  try {
+    const resultado = await axios.post('http://localhost:3000/api/v1/attention/create',{
+      id_usuario:usuario.value.id_usuario,
+      id_persona,
+      id_establecimiento:usuario.value.id_establecimiento
+    });
+    console.log("id: ", usuario.value.id_usuario,
+      id_persona,
+      usuario.value.id_establecimiento)
+    /* router.push({name: 'inicio'}) */
+  } catch (error) {
+    console.log("my error en table attention", error)
+  }
+
 }
 
 const verPaciente = (id_persona) =>{
