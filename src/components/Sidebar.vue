@@ -22,7 +22,7 @@
         <div class="perfil-section">
           <CIcon :icon="cilUserFemale" class="perfil-sidebar" />
           <p>{{ nombre_usuario }}</p>
-          <p>{{ rol }}</p>
+          <p><strong>{{ rol }}</strong></p>
         </div>
         <div class="dropdown-sidebar">
           <CIcon

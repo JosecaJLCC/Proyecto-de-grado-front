@@ -55,6 +55,7 @@ import axios from 'axios';
 import { useUsuarioStore } from '@/store/usuario.js';
 /* import router from '@/router'; */
 import { useRouter } from 'vue-router'
+import Swal from 'sweetalert2'
 const router = useRouter()
 
 let usuarioStore = useUsuarioStore();
@@ -76,7 +77,18 @@ const atenderPaciente = async(id_persona) =>{
       usuario.value.id_establecimiento)
     /* router.push({name: 'inicio'}) */
   } catch (error) {
-    console.log("my error en table attention", error)
+    if(error.status == 409){
+      Swal.fire({
+        icon: "error",
+        title: "Paciente ya atendido",
+        text: `${error.response.data.message}`,
+      });
+      /* console.log(error) */
+    }
+    else{
+      console.log("my error en table attention", error)
+    }
+
   }
 
 }
@@ -100,6 +112,7 @@ onMounted(async()=>{
     datos.value=resultado.data.resultado
     datosOriginales.value = [...resultado.data.resultado];
   } catch (error) {
+
     console.log("Error al obtener los datos:", error)
   }
 

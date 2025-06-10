@@ -1,6 +1,6 @@
 <template>
-    <main class="container-newregister">
-      <FormPersona redirectTo="inicio"/>
+    <main class="container-newperson">
+      <FormPersona redirecTo="registrar-usuario"/>
     </main>
 </template>
 
@@ -10,7 +10,7 @@ import FormPersona from '@/components/FormPersona.vue';
 </script>
 
 <style scoped>
-.container-newregister{
+.container-newperson{
     display: flex;
     justify-content: center;
     align-items: center;
