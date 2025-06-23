@@ -173,7 +173,14 @@ const registrarPersona = async() =>{
       text: "Tus datos han sido registrados",
       icon: "success"
     });
-    router.push({ name: props.redirectTo});
+    console.log("mi ruta: ", props.redirectTo)
+    if(props.redirectTo=="inicio"){
+      router.push({ name: props.redirectTo});
+    }
+    else{
+      router.push({ name: props.redirectTo, params:{id:ci}});
+    }
+
   };
   } catch (error) {
     console.log("errorPatient", error)

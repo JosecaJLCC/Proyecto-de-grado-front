@@ -2,34 +2,34 @@
   <div id="container-login">
     <form @submit.prevent="iniciarSesion">
       <fieldset id="formulario-login">
-      <legend id="legend-login">
-        <img class="logo-login" src="../assets/CapacabanaLogo.png" alt="" />
-      </legend>
-      <h2 id="title-login">INICIO DE SESION</h2>
-      <!-- <br /> -->
-      <label for="">CENTRO DE SALUD</label>
-      <div class="entrada-icon-login">
-        <select class="select-login" v-model="id_centro_salud">
-          <option v-for="(item) of establecimiento" v-bind:key="item.id_establecimiento" :value="item.id_establecimiento" >{{ item.nombre }}</option>
-        </select>
-      </div>
+        <legend id="legend-login">
+          <img class="logo-login" src="../assets/CapacabanaLogo.png" alt="" />
+        </legend>
+        <h2 id="title-login">INICIO DE SESION</h2>
+        <!-- <br /> -->
+        <label for="">CENTRO DE SALUD</label>
+        <div class="entrada-icon-login">
+          <select class="select-login" v-model="id_centro_salud">
+            <option v-for="(item) of establecimiento" v-bind:key="item.id_establecimiento" :value="item.id_establecimiento" >{{ item.nombre }}</option>
+          </select>
+        </div>
 
-      <label for=""> CORREO</label>
-      <div class="entrada-icon-login">
-        <input class="input-login" v-model="correo" type="email" />
-        <CIcon :icon="cilUser" class="icon-login"/>
-      </div>
+        <label for=""> CORREO</label>
+        <div class="entrada-icon-login">
+          <input class="input-login" v-model="correo" type="email" />
+          <CIcon :icon="cilUser" class="icon-login"/>
+        </div>
 
-      <label for="">CONTRASEÑA</label>
-      <div class="entrada-icon-login">
-        <input class="input-login" v-model="clave" :type="tipoClave" />
-        <CIcon :icon="cilLockLocked" class="icon-login"/>
-        <CIcon :icon="cilLowVision" class="icon-login-vision" v-on:click="verClave"/>
-      </div>
+        <label for="">CONTRASEÑA</label>
+        <div class="entrada-icon-login">
+          <input class="input-login" v-model="clave" :type="tipoClave" />
+          <CIcon :icon="cilLockLocked" class="icon-login"/>
+          <CIcon :icon="cilLowVision" class="icon-login-vision" v-on:click="verClave"/>
+        </div>
 
-      <button id="button-login" type="submit">INGRESAR</button>
-      <a id="link-login" href="">¿Olvidó sus credenciales?</a>
-    </fieldset>
+        <button id="button-login" type="submit">INGRESAR</button>
+        <a id="link-login" href="">¿Olvidó sus credenciales?</a>
+      </fieldset>
     </form>
   </div>
 </template>

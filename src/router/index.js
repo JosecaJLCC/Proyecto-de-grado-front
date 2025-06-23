@@ -14,7 +14,7 @@ import NewHospitalView from '@/views/NewHospitalView.vue'
 import HistoryUsersView from '@/views/HistoryUsersView.vue'
 import HistoryHospitalsView from '@/views/HistoryHospitalsView.vue'
 import PatientView from '@/views/PatientView.vue'
-import NewPersonView from '@/views/NewPersonView.vue'
+import NewStaffView from '@/views/NewStaffView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -62,9 +62,9 @@ const router = createRouter({
           component: NewUserView,
         },
         {
-          path: 'registrar-persona',
-          name: 'registrar-persona',
-          component: NewPersonView,
+          path: 'registrar-personal',
+          name: 'registrar-personal',
+          component: NewStaffView,
         },
         {
           path: 'registrar-centro-salud',

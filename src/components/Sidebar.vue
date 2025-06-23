@@ -20,7 +20,7 @@
         <CIcon :icon="cilBell" class="icon-sidebar" />
         <!-- <img src="../assets/logo.svg" class="perfil-sidebar"> -->
         <div class="perfil-section">
-          <CIcon :icon="cilUserFemale" class="perfil-sidebar" />
+          <img class="img-perfil" :src="`http://localhost:3000/uploads/${perfil}`" alt="">
           <p>{{ nombre_usuario }}</p>
           <p><strong>{{ rol }}</strong></p>
         </div>
@@ -88,7 +88,7 @@
             </RouterLink>
           </li>
           <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-centro-salud' }">
+            <RouterLink class="rutas-sidebar" :to="{ name: 'registrar-centro-salud' }">
               <CIcon :icon="cilChevronBottom" class="icon-sidebar" />
               <span>Establecimientos de Salud</span>
             </RouterLink>
@@ -154,6 +154,8 @@ let nombre_usuario = computed(()=>usuario.value?.nombre_usuario ?? 'x');
 let rol=computed(()=>usuario.value?.rol ?? 'x');
 
 let establecimiento=computed(()=>usuario.value?.nombre_establecimiento ?? 'x');
+
+let perfil = computed(()=> usuario.value?.perfil ?? 'usuario.png');
 
 watch(tamanioSidebar,(newTamanioSidebar) => {
     console.log('Nuevo tamaño:', newTamanioSidebar)
@@ -351,5 +353,12 @@ const mostrarSidebar = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.img-perfil{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 </style>
