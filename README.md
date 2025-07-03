@@ -74,6 +74,8 @@ createApp(App)
 
 ## Se instalo commitlint para el mejoramiento del git log
 
+### Esto instala el CLI de commitlint y la configuración basada en el estándar "Conventional Commits"
+
 ``` sh
 npm install -D @commitlint/cli @commitlint/config-conventional
 
@@ -82,7 +84,7 @@ npm install -D @commitlint/cli @commitlint/config-conventional
 ## Configurar commitlint para utilizar la configuración convencional
 
 ```js
-export default {
+module.exports ={
   extends: ['@commitlint/config-conventional']
 }
 
@@ -94,12 +96,21 @@ export default {
 
 ```sh
 npm install --save-dev husky
+
 ```
 
-## El init El comando simplifica la configuración de husky en un proyecto
+## Agrega el script prepare en tu package.json
+
+ ``` json
+  "scripts": {
+    "prepare": "husky install"
+  }
+ ```
+
+## Ejecuta el script prepare para crear la carpeta .husky Esto crea la carpeta .husky/
 
 ```sh
-npm husky init
+npm run prepare
 ```
 
 ## Para adicionar hooks ponemos el siguiente comando
@@ -107,3 +118,11 @@ npm husky init
 ```sh
 npx husky add .husky/commit-msg 'npx commitlint --edit $1'
 ```
+
+## Para que prompt-cli sea fácil de usar, agregue un script de ejecución npm a su package.json
+
+```json
+  "scripts": {
+    "commit": "commit"
+  }
+  ```
