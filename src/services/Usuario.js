@@ -6,14 +6,14 @@ export class Usuario {
     if (!token) return;
 
     try {
-      const { data } = await axios.get("http://localhost:3000/api/v1/users/profile", {
+      const { data } = await axios.get("http://localhost:3000/api/v1/user/profile", {
         headers: { Authorization: `Bearer ${token}` }
       });
       return data.msg;  // Retorna directamente los datos.
     } catch (error) {
       console.log("Error al obtener el perfil", error);
       if (error.response?.status === 401) {
-        console.warn("Token expirado. Redirigiendo a login...");
+        
         return null;  // Retorna null si el token expiró
       }
     }

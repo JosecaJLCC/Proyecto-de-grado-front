@@ -10,7 +10,7 @@
         <label for="">CENTRO DE SALUD</label>
         <div class="entrada-icon-login">
           <select class="select-login" v-model="id_centro_salud">
-            <option v-for="(item) of establecimiento" v-bind:key="item.id_establecimiento" :value="item.id_establecimiento" >{{ item.nombre }}</option>
+            <option v-for="(item) of establecimiento" v-bind:key="item.id_establecimiento" :value="item.id_establecimiento" >{{ item.nombre_establecimiento }}</option>
           </select>
         </div>
 
@@ -62,7 +62,14 @@ onMounted(async()=>{
     console.log("resultadoEst", resultadoEst.data.resultado)
     establecimiento.value = resultadoEst.data.resultado
   } catch (error) {
-    console.log("error en cargar establecimientos: ", error)
+    /* console.log("este error",error.response); */
+      if (!error.response) {
+        Swal.fire({
+          icon: "error",
+          title: "Servidor no disponible",
+          text: "No se pudo conectar al servidor. Intente más tarde.",
+        });
+      }
   }
 })
 
@@ -77,59 +84,70 @@ const iniciarSesion = async () => {
       return;
     }
     try {
+      let centro_salud = establecimiento.value.find(element => element.id_establecimiento==id_centro_salud)
       let resultSwal = await Swal.fire({
         title: `Estas seguro de iniciar sesión`,
-        text: `Correo: ${correo.value}`,
+        text: `Correo: ${correo.value}\n Centro de Salud: ${centro_salud.nombre_establecimiento}`,
         icon: "question",
         showCancelButton: true,
         confirmButtonColor: "#008080",
         cancelButtonColor: "#E03F3E",
         confirmButtonText: "Iniciar Sesión"
-    })
-/* me quede aca en esta vista, el front sigue avanzando */
-  if (resultSwal.isConfirmed) {
-    let resultado = await axios.post('http://localhost:3000/api/v1/users/login', {
-        correo: correo.value,
-        clave: clave.value,
-        id_establecimiento: id_centro_salud.value
       })
-      console.log('my_data: ', resultado)
-      if (resultado.data.ok) {
-        Swal.fire({
-          icon: "success",
-          title: "¡Bienvenido!",
-          text: ``,
-        });
-        localStorage.setItem('token', resultado.data.token)
-        /*  */
-        console.log("esta entrando?")
-        await usuarioStore.cargarUsuario();
-        console.log("esta entrando? si")
-        router.push({
-          name: 'inicio',
+  /* me quede aca en esta vista, el front sigue avanzando */
+      if (resultSwal.isConfirmed) {
+        let resultado = await axios.post('http://localhost:3000/api/v1/user/login', {
+          correo: correo.value,
+          clave: clave.value,
+          id_establecimiento: id_centro_salud.value
         })
+          console.log('mis-datos-login: ', resultado)
+          if (resultado.data.ok) {
+            Swal.fire({
+              icon: "success",
+              title: "¡Bienvenido!",
+              text: ``,
+            });
+            localStorage.setItem('token', resultado.data.token)
+
+            await usuarioStore.cargarUsuario();
+
+            router.push({
+              name: 'inicio',
+            })
+          }
+    };
+  }
+  catch (error) {
+      if (!error.response) {
+        Swal.fire({
+          icon: "error",
+          title: "Servidor no disponible ss",
+          text: "No se pudo conectar al servidor. Intente más tarde.",
+        });
+        return;
       }
-  };
-  }  catch (error) {
-      if(!error.response.correo && !error.response.clave){
+      if(!error.response.data.correo && !error.response.data.clave){
+
         Swal.fire({
           icon: "error",
           title: "Credenciales incorrectas",
-          text: `${error.response.msg}`,
+          text: `${error.response.data.msg}`,
+
         });
       }
-      else if(!error.response.correo){
+      else if(!error.response.data.correo){
         Swal.fire({
           icon: "error",
           title: "Credenciales incorrectas",
-          text: `${error.response.msg}`,
+          text: `${error.response.data.msg}`,
         });
       }
-      else if(!error.response.clave){
+      else if(!error.response.data.clave){
         Swal.fire({
           icon: "error",
           title: "Credenciales incorrectas",
-          text: `${error.response.msg}`,
+          text: `${error.response.data.msg}`,
         });
       }
     }

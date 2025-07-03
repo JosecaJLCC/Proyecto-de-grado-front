@@ -1,5 +1,6 @@
 <template>
   <div class="container-mainlayout">
+    <Header/>
     <Sidebar/>
     <main :style="{paddingLeft: paddingLeft}" class="main-layout">
       <RouterView />
@@ -9,8 +10,9 @@
 
 <script setup>
 import Sidebar from '@/components/Sidebar.vue';
+import Header from '@/components/Header.vue';
 import { useSidebarStore } from '@/store/sidebar.js';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, watch } from 'vue';
 import { useUsuarioStore } from '@/store/usuario.js'
 import { useRouter } from 'vue-router';
 
@@ -22,10 +24,21 @@ let router = useRouter();
 onMounted(async()=> {
   await authStore.cargarUsuario()
   if (!authStore.usuario) {
+    console.log("siii")
     // Si no está autenticado, redirige al login
     router.push({ name: 'login' });
   }
 })
+
+// Observa cambios en usuario para reaccionar si se desloguea o expira el token
+watch(
+  () => authStore.usuario,
+  (nuevoUsuario) => {
+    if (!nuevoUsuario) {
+      router.push({ name: 'login' })
+    }
+  }
+)
 </script>
 
 <style scoped>

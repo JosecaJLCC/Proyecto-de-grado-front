@@ -46,7 +46,9 @@ npm install axios -E
 
 npm install @coreui/icons
 npm install @coreui/icons-vue 
+
 ```
+
 ### instalar Sweet alert para alertas
 
 ``` sh
@@ -54,15 +56,54 @@ npm install sweetalert2
 ```
 
 ### instalar Pinia para utilizar variables globales
+
 ``` sh
 npm install pinia
+
 ```
+
 ## HAcer lo siguiente en el main.js para usar Pinia en el main.js
+
 ``` js
 import { createPinia } from 'pinia'
 const pinia = createPinia();
 
 createApp(App)
 .use(pinia).mount('#app')
+```
 
+## Se instalo commitlint para el mejoramiento del git log
+
+``` sh
+npm install -D @commitlint/cli @commitlint/config-conventional
+
+```
+
+## Configurar commitlint para utilizar la configuración convencional
+
+```js
+export default {
+  extends: ['@commitlint/config-conventional']
+}
+
+```
+
+## Usando un administrador de hooks git instalamos Husky para emitir funciones antes y despues de eventos de git
+
+### antes del siguiente comando se debe tener un repositorio git
+
+```sh
+npm install --save-dev husky
+```
+
+## El init El comando simplifica la configuración de husky en un proyecto
+
+```sh
+npm husky init
+```
+
+## Para adicionar hooks ponemos el siguiente comando
+
+```sh
+npx husky add .husky/commit-msg 'npx commitlint --edit $1'
 ```

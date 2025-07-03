@@ -126,6 +126,7 @@ const props = defineProps({
   }
 });
 
+console.log("mi ruta: ",props.redirectTo)
 const retornarInicio = () => {
   router.push({name: 'inicio'})
 }
@@ -178,7 +179,7 @@ const registrarPersona = async() =>{
       router.push({ name: props.redirectTo});
     }
     else{
-      router.push({ name: props.redirectTo, params:{id:ci}});
+      router.push({ name: props.redirectTo, params:{id:resultado.data.id_persona}});
     }
 
   };

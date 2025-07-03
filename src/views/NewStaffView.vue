@@ -1,6 +1,6 @@
 <template>
     <main class="container-newperson">
-      <FormPersona redirecTo="registrar-usuario"/>
+      <FormPersona redirectTo="registrar-usuario"/>
     </main>
 </template>
 

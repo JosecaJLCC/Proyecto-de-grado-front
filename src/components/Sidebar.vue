@@ -82,13 +82,13 @@
             </RouterLink>
           </li>
           <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'registrar-usuario' }">
+            <RouterLink class="rutas-sidebar" :to="{ name: 'registrar-personal' }">
               <CIcon :icon="cilChevronBottom" class="icon-sidebar" />
               <span>Usuarios</span>
             </RouterLink>
           </li>
           <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'registrar-centro-salud' }">
+            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-centro-salud' }">
               <CIcon :icon="cilChevronBottom" class="icon-sidebar" />
               <span>Establecimientos de Salud</span>
             </RouterLink>

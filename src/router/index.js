@@ -5,7 +5,7 @@ import NewUserView from '@/views/NewUserView.vue'
 import HomeView from '@/views/HomeView.vue'
 import NewPatientView from '@/views/NewPatientView.vue'
 import NewAttentionView from '@/views/NewAttentionView.vue'
-import GeneralHistoryView from '@/views/GeneralHistoryView.vue'
+import GeneralHistoryView from '@/views/HistoryPatientsView.vue'
 
 import MainLayout from '@/layouts/MainLayout.vue'
 
@@ -57,7 +57,7 @@ const router = createRouter({
         },
 
         {
-          path: 'registrar-usuario',
+          path: 'registrar-usuario/:id',
           name: 'registrar-usuario',
           component: NewUserView,
         },
