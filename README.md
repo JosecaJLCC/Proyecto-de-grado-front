@@ -62,7 +62,7 @@ npm install pinia
 
 ```
 
-## HAcer lo siguiente en el main.js para usar Pinia en el main.js
+## Hacer lo siguiente en el main.js para usar Pinia en el main.js
 
 ``` js
 import { createPinia } from 'pinia'
