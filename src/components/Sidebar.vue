@@ -16,13 +16,11 @@
         SISTEMA DE CONTROL DE PREVENCION DEL USO INDEBIDO DEL SISTEMA UNICO DE SALUD
       </h3>
       <section class="user-sidebar">
-        <CIcon :icon="cilChatBubble" class="icon-sidebar" />
-        <CIcon :icon="cilBell" class="icon-sidebar" />
         <!-- <img src="../assets/logo.svg" class="perfil-sidebar"> -->
         <div class="perfil-section">
           <img class="img-perfil" :src="`http://localhost:3000/uploads/${perfil}`" alt="">
           <p>{{ nombre_usuario }}</p>
-          <p><strong>{{ rol }}</strong></p>
+          <!-- <p><strong>{{ rol }}</strong></p> -->
         </div>
         <div class="dropdown-sidebar">
           <CIcon
@@ -59,43 +57,70 @@
         <ul>
           <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'inicio' }">
-              <CIcon :icon="cilHome" class="icon-sidebar" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-home icon-sidebar">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"  />
+                <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+              </svg>
+              <!-- <CIcon :icon="cilHome" class="icon-sidebar" /> -->
               <span>Inicio</span>
             </RouterLink>
           </li>
           <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'nuevo-paciente' }">
-              <CIcon :icon="cilUserPlus" class="icon-sidebar" />
-              <span>Nuevo Paciente</span>
-            </RouterLink>
-          </li>
-          <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'nuevo-registro' }">
-              <CIcon :icon="cilNoteAdd" class="icon-sidebar" />
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-plus icon-sidebar">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                <path d="M12 11l0 6" />
+                <path d="M9 14l6 0" />
+              </svg>
               <span>Registrar Atención</span>
             </RouterLink>
           </li>
           <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'historial-general' }">
-              <CIcon :icon="cilHistory" class="icon-sidebar" />
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-history icon-sidebar">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M12 8l0 4l2 2" />
+                <path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5" />
+              </svg>
               <span>Historial General</span>
             </RouterLink>
           </li>
           <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'registrar-personal' }">
-              <CIcon :icon="cilChevronBottom" class="icon-sidebar" />
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-users icon-sidebar">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
+              </svg>
               <span>Usuarios</span>
             </RouterLink>
           </li>
           <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'historial-centro-salud' }">
-              <CIcon :icon="cilChevronBottom" class="icon-sidebar" />
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-medical-cross icon-sidebar">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M13 3a1 1 0 0 1 1 1v4.535l3.928 -2.267a1 1 0 0 1 1.366 .366l1 1.732a1 1 0 0 1 -.366 1.366l-3.927 2.268l3.927 2.269a1 1 0 0 1 .366 1.366l-1 1.732a1 1 0 0 1 -1.366 .366l-3.928 -2.269v4.536a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-4.536l-3.928 2.268a1 1 0 0 1 -1.366 -.366l-1 -1.732a1 1 0 0 1 .366 -1.366l3.927 -2.268l-3.927 -2.268a1 1 0 0 1 -.366 -1.366l1 -1.732a1 1 0 0 1 1.366 -.366l3.928 2.267v-4.535a1 1 0 0 1 1 -1h2z" />
+              </svg>
               <span>Establecimientos de Salud</span>
             </RouterLink>
           </li>
            <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'historial-centro-salud' }">
-              <CIcon :icon="cilChevronBottom" class="icon-sidebar" />
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-report icon-sidebar">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M8 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h5.697" /><path d="M18 14v4h4" />
+                <path d="M18 11v-4a2 2 0 0 0 -2 -2h-2" />
+                <path d="M8 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                <path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                <path d="M8 11h4" />
+                <path d="M8 15h3" />
+              </svg>
               <span>Reportes</span>
             </RouterLink>
           </li>
@@ -106,6 +131,7 @@
 </template>
 
 <script setup>
+
 import { CIcon } from '@coreui/icons-vue'
 import {
   cilHospital,
@@ -121,10 +147,9 @@ import {
   cilChatBubble,
   cilPowerStandby,
   cilBell,
-  cilUserFemale,
   cilPeople,
 } from '@coreui/icons'
-import { ref, watch, computed, onMounted } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
 /* Para cambio de rutas cuando se cierra cesion */
 let router = useRouter()
@@ -149,9 +174,9 @@ let authStore = useUsuarioStore();
 let usuario = computed(() => authStore.usuario)
 console.log('usuario sidebar', usuario.value)
 /* faltan detalles */
-let nombre_usuario = computed(()=>usuario.value?.nombre_usuario ?? 'x');
+let nombre_usuario = computed(()=>usuario.value?.correo ?? 'x');
 
-let rol=computed(()=>usuario.value?.rol ?? 'x');
+let rol=computed(()=>usuario.value?.nombre_rol ?? 'x');
 
 let establecimiento=computed(()=>usuario.value?.nombre_establecimiento ?? 'x');
 
@@ -159,6 +184,7 @@ let perfil = computed(()=> usuario.value?.perfil ?? 'usuario.png');
 
 watch(tamanioSidebar,(newTamanioSidebar) => {
     console.log('Nuevo tamaño:', newTamanioSidebar)
+    console.log("mi perfil", perfil)
   },
   { immediate: true },
 )

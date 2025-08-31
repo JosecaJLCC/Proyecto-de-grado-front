@@ -53,12 +53,10 @@ import { CIcon } from '@coreui/icons-vue';
 import { cilCheckAlt} from '@coreui/icons';
 
 import { onMounted, ref } from 'vue';
-import Swal from 'sweetalert2';
 import axios from 'axios';
 /* router */
-import { useRouter, useRoute } from 'vue-router';
-/* Te da acceso al router completo  */
-let router = useRouter();
+import { useRoute } from 'vue-router';
+
 /* Te da acceso a la información de la ruta actual. */
 let route = useRoute();
 let id_person = ref(route.params.id)

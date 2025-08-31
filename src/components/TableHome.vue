@@ -45,14 +45,15 @@
 </template>
 
 <script setup>
+import '@/assets/styles/table.css';
 import { computed, onMounted, ref } from 'vue';
 import { CIcon } from '@coreui/icons-vue';
-import { cilUser, cilLockLocked, cilLowVision, cilLockUnlocked, cilSearch } from '@coreui/icons';
+import { cilSearch } from '@coreui/icons';
 import axios from 'axios';
-import { useUsuarioStore } from '@/store/usuario.js';
+/* import { useUsuarioStore } from '@/store/usuario.js';
 
 let usuarioStore = useUsuarioStore();
-let usuario = usuarioStore.usuario;
+let usuario = usuarioStore.usuario; */
 let date = new Date();
 date = date.toISOString().split("T")[0];
 let registros=ref(0)
@@ -186,74 +187,4 @@ border: none;
 font-weight: bold;
 }
 
-/* Tabla */
-table {
-border-collapse: collapse;
-margin: 0;
-width: 100%;
-box-shadow: 0 0 5px rgba(0, 0, 0, -25);
-/* border: 3px solid black; */
-}
-
-table tr {
-padding: .45em;
-}
-
-thead tr {
-background-color: rgb(0, 128, 128);
-}
-
-tbody tr:nth-child(even) {
-background-color: rgba(0, 128, 128, .3);
-}
-
-table th, table td {
-font-size: 1em;
-padding: 1em;
-text-align: center;
-}
-
-thead th {
-color: white;
-font-size: 1.15em;
-}
-
-
-@media (max-width: 800px) {
-.content-btn-attention {
-
-  justify-content: end;
-
-}
-
-table thead tr {
-  display: none;
-}
-
-table tr {
-  display: block;
-}
-
-table th, table td {
-  padding: .5em;
-  text-align: right;
-}
-
-table td {
-  text-align: right;
-  display: block;
-  font-size: 1em;
-}
-
-table td::before {
-  content: attr(data-title)": ";
-  float: left;
-  font-weight: bold;
-  color: #333;
-}
-
-tbody tr:nth-child(even) {
-  background-color: rgba(0, 128, 128, 0.1);
-}
-}
 </style>

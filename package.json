@@ -8,9 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --fix",
-    "format": "prettier --write src/",
-    "commit": "commit",
-    "prepare":"husky install"
+    "format": "prettier --write src/"
   },
   "dependencies": {
     "@coreui/icons": "^3.0.1",
@@ -30,6 +28,7 @@
     "eslint": "^9.18.0",
     "eslint-plugin-vue": "^9.32.0",
     "husky": "^9.1.7",
+    "oxlint": "^1.5.0",
     "prettier": "^3.4.2",
     "vite": "^6.0.11",
     "vite-plugin-vue-devtools": "^7.7.0"

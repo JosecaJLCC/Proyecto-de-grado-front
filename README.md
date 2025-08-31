@@ -72,16 +72,19 @@ createApp(App)
 .use(pinia).mount('#app')
 ```
 
-## Se instalo commitlint para el mejoramiento del git log
+## Configuracion de commitlint + husky v9+
 
-### Esto instala el CLI de commitlint y la configuración basada en el estándar "Conventional Commits"
+### Este proyecto usa **Commitlint** para validar los mensajes de commit
 
-``` sh
-npm install -D @commitlint/cli @commitlint/config-conventional
+### 1. instalacion
 
+``` bash
+npm install --save-dev husky @commitlint/cli @commitlint/config-conventional
 ```
 
-## Configurar commitlint para utilizar la configuración convencional
+## 2. configurar commitlint
+
+### Creamos el archivo commitlint.config.js en la raiz del proyecto con el sgte contenido
 
 ```js
 module.exports ={
@@ -90,39 +93,64 @@ module.exports ={
 
 ```
 
-## Usando un administrador de hooks git instalamos Husky para emitir funciones antes y despues de eventos de git
+## 3. Configurar husky manualmente
 
-### antes del siguiente comando se debe tener un repositorio git
+### Crear carpeta y archivo de hook
+
+```bash
+mkdir -p .husky
+touch .husky/commit-msg
+chmod +x .husky/commit-msg
+```
+
+### Edita .husky/commit-msg y agrega este contenido
 
 ```sh
-npm install --save-dev husky
+  #!/bin/sh
+  npx --no-install commitlint --edit "$1"
 
 ```
 
-## Agrega el script prepare en tu package.json
+## 4. Probar configuracion
 
- ``` json
-  "scripts": {
-    "prepare": "husky install"
+  ```bash
+  git commit -m "feat: agregar funcionalidad X"
+  ```
+
+## oxlint
+
+  ```sh
+  npm install --save-dev oxlint
+  ```
+
+### Crear el archivo de configuración
+
+  ```sh
+  touch .oxlintrc.json
+  ```
+
+### Escribir lo siguiente en el archivo
+
+  ```json
+  {
+  "rules": {
+      "no-alert": "error",
+      "oxc/approx-constant": "warn",
+      "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }]
   }
- ```
-
-## Ejecuta el script prepare para crear la carpeta .husky Esto crea la carpeta .husky/
-
-```sh
-npm run prepare
-```
-
-## Para adicionar hooks ponemos el siguiente comando
-
-```sh
-npx husky add .husky/commit-msg 'npx commitlint --edit $1'
-```
-
-## Para que prompt-cli sea fácil de usar, agregue un script de ejecución npm a su package.json
-
-```json
-  "scripts": {
-    "commit": "commit"
   }
+  ```
+
+### Agregamos el siguiente script en package.json
+
+  ``` json
+  "scripts":{
+      "lint": "oxlint"
+  }
+  ```
+
+### Asi podras correr el siguiente comando
+
+  ```sh
+  npm run lint
   ```

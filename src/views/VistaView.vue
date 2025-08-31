@@ -1,9 +1,9 @@
 <template>
-  <h1>En proceso...</h1>
+  <Sidebar/>
 </template>
 
 <script setup>
-
+ import Sidebar from '@/components/Sidebar.vue';
 </script>
 
 <style>

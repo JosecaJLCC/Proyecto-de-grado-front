@@ -5,13 +5,13 @@
 </template>
 
 <script setup>
-  import { Usuario } from '@/services/Usuario.js';
+  import { Usuario } from '@/models/Usuario.js';
   import { onMounted } from 'vue';
   import TableHome from '@/components/TableHome.vue';
   onMounted(async() => {
     let usuario = new Usuario();
     let data = await usuario.obtenerUsuario();
-    console.log("data", data[0])
+    console.log("data", data)
 
   })
 </script>

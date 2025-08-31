@@ -3,18 +3,17 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '@/views/LoginView.vue'
 import NewUserView from '@/views/NewUserView.vue'
 import HomeView from '@/views/HomeView.vue'
-import NewPatientView from '@/views/NewPatientView.vue'
 import NewAttentionView from '@/views/NewAttentionView.vue'
 import GeneralHistoryView from '@/views/HistoryPatientsView.vue'
 
 import MainLayout from '@/layouts/MainLayout.vue'
 
 import { useUsuarioStore } from '@/store/usuario.js'
-import NewHospitalView from '@/views/NewHospitalView.vue'
 import HistoryUsersView from '@/views/HistoryUsersView.vue'
 import HistoryHospitalsView from '@/views/HistoryHospitalsView.vue'
 import PatientView from '@/views/PatientView.vue'
 import NewStaffView from '@/views/NewStaffView.vue'
+import VistaView from '@/views/VistaView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,13 +32,7 @@ const router = createRouter({
           name: 'inicio',
           component: HomeView,
         },
-        {
-          path: 'nuevo-paciente',
-          name: 'nuevo-paciente',
-          component: NewPatientView,
-        },
         /* despues de datos personales viene datos de direccion */
-
         {
           path: 'nuevo-registro',
           name: 'nuevo-registro',
@@ -67,11 +60,6 @@ const router = createRouter({
           component: NewStaffView,
         },
         {
-          path: 'registrar-centro-salud',
-          name: 'registrar-centro-salud',
-          component: NewHospitalView,
-        },
-        {
           path: 'historial-usuarios',
           name: 'historial-usuarios',
           component: HistoryUsersView,
@@ -87,7 +75,7 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach(async (to, from, next) => {
+/* router.beforeEach(async (to, from, next) => {
   const usuarioStore = useUsuarioStore()
   const token = localStorage.getItem('token')
 
@@ -96,6 +84,6 @@ router.beforeEach(async (to, from, next) => {
   }
 
   next()
-})
+}) */
 
 export default router;

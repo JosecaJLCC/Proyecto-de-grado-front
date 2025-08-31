@@ -5,77 +5,48 @@
         <legend id="legend-login">
           <img class="logo-login" src="../assets/CapacabanaLogo.png" alt="" />
         </legend>
-        <h2 id="title-login">INICIO DE SESION</h2>
-        <!-- <br /> -->
-        <label for="">CENTRO DE SALUD</label>
-        <div class="entrada-icon-login">
-          <select class="select-login" v-model="id_centro_salud">
-            <option v-for="(item) of establecimiento" v-bind:key="item.id_establecimiento" :value="item.id_establecimiento" >{{ item.nombre_establecimiento }}</option>
-          </select>
-        </div>
+        <h2 id="title-login">INICIO DE SESIÓN</h2>
 
         <label for=""> CORREO</label>
         <div class="entrada-icon-login">
           <input class="input-login" v-model="correo" type="email" />
-          <CIcon :icon="cilUser" class="icon-login"/>
+          <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-user icon-login"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2a5 5 0 1 1 -5 5l.005 -.217a5 5 0 0 1 4.995 -4.783z" /><path d="M14 14a5 5 0 0 1 5 5v1a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-1a5 5 0 0 1 5 -5h4z" /></svg>
         </div>
 
         <label for="">CONTRASEÑA</label>
         <div class="entrada-icon-login">
           <input class="input-login" v-model="clave" :type="tipoClave" />
-          <CIcon :icon="cilLockLocked" class="icon-login"/>
-          <CIcon :icon="cilLowVision" class="icon-login-vision" v-on:click="verClave"/>
+           <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-lock icon-login"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2a5 5 0 0 1 5 5v3a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-10a3 3 0 0 1 -3 -3v-6a3 3 0 0 1 3 -3v-3a5 5 0 0 1 5 -5m0 12a2 2 0 0 0 -1.995 1.85l-.005 .15a2 2 0 1 0 2 -2m0 -10a3 3 0 0 0 -3 3v3h6v-3a3 3 0 0 0 -3 -3" /></svg>
+          <transition name="fade" mode="out-in">
+            <svg v-if="cambioIcon" v-on:click="verClave"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-eye-off icon-login-vision"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" /><path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" /><path d="M3 3l18 18" /></svg>
+            <svg v-else v-on:click="verClave" xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-eye icon-login-vision"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
+          </transition>
         </div>
 
         <button id="button-login" type="submit">INGRESAR</button>
         <a id="link-login" href="">¿Olvidó sus credenciales?</a>
       </fieldset>
     </form>
+    <ChooseCentroSalud class="content-form-cs" v-if="modalVisibleChoose" :data="result" @modificarModalChoose="ocultarModalChoose"/>
   </div>
 </template>
 
 <script setup>
-
-import { CIcon } from '@coreui/icons-vue';
-import { cilUser, cilLockLocked, cilLowVision, cilLockUnlocked } from '@coreui/icons';
-
+import ChooseCentroSalud from '@/components/ChooseCentroSalud.vue'
+import { userService } from '@/services/Usuario.js'
 import Swal from 'sweetalert2'
-import axios from 'axios'
-import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
-const router = useRouter()
+import { ref } from 'vue'
 
 let correo = ref('')
 let clave = ref('')
 let tipoClave = ref('password');
 
-let establecimiento = ref([])
-let id_centro_salud = ref('')
-
-/* Para la autenticacion y guardado de info del usuario */
-import { useUsuarioStore } from '@/store/usuario.js';
-let usuarioStore = useUsuarioStore();
-
-onMounted(async()=>{
-  try {
-    let resultadoEst = await axios.get('http://localhost:3000/api/v1/stablishment/show')
-    console.log("resultadoEst", resultadoEst.data.resultado)
-    establecimiento.value = resultadoEst.data.resultado
-  } catch (error) {
-    /* console.log("este error",error.response); */
-      if (!error.response) {
-        Swal.fire({
-          icon: "error",
-          title: "Servidor no disponible",
-          text: "No se pudo conectar al servidor. Intente más tarde.",
-        });
-      }
-  }
-})
-
+let cambioIcon = ref(true);
+let modalVisibleChoose=ref(false);
+let result=ref({});
 const iniciarSesion = async () => {
   /* Validar si los inputs no esten vacios */
-    if(correo.value == '' || clave.value == '' || id_centro_salud.value == '') {
+    if(correo.value == '' || clave.value == '') {
       Swal.fire({
         icon: "error",
         title: "Campos vacios",
@@ -84,45 +55,31 @@ const iniciarSesion = async () => {
       return;
     }
     try {
-      let centro_salud = establecimiento.value.find(element => element.id_establecimiento==id_centro_salud)
-      let resultSwal = await Swal.fire({
-        title: `Estas seguro de iniciar sesión`,
-        text: `Correo: ${correo.value}\n Centro de Salud: ${centro_salud.nombre_establecimiento}`,
+
+      /* let resultSwal = await Swal.fire({
+        title: `¿Iniciar Sesión?`,
+        html: `Correo: ${correo.value}`,
         icon: "question",
         showCancelButton: true,
-        confirmButtonColor: "#008080",
-        cancelButtonColor: "#E03F3E",
+        confirmButtonColor: "rgb(5, 135, 137)",
+        cancelButtonColor: "rgb(224, 63, 62)",
         confirmButtonText: "Iniciar Sesión"
-      })
-  /* me quede aca en esta vista, el front sigue avanzando */
-      if (resultSwal.isConfirmed) {
-        let resultado = await axios.post('http://localhost:3000/api/v1/user/login', {
-          correo: correo.value,
-          clave: clave.value,
-          id_establecimiento: id_centro_salud.value
-        })
-          console.log('mis-datos-login: ', resultado)
-          if (resultado.data.ok) {
-            Swal.fire({
-              icon: "success",
-              title: "¡Bienvenido!",
-              text: ``,
-            });
-            localStorage.setItem('token', resultado.data.token)
+      }) */
+      /* if (resultSwal.isConfirmed) { */
+        result.value = await userService.login({correo: correo.value, clave: clave.value })
+          if (result.value.ok) {
+            console.log("ok: ", result.value.data)
+            result.value=result.value.data;
+            modalVisibleChoose.value = !modalVisibleChoose.value;
 
-            await usuarioStore.cargarUsuario();
-
-            router.push({
-              name: 'inicio',
-            })
           }
-    };
+    /* }; */
   }
   catch (error) {
       if (!error.response) {
         Swal.fire({
           icon: "error",
-          title: "Servidor no disponible ss",
+          title: "Servidor no disponible",
           text: "No se pudo conectar al servidor. Intente más tarde.",
         });
         return;
@@ -132,7 +89,7 @@ const iniciarSesion = async () => {
         Swal.fire({
           icon: "error",
           title: "Credenciales incorrectas",
-          text: `${error.response.data.msg}`,
+          text: `Vuelva a ingresar sus datos`,
 
         });
       }
@@ -154,19 +111,43 @@ const iniciarSesion = async () => {
 }
 
 const verClave = () =>{
-  /* alert("xxx",tipoClave.value) */
   tipoClave.value=="password" ? tipoClave.value='text' : tipoClave.value='password';
+  cambioIcon.value=!cambioIcon.value;
+}
+
+const ocultarModalChoose = (valor) => {
+  modalVisibleChoose.value = valor;
 }
 </script>
 
 <style scoped>
+.content-form-cs{
+    position: absolute; /* o fixed, si prefieres */
+    top: 0px;
+    left: 0;
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.7); /* blanco semitransparente */
+    backdrop-filter: blur(5px); /* 🔥 Aquí se hace el desenfoque */
+    -webkit-backdrop-filter: blur(5px); /* compatibilidad con Safari */
+    z-index: 10;
+  }
+
 #container-login {
+  background-image: url('@/assets/background7.jfif');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: var(--color-primary);
   display: flex;
   justify-content: center;
   align-items: center;
   max-width: 100%;
-  height: 100vh;
-  /* border: 3px solid brown; */
+  height: 100dvh;
 }
 #formulario-login {
   border-radius: 20px;
@@ -176,11 +157,9 @@ const verClave = () =>{
   align-items: center;
   justify-content: center;
   min-width: 350px;
-  /* background-color: rgb(5, 15, 37, 0.8); */
-  background-color: rgb(0, 128, 128);
+  background-color: var(--color-white);
   padding: 20px;
   row-gap: 20px;
-  /* box-shadow: 0px 2px 20px 10px #00ffc8; */
 }
 
 #formulario-login > * {
@@ -195,7 +174,7 @@ const verClave = () =>{
   height: 150px;
   width: 150px;
   border-radius: 50%;
-  border: 3px solid rgb(0, 128, 128);
+  border: 3px solid var(--color-primary);
 }
 
 #legend-login {
@@ -206,8 +185,9 @@ const verClave = () =>{
 }
 
 #button-login {
-  background-color: rgb(224, 63, 62);
-  color: white;
+
+  background-color: var(--color-primary);
+  color: var(--color-white);
   border: 0;
   outline: none;
   padding: 10px;
@@ -215,7 +195,7 @@ const verClave = () =>{
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 #button-login:hover {
-  background-color: #00ffc8;
+  background-color: var(--color-secondary);
   transition: 0.5s;
 }
 
@@ -224,30 +204,15 @@ const verClave = () =>{
   background: none;
   outline: none;
   border: none;
-  border-bottom: 3px solid white;
+  border-bottom: 3px solid var(--color-primary);
   color: white;
   width: 100%;
   padding-left: 30px;
   height: 100%;
 }
 
-.select-login{
-  text-align: center;
-  font-size: medium;
-  /* background-color:rgb(224, 63, 62); */
-  background-color: rgb(0, 128, 128);
-  outline: none;
-  border: 3px solid white;
-  border-radius: 20px;
-  color: white;
-  width: 100%;
-  height: 100%;
-}
-
-
-
 #link-login {
-  color: white;
+  color: var(--color-primary);
 }
 
 .entrada-icon-login{
@@ -255,12 +220,8 @@ const verClave = () =>{
   position: relative;
 }
 
-/* .entrada-icon-login > select{
-  background-color: rgb(224, 63, 62);
-} */
-
 .entrada-icon-login > input{
-  color: white;
+  color: var(--color-black);
 }
 
 .icon-login{
@@ -277,5 +238,15 @@ const verClave = () =>{
   width: 20px;
   margin: 5px;
   right: 0px;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease; /* Cambia 0.3s a lo que necesites */
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-to, .fade-leave-from {
+  opacity: 1;
 }
 </style>

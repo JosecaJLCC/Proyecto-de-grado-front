@@ -1,24 +1,17 @@
 <template>
   <div>
-
     <div class="container-newregister">
-
       <fieldset class="form-newregister">
         <legend class="legend-newregister">
           <!-- <CIcon :icon="cilUserPlus" class="icon-newregister"/> -->
            <span class="titulo-newregister">DATOS ADICIONALES</span>
         </legend>
-
-
       </fieldset>
     </div>
   </div>
 </template>
 
 <script setup>
-
-import { CIcon } from '@coreui/icons-vue';
-import { cilUserPlus, cilCheckAlt, cilX } from '@coreui/icons';
 
 </script>
 

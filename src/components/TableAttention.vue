@@ -1,6 +1,6 @@
 <template>
-    <div class="container-tableattention" >
-      <div class="header-tableattention">
+    <div v-if="registros>0" class="container-tableattention" >
+      <header class="header-tableattention">
         <section class="search-tableattention">
           <section class="input-tableattention">
             <input type="text" placeholder="INGRESE SU CI" class="input-text-search" v-model="ciBuscado">
@@ -8,7 +8,7 @@
           </section>
 
         </section>
-      </div>
+      </header>
       <table class="table-attention">
         <thead>
             <tr>
@@ -21,19 +21,16 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(data, Nro) of datosFiltrados" v-bind:key="data.cedula">
+            <tr v-for="(data, Nro) of datosFiltrados" v-bind:key="data.ci">
               <!--  -->
                 <td data-title="N°">{{ Nro + 1 }}</td>
-                <td data-title="CI">{{ data.cedula }}</td>
+                <td data-title="CI">{{ data.ci}}</td>
                 <td data-title="PATERNO">{{ data.paterno }}</td>
                 <td data-title="MATERNO">{{ data.materno }}</td>
                 <td data-title="NOMBRES">{{ data.nombre }}</td>
                 <td data-title="ACCIONES">
                   <div class="content-btn-attention">
-                    <!-- <router-link class="btn-attention" :to='{name:"datos-paciente", params: {id: data.cedula}}'>
-                      VER MÁS
-                    </router-link> -->
-                    <button class="btn-attention" v-on:click="verPaciente(data.cedula)">
+                    <button class="btn-attention" v-on:click="verPaciente(data.ci)">
                       VER MÁS
                     </button>
                     <button class="btn-attention" v-on:click="atenderPaciente(data.id_persona)">
@@ -45,12 +42,15 @@
         </tbody>
     </table>
     </div>
+    <div v-else class="alternative-div">
+      <h2 >NO SE ENCONTRARON REGISTROS</h2>
+    </div>
 </template>
 
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { CIcon } from '@coreui/icons-vue';
-import { cilUser, cilLockLocked, cilLowVision, cilLockUnlocked, cilSearch } from '@coreui/icons';
+import { cilSearch } from '@coreui/icons';
 import axios from 'axios';
 import { useUsuarioStore } from '@/store/usuario.js';
 /* import router from '@/router'; */
@@ -64,6 +64,7 @@ let usuario = computed(() => usuarioStore.usuario)
 let datos = ref([]);
 let datosOriginales = ref([])
 let ciBuscado = ref("");
+let registros=ref(0)
 
 const atenderPaciente = async(id_persona) =>{
   try {
@@ -72,6 +73,7 @@ const atenderPaciente = async(id_persona) =>{
       id_persona,
       id_establecimiento:usuario.value.id_establecimiento
     });
+    console.log(resultado);
     console.log("id: ", usuario.value.id_usuario,
       id_persona,
       usuario.value.id_establecimiento)
@@ -101,13 +103,14 @@ const datosFiltrados = computed(() => {
   const ci = ciBuscado.value.trim();
   return ci === ""
     ? datos.value
-    : datosOriginales.value.filter(data => data.cedula.toString().includes(ci));
+    : datosOriginales.value.filter(data => data.ci.toString().includes(ci));
 });
 
 
 onMounted(async()=>{
   try {
-    const resultado = await axios.get('http://localhost:3000/api/v1/people/show');
+    const resultado = await axios.get('http://localhost:3000/api/v1/patient/show');
+      registros.value = resultado.data.resultado.length;
     console.log("myres", resultado.data.resultado);
     datos.value=resultado.data.resultado
     datosOriginales.value = [...resultado.data.resultado];
@@ -121,6 +124,7 @@ onMounted(async()=>{
 </script>
 
 <style scoped>
+
 .container-tableattention {
   color: black;
   /* border: 3px solid green; */
@@ -129,6 +133,14 @@ onMounted(async()=>{
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+}
+
+.alternative-div{
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .header-tableattention {
@@ -143,6 +155,7 @@ onMounted(async()=>{
   display: flex;
   justify-content: space-between;
   column-gap: 10px;
+  width: 100%;
 }
 
 .input-tableattention {

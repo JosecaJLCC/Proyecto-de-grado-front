@@ -1,6 +1,6 @@
 // src/stores/usuario.js
 import { defineStore } from 'pinia'
-import { Usuario } from '@/services/Usuario.js'
+import { Usuario } from '@/models/Usuario.js'
 
 export const useUsuarioStore = defineStore('usuario', {
   state: () => ({
@@ -11,8 +11,8 @@ export const useUsuarioStore = defineStore('usuario', {
       try {
         const servicio = new Usuario()
         const data = await servicio.obtenerUsuario()
-        /* data[0] porque es un array de objetos */
-        this.usuario = data[0]
+
+        this.usuario = data
       } catch (error) {
         console.log('Error al cargar el usuario:', error)
         this.usuario = null
@@ -25,3 +25,4 @@ export const useUsuarioStore = defineStore('usuario', {
     }
   }
 })
+

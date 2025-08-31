@@ -1,5 +1,4 @@
 /* Importamos la libreria de coreIU */
-/* import '@coreui/coreui/dist/css/coreui.min.css' */
 import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -9,6 +8,7 @@ import { createPinia } from 'pinia'
 // Importa TODOS los íconos de CoreUI
 import { CIcon } from '@coreui/icons-vue'
 import * as iconSet from '@coreui/icons'
+import '@/assets/styles/palet.css'
 
 const pinia = createPinia();
 const app = createApp(App)

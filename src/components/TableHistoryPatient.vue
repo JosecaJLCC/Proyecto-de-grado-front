@@ -49,14 +49,9 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { CIcon } from '@coreui/icons-vue';
-import { cilUser, cilLockLocked, cilLowVision, cilLockUnlocked, cilSearch } from '@coreui/icons';
+import { cilSearch } from '@coreui/icons';
 import axios from 'axios';
-import { useUsuarioStore } from '@/store/usuario.js';
 
-let usuarioStore = useUsuarioStore();
-let usuario = usuarioStore.usuario;
-let date = new Date();
-date = date.toISOString().split("T")[0];
 let registros=ref(0)
 
 let datos = ref([]);
