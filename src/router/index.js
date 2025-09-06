@@ -10,10 +10,10 @@ import MainLayout from '@/layouts/MainLayout.vue'
 
 import { useUsuarioStore } from '@/store/usuario.js'
 import HistoryUsersView from '@/views/HistoryUsersView.vue'
-import HistoryHospitalsView from '@/views/HistoryHospitalsView.vue'
+
 import PatientView from '@/views/PatientView.vue'
 import NewStaffView from '@/views/NewStaffView.vue'
-import VistaView from '@/views/VistaView.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,7 +30,7 @@ const router = createRouter({
         {
           path: 'inicio',
           name: 'inicio',
-          component: HomeView,
+          component: ()=>import('@/views/HomeView.vue'),
         },
         /* despues de datos personales viene datos de direccion */
         {
@@ -65,9 +65,9 @@ const router = createRouter({
           component: HistoryUsersView,
         },
         {
-          path: 'historial-centro-salud',
-          name: 'historial-centro-salud',
-          component: HistoryHospitalsView,
+          path: 'historial-microred',
+          name: 'historial-microred',
+          component:()=>import('@/views/MicroredView.vue')
         },
       ]
     },

@@ -130,8 +130,7 @@ const ocultarModalChoose = (valor) => {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
-    background-color: rgba(255, 255, 255, 0.7); /* blanco semitransparente */
+    background-color: var(--color-black-transparent); /* blanco semitransparente */
     backdrop-filter: blur(5px); /* 🔥 Aquí se hace el desenfoque */
     -webkit-backdrop-filter: blur(5px); /* compatibilidad con Safari */
     z-index: 10;
@@ -201,11 +200,9 @@ const ocultarModalChoose = (valor) => {
 
 .input-login{
   font-size: medium;
-  background: none;
-  outline: none;
-  border: none;
-  border-bottom: 3px solid var(--color-primary);
-  color: white;
+  background-color: none;
+  border: 2px solid var(--color-primary);
+  border-radius: 20px;
   width: 100%;
   padding-left: 30px;
   height: 100%;

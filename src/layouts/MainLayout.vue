@@ -1,6 +1,6 @@
 <template>
   <div class="container-mainlayout">
-    <Sidebar />
+    <Sidebar class="sidebar-layout"/>
     <main :style="{ paddingLeft: paddingLeft }" class="main-layout">
       <RouterView />
     </main>
@@ -43,16 +43,24 @@ watch(
 <style scoped>
 .container-mainlayout {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
   /* border: 2px solid blue; */
 }
+
+.sidebar-layout{
+  height: 15dvh;
+}
 .main-layout {
-  padding-top: 83px;
   transition: padding-left 0.3s ease;
+  background-image: url('@/assets/background5.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   display: flex;
   /* border: 2px solid red; */
-  min-height: 100vh;
+  height: 85dvh;
   width: 100%;
+  /* border: 2px solid green; */
 }
 @media (max-width: 620px) {
   .main-layout {

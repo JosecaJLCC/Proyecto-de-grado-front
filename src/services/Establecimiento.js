@@ -3,7 +3,7 @@ import axios from 'axios'
 let API_URL = 'http://localhost:3000/api/v1/stablishment'
 
 const crearEstablecimiento = async(Establecimiento)=>{
-  const data = await axios.post(API_URL+'/create', Establecimiento);
+  const {data} = await axios.post(API_URL+'/create', Establecimiento);
   return data;
 }
 

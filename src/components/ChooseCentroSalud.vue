@@ -92,21 +92,18 @@ const setSession = async() => {
         confirmButtonText: "Iniciar Sesión"
       })
       if (resultSwal.isConfirmed) {
+        localStorage.setItem('token', result.value.token)
+        console.log("verificando...")
+        await usuarioStore.cargarUsuario();
+        router.push({
+          name: 'inicio',
+        })
         Swal.fire({
           icon: "success",
           title: "¡Bienvenido!",
           text: ``,
         });
       }
-
-
-      localStorage.setItem('token', result.value.token)
-      console.log("verificando...")
-
-      await usuarioStore.cargarUsuario();
-      router.push({
-        name: 'inicio',
-      })
     }
 
   } catch (error) {
@@ -156,7 +153,7 @@ const enviarValorModal = () => {
 select {
   border-radius: 20px;
   height: 25px;
-  border: 2px solid black;
+  border: 2px solid var(--color-black);
   /* outline: none; */
 }
 
@@ -174,6 +171,7 @@ select {
   border-radius: 20px;
   padding: 5px;
   font-weight: bold;
+  color: var(--color-white);
 }
 
 .icon-choose-cs {
@@ -192,7 +190,7 @@ select {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  color: white;
+  color: var(--color-white);
   font-weight: bold;
   border-radius: 20px;
   outline: none;

@@ -3,14 +3,15 @@
     <header class="header-sidebar">
       <section class="main-sidebar">
         <!-- <transition name="fade"> -->
-        <CIcon
-          v-if="cambioIcon"
-          :icon="cilArrowLeft"
-          class="icon-sidebar"
-          v-on:click="mostrarSidebar"
-        />
-        <CIcon v-else :icon="cilMenu" class="icon-sidebar" v-on:click="mostrarSidebar" />
-        <!-- </transition> -->
+        <transition name="fade" mode="out-in">
+          <CIcon
+            v-if="cambioIcon"
+            :icon="cilArrowLeft"
+            class="icon-sidebar"
+            v-on:click="mostrarSidebar"
+          />
+          <CIcon v-else :icon="cilMenu" class="icon-sidebar" v-on:click="mostrarSidebar" />
+        </transition>
       </section>
       <h3 class="titulo-sidebar">
         SISTEMA DE CONTROL DE PREVENCION DEL USO INDEBIDO DEL SISTEMA UNICO DE SALUD
@@ -18,8 +19,9 @@
       <section class="user-sidebar">
         <!-- <img src="../assets/logo.svg" class="perfil-sidebar"> -->
         <div class="perfil-section">
-          <img class="img-perfil" :src="`http://localhost:3000/uploads/${perfil}`" alt="">
+          <img class="img-perfil" :src="`http://localhost:3000/uploads/${perfil}`" alt="" />
           <p>{{ nombre_usuario }}</p>
+          <p>{{ rol }}</p>
           <!-- <p><strong>{{ rol }}</strong></p> -->
         </div>
         <div class="dropdown-sidebar">
@@ -57,10 +59,19 @@
         <ul>
           <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'inicio' }">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-home icon-sidebar">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-home icon-sidebar"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"  />
+                <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
                 <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
               </svg>
               <!-- <CIcon :icon="cilHome" class="icon-sidebar" /> -->
@@ -69,8 +80,19 @@
           </li>
           <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'nuevo-registro' }">
-              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-file-plus icon-sidebar">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-file-plus icon-sidebar"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M14 3v4a1 1 0 0 0 1 1h4" />
                 <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
                 <path d="M12 11l0 6" />
@@ -81,8 +103,19 @@
           </li>
           <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'historial-general' }">
-              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-history icon-sidebar">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-history icon-sidebar"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M12 8l0 4l2 2" />
                 <path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5" />
               </svg>
@@ -91,8 +124,19 @@
           </li>
           <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'registrar-personal' }">
-              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-users icon-sidebar">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-users icon-sidebar"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
                 <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
                 <path d="M16 3.13a4 4 0 0 1 0 7.75" />
@@ -102,21 +146,32 @@
             </RouterLink>
           </li>
           <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-centro-salud' }">
-              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-medical-cross icon-sidebar">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                <path d="M13 3a1 1 0 0 1 1 1v4.535l3.928 -2.267a1 1 0 0 1 1.366 .366l1 1.732a1 1 0 0 1 -.366 1.366l-3.927 2.268l3.927 2.269a1 1 0 0 1 .366 1.366l-1 1.732a1 1 0 0 1 -1.366 .366l-3.928 -2.269v4.536a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-4.536l-3.928 2.268a1 1 0 0 1 -1.366 -.366l-1 -1.732a1 1 0 0 1 .366 -1.366l3.927 -2.268l-3.927 -2.268a1 1 0 0 1 -.366 -1.366l1 -1.732a1 1 0 0 1 1.366 -.366l3.928 2.267v-4.535a1 1 0 0 1 1 -1h2z" />
-              </svg>
+            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-microred' }">
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-building-hospital icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l18 0" /><path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16" /><path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" /><path d="M10 9l4 0" /><path d="M12 7l0 4" /></svg>
               <span>Establecimientos de Salud</span>
             </RouterLink>
           </li>
-           <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-centro-salud' }">
-              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-report icon-sidebar">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                <path d="M8 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h5.697" /><path d="M18 14v4h4" />
+          <li>
+            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-microred' }">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="icon icon-tabler icons-tabler-outline icon-tabler-report icon-sidebar"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M8 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h5.697" />
+                <path d="M18 14v4h4" />
                 <path d="M18 11v-4a2 2 0 0 0 -2 -2h-2" />
-                <path d="M8 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                <path
+                  d="M8 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"
+                />
                 <path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
                 <path d="M8 11h4" />
                 <path d="M8 15h3" />
@@ -131,7 +186,6 @@
 </template>
 
 <script setup>
-
 import { CIcon } from '@coreui/icons-vue'
 import {
   cilHospital,
@@ -163,28 +217,29 @@ let cambioIcon = computed(() => sidebarStore.cambioIcon)
 /* el ancho de la img de la institucion que esta dentro del sidebar */
 let tamanioLogo = computed(() => sidebarStore.tamanioLogo)
 
-const mostrarTitulo = computed(() => sidebarStore.tamanioSidebar !== '50px');
+const mostrarTitulo = computed(() => sidebarStore.tamanioSidebar !== '50px')
 
 /* para el despliegue de dropdown  */
-let mostrarDropDown=ref(false);
+let mostrarDropDown = ref(false)
 
 /* Datos de usuario desde auth.js de store */
 import { useUsuarioStore } from '@/store/usuario.js'
-let authStore = useUsuarioStore();
+let authStore = useUsuarioStore()
 let usuario = computed(() => authStore.usuario)
 console.log('usuario sidebar', usuario.value)
 /* faltan detalles */
-let nombre_usuario = computed(()=>usuario.value?.correo ?? 'x');
+let nombre_usuario = computed(() => usuario.value?.correo ?? 'x')
 
-let rol=computed(()=>usuario.value?.nombre_rol ?? 'x');
+let rol = computed(() => usuario.value?.nombre_rol ?? 'x')
 
-let establecimiento=computed(()=>usuario.value?.nombre_establecimiento ?? 'x');
+let establecimiento = computed(() => usuario.value?.nombre_establecimiento ?? 'x')
 
-let perfil = computed(()=> usuario.value?.perfil ?? 'usuario.png');
+let perfil = computed(() => usuario.value?.perfil ?? 'usuario.png')
 
-watch(tamanioSidebar,(newTamanioSidebar) => {
+watch(
+  tamanioSidebar,
+  (newTamanioSidebar) => {
     console.log('Nuevo tamaño:', newTamanioSidebar)
-    console.log("mi perfil", perfil)
   },
   { immediate: true },
 )
@@ -196,8 +251,8 @@ const desplegarDropDown = () => {
 
 /* al pulsar el boton de cerrar sesion se ejecutara esta funcion */
 const cerrarSesion = () => {
-  authStore.cerrarSesion();
-  router.push({ name: 'login' });
+  authStore.cerrarSesion()
+  router.push({ name: 'login' })
 }
 
 /* Funcion que maneja el tamaño del sidebar y algunos de sus componentes que cambian de tamaño, ademas del titulo del header*/
@@ -218,8 +273,9 @@ const mostrarSidebar = () => {
   position: fixed;
   left: 0;
   width: 100%;
-  height: 80px;
+  height: 15dvh;
   z-index: 100;
+
 }
 
 .main-sidebar {
@@ -245,19 +301,19 @@ const mostrarSidebar = () => {
 }
 
 .sidebar {
-  min-height: 100vh;
+  min-height: 85dvh;
   /* width: 300px; */
   display: flex;
   flex-direction: column;
   row-gap: 10px;
   background-color: rgb(0, 128, 128);
-
   transition: width 0.3s ease, height 0.3s ease;
   position: fixed;
-  top: 82px;
+  top: 15dvh;
   padding-top: 10px;
-  border-radius: 0px 20px 20px 0px;
+  /* border-radius: 0px 20px 20px 0px; */
   z-index: 100;
+
 }
 
 .section-logo-sidebar {
@@ -316,7 +372,7 @@ const mostrarSidebar = () => {
   .titulo-sidebar {
     display: none;
   }
-/* Mi sidebar adoptara automaticamente ese ancho */
+  /* Mi sidebar adoptara automaticamente ese ancho */
   .logo-sidebar {
     border-radius: 50%;
     padding: 0;
@@ -374,17 +430,27 @@ const mostrarSidebar = () => {
   row-gap: 10px;
 }
 
-.perfil-section{
+.perfil-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.img-perfil{
+.img-perfil {
   width: 50px;
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease; /* Cambia 0.3s a lo que necesites */
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-to, .fade-leave-from {
+  opacity: 1;
 }
 </style>
