@@ -13,7 +13,7 @@
             <select v-model="usuario_rol" @change="cargarEstablecimiento">
               <option value="" disabled selected>Selecciona una opción</option>
               <option :value="item" v-for="item in roles" :key="item.id_usuario">
-                {{ item.nombre }}
+                {{ item.nombre_rol }}
               </option>
             </select>
 
@@ -80,11 +80,14 @@ const cargarEstablecimiento = async () => {
 
 const setSession = async() => {
   try {
+    console.log("mi result setsession eeh1", usuario_rol.value);
     result.value=await userService.setSession({...usuario_rol.value, id_establecimiento: establecimiento.value?.id_establecimiento || null});
+    console.log("mi result setsession eeh2", result.value);
     if(result.value.ok){
       let resultSwal=await Swal.fire({
         title: "¿Iniciar Sesión?",
-        html: `Correo: ${usuario_rol.value.correo}`,
+        html: `Correo: ${usuario_rol.value.correo}
+              <br> Rol: ${usuario_rol.value.nombre_rol}`,
         icon: "question",
         showCancelButton: true,
         confirmButtonColor: "rgb(5, 135, 137)",

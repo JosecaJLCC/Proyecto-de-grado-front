@@ -1,10 +1,9 @@
 <template>
-  <TableMicrored/>
+  <TableEstablishment/>
 </template>
 
 <script setup>
-  import TableMicrored from '@/components/TableMicrored.vue';
-
+  import TableEstablishment from '@/components/Establishment/TableEstablishment.vue';
 </script>
 
 <style scoped>

@@ -2,8 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import LoginView from '@/views/LoginView.vue'
 import NewUserView from '@/views/NewUserView.vue'
-import HomeView from '@/views/HomeView.vue'
-import NewAttentionView from '@/views/NewAttentionView.vue'
+import NewAttentionView from '@/views/AttentionView.vue'
 import GeneralHistoryView from '@/views/HistoryPatientsView.vue'
 
 import MainLayout from '@/layouts/MainLayout.vue'
@@ -12,7 +11,7 @@ import { useUsuarioStore } from '@/store/usuario.js'
 import HistoryUsersView from '@/views/HistoryUsersView.vue'
 
 import PatientView from '@/views/PatientView.vue'
-import NewStaffView from '@/views/NewStaffView.vue'
+import NewStaffView from '@/views/StaffView.vue'
 
 
 const router = createRouter({
@@ -21,7 +20,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'login',
-      component: LoginView,
+      component: () => import('@/views/LoginView.vue'),
     },
     {
       path: '/app',
@@ -36,7 +35,7 @@ const router = createRouter({
         {
           path: 'nuevo-registro',
           name: 'nuevo-registro',
-          component: NewAttentionView,
+          component: ()=>import('@/views/AttentionView.vue'),
         },
         {
           path: 'datos-paciente/:id',
@@ -60,9 +59,19 @@ const router = createRouter({
           component: NewStaffView,
         },
         {
+          path: 'personal-salud',
+          name: 'personal-salud',
+          component: ()=>import('@/views/StaffView.vue'),
+        },
+        {
           path: 'historial-usuarios',
           name: 'historial-usuarios',
           component: HistoryUsersView,
+        },
+        {
+          path: 'historial-establecimiento',
+          name: 'historial-establecimiento',
+          component: ()=>import('@/views/EstablishmentView.vue')
         },
         {
           path: 'historial-microred',

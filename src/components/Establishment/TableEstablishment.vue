@@ -2,7 +2,7 @@
   <div class="container-table-microred">
     <div class="header-table-microred">
       <section class="search-table-microred">
-        <button class="btn-add-microred" v-on:click="agregarHospital">
+        <button class="btn-add-microred" v-on:click="createEstablishment">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="25"
@@ -21,16 +21,16 @@
             <path d="M16 19h6" />
             <path d="M19 16v6" />
           </svg>
-          Agregar Microred
+          Agregar Establecimiento
         </button>
         <section class="input-table-microred">
           <input
             type="text"
-            placeholder="Microred"
+            placeholder="Establecimiento de salud"
             class="input-text-search"
-            v-model="nombreBuscado"
+            v-model="searchName"
           />
-          <CIcon :icon="cilSearch" class="icon-table-microred" />
+          <CIcon :icon="cilSearch" class="icon-table-microred"/>
         </section>
       </section>
     </div>
@@ -39,20 +39,20 @@
         <thead>
           <tr>
             <th>N°</th>
-            <th>CODIGO</th>
-            <th>NOMBRE</th>
-            <th>RED</th>
-            <th>DIRECTOR</th>
+            <th>ESTABLECIMIENTO</th>
+            <th>TIPO</th>
+            <th>MICRORED</th>
+            <th>FECHA DE CREACION</th>
             <th>ACCIONES</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, Nro) of filterData" v-bind:key="item.id_microred">
+          <tr v-for="(item, Nro) in filterData" v-bind:key="item.id_establecimiento">
             <td data-title="N°">{{ Nro + 1 }}</td>
-            <td data-title="CODIGO">{{ item.id_microred}}</td>
-            <td data-title="NOMBRE">{{ item.nombre_microred }}</td>
-            <td data-title="RED">{{ item.red }}</td>
-            <td data-title="DIRECTOR">{{ item.nombres }}</td>
+            <td data-title="ESTABLECIMIENTO">{{ item.nombre_establecimiento}}</td>
+            <td data-title="TIPO">{{ item.tipo_establecimiento }}</td>
+            <td data-title="MICRORED">{{ item.nombre_microred }}</td>
+            <td data-title="FECHA DE CREACION">{{ item.fecha_creacion }}</td>
             <td data-title="ACCIONES">
               <div class="content-btn-actions">
                 <button class="btn-acciones btn-view" v-on:click="verHospital">
@@ -75,7 +75,7 @@
                     />
                   </svg>
                 </button>
-                <button class="btn-acciones btn-edit" v-on:click="editMicrored(item.id_microred)">
+                <button class="btn-acciones btn-edit" v-on:click="editEstablishment(item.id_establecimiento)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -93,9 +93,7 @@
                     <path d="M13.5 6.5l4 4" />
                   </svg>
                 </button>
-                <button
-                  class="btn-acciones btn-delete"
-                  v-on:click="deleteMicrored(item.id_microred)"
+                <button class="btn-acciones btn-delete" v-on:click="deleteEstablishment(item.id_establecimiento)"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -126,25 +124,25 @@
     <!--  <div v-else class="alternative-div">
       <h2>NO SE ENCONTRARON REGISTROS</h2>
     </div> -->
-    <FormMicrored
+    <FormEstablishment
       class="content-form-microred"
       v-if="modalVisibleAgregar"
       @modificarModalAgregar="ocultarModalAgregar"
     />
-    <EditMicrored
+    <EditEstablishment
       class="content-edit-microred"
       v-if="modalVisibleEditar"
       @modificarModalEditar="ocultarModalEditar"
-      :id_director="idProp"
+      :id_establecimiento="idProp"
     />
   </div>
 </template>
 
 <script setup>
 import '@/assets/styles/table.css'
-import { microredService } from '@/services/Microred.js'
-import FormMicrored from './FormMicrored.vue'
-import EditMicrored from './EditMicrored.vue'
+import { establishmentService } from '@/services/Establecimiento.js'
+import FormEstablishment from '@/components/Establishment/FormEstablishment.vue'
+import EditEstablishment from '@/components/Establishment/EditEstablishment.vue'
 import { computed, onMounted, ref } from 'vue'
 import { CIcon } from '@coreui/icons-vue'
 import { cilSearch } from '@coreui/icons'
@@ -161,56 +159,55 @@ let result = ref({})
 
 const filterData = computed(() => {
   const health_center = searchName.value.trim()
-  return health_center === ''
+  const result= health_center === ''
     ? data.value
     : originalData.value.filter((item) =>
         item.nombre_microred.toString().toUpperCase().includes(health_center.toUpperCase()),
       )
+  return result;
 })
 
-const showMicrored = async () => {
+const showEstablishment = async () => {
   try {
-    result.value = await microredService.showMicrored()
-    console.log('mi result show microred', result.value)
-
-      data.value = result.value;
-      originalData.value = [...result.value]
-
-    /*  */
+    result.value = await establishmentService.showEstablishment()
+    console.log('mi result show establecimiento', result.value[2].fecha_creacion)
+    // Asignar aunque esté vacío
+    data.value = Array.isArray(result.value) ? result.value : []
+    originalData.value = [...data.value]
   } catch (error) {
-    console.log('Error al obtener los datos de microred:', error)
+    console.log('Error al obtener los datos de establecimiento:', error)
   }
 }
 
 onMounted(async () => {
-  showMicrored()
+  showEstablishment()
 })
 /* boton de agregar nuevo cs */
-const agregarHospital = () => {
+const createEstablishment = () => {
   modalVisibleAgregar.value = true
 }
 
 const ocultarModalAgregar = (valor) => {
   modalVisibleAgregar.value = valor
-  showMicrored()
+  showEstablishment()
 }
 /* boton de editar cs */
-const editMicrored = (id_microred) => {
-  idProp.value=id_microred;
+const editEstablishment = (id_establecimiento) => {
+  console.log("edit", id_establecimiento)
+  idProp.value=id_establecimiento;
   modalVisibleEditar.value = true
 }
 
 const ocultarModalEditar = (valor) => {
   modalVisibleEditar.value = valor
-  showMicrored();
+  showEstablishment();
 }
 
 /* boton eliminar cs */
-const deleteMicrored = async(id_microred) => {
-  console.log("holaaa", id_microred);
+const deleteEstablishment = async(id_establecimiento) => {
   const resultSwal = await Swal.fire({
     title: "¿Estás seguro?",
-    text: "Se eliminará la microred",
+    text: "Se eliminará el establecimiento",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "rgb(5, 135, 137)",
@@ -219,10 +216,10 @@ const deleteMicrored = async(id_microred) => {
   })
   if (resultSwal.isConfirmed) {
     try {
-      console.log('mi id:', id_microred)
-      let resultDelete = ref(await microredService.deleteMicrored(id_microred));
+      console.log('mi id:', id_establecimiento)
+      let resultDelete = ref(await establishmentService.deleteEstablishment(id_establecimiento));
       console.log("eliminado",resultDelete.value)
-      showMicrored();
+      showEstablishment();
       Swal.fire({
         title: "¡Eliminado!",
         text: "Microred eliminada.",

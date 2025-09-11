@@ -11,8 +11,7 @@ export const useUsuarioStore = defineStore('usuario', {
       try {
         const servicio = new Usuario()
         const data = await servicio.obtenerUsuario()
-
-        this.usuario = data
+        this.usuario = data;
       } catch (error) {
         console.log('Error al cargar el usuario:', error)
         this.usuario = null

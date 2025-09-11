@@ -74,7 +74,7 @@
 <script setup>
 import '@/assets/styles/table.css'
 import { usuarioService } from '@/services/Establecimiento.js'
-import FormCentroSalud from './FormMicrored.vue'
+import FormCentroSalud from './Microred/FormMicrored.vue'
 import { computed, onMounted, ref } from 'vue'
 import { CIcon } from '@coreui/icons-vue'
 import { cilSearch } from '@coreui/icons'

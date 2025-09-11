@@ -2,23 +2,35 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:3000/api/v1/patient'
 
-const mostrarPaciente = async() =>{
-  const data = await axios.get(API_URL+'/show');
+const showPatient = async() =>{
+  const {data} = await axios.get(API_URL+'/show');
+  return data.data;
+}
+
+const createPatient = async(patient) =>{
+  const {data} = await axios.post(API_URL+'/create', patient);
   return data;
 }
 
-const registrarPaciente = async(paciente) =>{
-  const data = await axios.get(API_URL+'/register', paciente);
-  return data;
-}
-
-const mostrarPacienteByCi = async() =>{
+const showPatientById = async() =>{
   const data = await axios.get(API_URL+'/show/:id');
   return data;
 }
 
-export const pacienteService = {
-  mostrarPaciente,
-  registrarPaciente,
-  mostrarPacienteByCi
+const deletePatient = async(id_paciente) =>{
+  const {data} = await axios.delete(API_URL+`/delete/${id_paciente}`)
+  return data;
+}
+
+const updatePatient = async(patient) =>{
+  const {data} = await axios.patch(API_URL+`/update/${patient.id_paciente}`, patient)
+  return data;
+}
+
+export const patientService = {
+  showPatient,
+  createPatient,
+  showPatientById,
+  updatePatient,
+  deletePatient
 }

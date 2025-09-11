@@ -55,17 +55,6 @@ const iniciarSesion = async () => {
       return;
     }
     try {
-
-      /* let resultSwal = await Swal.fire({
-        title: `¿Iniciar Sesión?`,
-        html: `Correo: ${correo.value}`,
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "rgb(5, 135, 137)",
-        cancelButtonColor: "rgb(224, 63, 62)",
-        confirmButtonText: "Iniciar Sesión"
-      }) */
-      /* if (resultSwal.isConfirmed) { */
         result.value = await userService.login({correo: correo.value, clave: clave.value })
           if (result.value.ok) {
             console.log("ok: ", result.value.data)
@@ -73,7 +62,6 @@ const iniciarSesion = async () => {
             modalVisibleChoose.value = !modalVisibleChoose.value;
 
           }
-    /* }; */
   }
   catch (error) {
       if (!error.response) {

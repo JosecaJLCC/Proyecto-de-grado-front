@@ -1,11 +1,11 @@
 <template>
-  <div v-if="registros > 0" class="container-tableattention" >
+  <div v-if="true" class="container-tableattention" >
     <div class="header-tableattention">
       <section class="search-tableattention">
         <h2 class="fecha-header">FECHA: {{ date }}</h2>
         <section class="input-tableattention">
 
-          <input type="text" placeholder="INGRESE SU CI" class="input-text-search" v-model="ciBuscado">
+          <input type="text" placeholder="INGRESE SU CI" class="input-text-search" v-model="searchCi">
           <CIcon :icon="cilSearch" class="icon-tableattention"/>
         </section>
 
@@ -17,24 +17,24 @@
               <th>N°</th>
               <th>CI</th>
               <th>NOMBRES</th>
-              <th>ESTABLECIMIENTO</th>
+              <!-- <th>ESTABLECIMIENTO</th> -->
               <th>ACCIONES</th>
           </tr>
       </thead>
       <tbody>
-          <tr v-for="(data, Nro) of datosFiltrados" v-bind:key="data.cedula">
+          <tr v-for="(item, Nro) in filterData" v-bind:key="item.id_paciente">
             <!--  -->
               <td data-title="N°">{{ Nro + 1 }}</td>
-              <td data-title="CI">{{ data.cedula }}</td>
-              <td data-title="NOMBRES">{{ data.nombres }}</td>
-              <td data-title="ESTABLECIMIENTO">{{ data.establecimiento }}</td>
-              <td data-title="ACCIONES">
+              <td data-title="CI">{{ item.ci}}</td>
+              <td data-title="NOMBRES">{{ item.nombres }}</td>
+              <!-- <td data-title="ESTABLECIMIENTO">{{ data.establecimiento }}</td> -->
+              <!-- <td data-title="ACCIONES">
                 <div class="content-btn-attention">
-                    <router-link  :to="{ name: 'datos-paciente', params: { id: data.cedula } }">
+                    <router-link  :to="{ name: 'datos-paciente', params: { id: item.ci } }">
                       VER MÁS
                     </router-link>
                 </div>
-              </td>
+              </td> -->
           </tr>
       </tbody>
   </table>
@@ -50,41 +50,43 @@ import { computed, onMounted, ref } from 'vue';
 import { CIcon } from '@coreui/icons-vue';
 import { cilSearch } from '@coreui/icons';
 import axios from 'axios';
+import { attentionService } from '@/services/Atencion.js';
 /* import { useUsuarioStore } from '@/store/usuario.js';
 
 let usuarioStore = useUsuarioStore();
 let usuario = usuarioStore.usuario; */
 let date = new Date();
 date = date.toISOString().split("T")[0];
-let registros=ref(0)
 
-let datos = ref([]);
-let datosOriginales = ref([])
-let ciBuscado = ref("");
+let data = ref([]);
+let originalData = ref([])
+let searchCi = ref("");
+let result = ref([])
 
-const datosFiltrados = computed(() => {
-const ci = ciBuscado.value.trim();
-return ci === ""
-  ? datos.value
-  : datosOriginales.value.filter(data => data.cedula.toString().includes(ci));
+const filterData = computed(() => {
+  const ci = searchCi.value.trim();
+  const result = ci === ""
+    ? data.value
+    : originalData.value.filter(item =>
+      item.ci.toString().includes(ci)
+    );
+  return result;
 });
 
 /* verPaciente = () => {
 
 }
  */
-onMounted(async()=>{
-try {
-  let resultado = await axios.get('http://localhost:3000/api/v1/attention/show');
-  registros.value = resultado.data.resultado.length;
-  datos.value=resultado.data.resultado
-  datosOriginales.value = [...resultado.data.resultado];
-
-} catch (error) {
-  console.log("Error al obtener los datos:", error)
-}
-
-})
+onMounted(async () => {
+  try {
+    const res = await attentionService.showAttention();
+    console.log("my res", res);
+    data.value = Array.isArray(res) ? res : [res]; // 🔹 convertir a array si es objeto
+    originalData.value = [...data.value];
+  } catch (error) {
+    console.log('Error al obtener los datos de atención:', error);
+  }
+});
 
 </script>
 

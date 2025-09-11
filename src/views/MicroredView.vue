@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-  import TableMicrored from '@/components/TableMicrored.vue';
+  import TableMicrored from '@/components/Microred/TableMicrored.vue';
 
 </script>
 

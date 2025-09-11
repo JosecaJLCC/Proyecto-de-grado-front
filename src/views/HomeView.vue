@@ -11,7 +11,7 @@
   onMounted(async() => {
     let usuario = new Usuario();
     let data = await usuario.obtenerUsuario();
-    console.log("data", data)
+    console.log("data home: ", data)
 
   })
 </script>

@@ -52,7 +52,7 @@
           class="logo-sidebar"
           :style="{ width: tamanioLogo, height: tamanioLogo }"
         />
-        <h3 v-if="mostrarTitulo">"{{ establecimiento }}"</h3>
+        <!-- <h3 v-if="mostrarTitulo">"{{ establecimiento }}"</h3> -->
       </section>
 
       <nav class="nav-sidebar">
@@ -123,6 +123,12 @@
             </RouterLink>
           </li>
           <li>
+            <RouterLink class="rutas-sidebar" :to="{ name: 'personal-salud' }">
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-first-aid-kit icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 8v-2a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v2" /><path d="M4 8m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M10 14h4" /><path d="M12 12v4" /></svg>
+              <span>Personal</span>
+            </RouterLink>
+          </li>
+          <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'registrar-personal' }">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -148,35 +154,13 @@
           <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'historial-microred' }">
               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-building-hospital icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l18 0" /><path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16" /><path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" /><path d="M10 9l4 0" /><path d="M12 7l0 4" /></svg>
-              <span>Establecimientos de Salud</span>
+              <span>Microred</span>
             </RouterLink>
           </li>
           <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-microred' }">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="icon icon-tabler icons-tabler-outline icon-tabler-report icon-sidebar"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M8 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h5.697" />
-                <path d="M18 14v4h4" />
-                <path d="M18 11v-4a2 2 0 0 0 -2 -2h-2" />
-                <path
-                  d="M8 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"
-                />
-                <path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
-                <path d="M8 11h4" />
-                <path d="M8 15h3" />
-              </svg>
-              <span>Reportes</span>
+            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-establecimiento' }">
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-medical-cross icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M13 3a1 1 0 0 1 1 1v4.535l3.928 -2.267a1 1 0 0 1 1.366 .366l1 1.732a1 1 0 0 1 -.366 1.366l-3.927 2.268l3.927 2.269a1 1 0 0 1 .366 1.366l-1 1.732a1 1 0 0 1 -1.366 .366l-3.928 -2.269v4.536a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-4.536l-3.928 2.268a1 1 0 0 1 -1.366 -.366l-1 -1.732a1 1 0 0 1 .366 -1.366l3.927 -2.268l-3.927 -2.268a1 1 0 0 1 -.366 -1.366l1 -1.732a1 1 0 0 1 1.366 -.366l3.928 2.267v-4.535a1 1 0 0 1 1 -1h2z" /></svg>
+              <span>Establecimientos</span>
             </RouterLink>
           </li>
         </ul>

@@ -33,7 +33,7 @@
                     <button class="btn-attention" v-on:click="verPaciente(data.ci)">
                       VER MÁS
                     </button>
-                    <button class="btn-attention" v-on:click="atenderPaciente(data.id_persona)">
+                    <button class="btn-attention" v-on:click="patientAttention(data.id_persona)">
                       ATENDER
                     </button>
                   </div>
@@ -66,7 +66,7 @@ let datosOriginales = ref([])
 let ciBuscado = ref("");
 let registros=ref(0)
 
-const atenderPaciente = async(id_persona) =>{
+const patientAttention = async(id_persona) =>{
   try {
     const resultado = await axios.post('http://localhost:3000/api/v1/attention/create',{
       id_usuario:usuario.value.id_usuario,

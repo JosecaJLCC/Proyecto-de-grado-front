@@ -1,18 +1,18 @@
 import axios from 'axios'
 
-let API_URL = 'http://localhost:3000/api/v1/establishment'
+let API_URL = 'http://localhost:3000/api/v1/attention'
 
-const createEstablishment = async(establishment)=>{
-  const {data} = await axios.post(API_URL+'/create', establishment);
+const createAttention = async(attention)=>{
+  const {data} = await axios.post(API_URL+'/create', attention);
   return data;
 }
 
-const showEstablishment = async()=>{
+const showAttention = async()=>{
   const {data} = await axios.get(API_URL+'/show');
   return data.data;
 }
 
-const showEstablishmentById = async(id_establecimiento)=>{
+/* const showAttentionById = async(id_establecimiento)=>{
   const {data} = await axios.get(API_URL+`/show/${id_establecimiento}`);
   return data;
 }
@@ -25,13 +25,13 @@ const deleteEstablishment = async(id_establecimiento) =>{
 const updateEstablishment = async(establishment) =>{
   const {data} = await axios.patch(API_URL+`/update/${establishment.id_establecimiento}`, establishment)
   return data;
-}
+} */
 
-export const establishmentService = {
-  createEstablishment,
-  showEstablishment,
-  showEstablishmentById,
+export const attentionService = {
+  createAttention,
+  showAttention,
+/*   showAttentionById,
   deleteEstablishment,
-  updateEstablishment
+  updateEstablishment */
 }
 

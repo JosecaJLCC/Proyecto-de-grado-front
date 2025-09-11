@@ -7,7 +7,7 @@
 
 <script setup>
 
-import TableAttention from '@/components/TableAttention.vue';
+import TableAttention from '@/components/Attention/TableAttention.vue';
 
 </script>
 
