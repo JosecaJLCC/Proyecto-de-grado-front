@@ -98,7 +98,7 @@ import { microredService } from '@/services/Microred.js';
 
 import { CIcon } from '@coreui/icons-vue';
 import { cilCheckAlt, cilX } from '@coreui/icons';
-import { ref, defineEmits, onMounted} from 'vue';
+import { ref, onMounted} from 'vue';
 import Swal from 'sweetalert2';
 import { Paciente } from '@/models/Paciente.js';
 import { patientService } from '@/services/Paciente';

@@ -24,13 +24,18 @@ const profileUser = async(token) => {
   return data.data;
 }
 
-const chooseEstablishment = async(userId) => {
-  const {data} = await axios.get(API_URL+`/choose/${userId}`)
+const chooseEstablishment = async(id_usuario) => {
+  const {data} = await axios.get(API_URL+`/choose/${id_usuario}`)
   return data.data;
 }
 
 const setSession = async(user) => {
   const {data} = await axios.post(API_URL+`/session`, user)
+  return data;
+}
+
+const deleteUser = async(id_usuario) => {
+  const {data} = await axios.post(API_URL+`/delete/${id_usuario}`)
   return data;
 }
 

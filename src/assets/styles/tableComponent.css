@@ -1,0 +1,140 @@
+.container-table {
+  color: var(--color-black);
+  padding-left: 3px;
+  transition: width 0.8s ease;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  position: relative;
+
+}
+.content-table {
+  width: 100%;
+  position: relative;
+  /* min-height: 100vh; */
+}
+
+.content-form,
+.content-edit,
+.content-view {
+  position: absolute; /* o fixed, si prefieres */
+  top: 0px;
+  left: 0;
+  width: 100%;
+  min-height: 85dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-white);
+  background-color: var(--color-black-transparent); /* blanco semitransparente */
+  backdrop-filter: blur(5px); /* 🔥 Aquí se hace el desenfoque */
+  -webkit-backdrop-filter: blur(5px); /* compatibilidad con Safari */
+  z-index: 10;
+}
+
+.header-table {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  height: 80px;
+  padding: 10px;
+}
+
+.search-table {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 10px;
+  row-gap: 10px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.input-table {
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+
+.icon-table {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 5px;
+}
+
+.input-text-search {
+  padding-left: 25px;
+  border-radius: 20px;
+}
+
+.btn-add-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-white);
+  background-color: var(--color-primary);
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  padding: 5px 10px;
+}
+
+.btn-add-item:hover {
+  background-color: var(--color-secondary);
+}
+
+.btn-search {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  width: 150px;
+  border-radius: 20px;
+  outline: none;
+  border: none;
+  font-weight: bold;
+}
+
+.btn-search,
+.input-text-search,
+.btn-add-item {
+  font-size: 1.3em;
+  height: 35px;
+}
+
+.date-table-microred {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: 5px;
+  border-radius: 20px;
+}
+
+.btn-attention {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  width: 100px;
+  border-radius: 20px;
+  outline: none;
+  border: none;
+  font-weight: bold;
+}
+
+.btn-actions {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  border-radius: 50%;
+  outline: none;
+  border: none;
+}
+
+.btn-view {
+  background-color: var(--color-primary);
+}
+
+.btn-edit {
+  background-color: rgb(229, 229, 25);
+}
+
+.btn-delete {
+  background-color: var(--color-secondary);
+}

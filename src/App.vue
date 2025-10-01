@@ -1,36 +1,18 @@
 <template>
-  <div id="app-vue">
-    <RouterView />
-  </div>
+  <v-app>
+    <v-main>
+      <router-view/>
+    </v-main>
+  </v-app>
 </template>
 
-<script setup>
-/* import { onMounted } from 'vue' */
-import { useRouter } from 'vue-router'
-/* import { useUsuarioStore } from '@/store/usuario.js' */
+<script>
 
-/* let usuarioStore = useUsuarioStore(); */
-const router = useRouter()
+export default {
+  name: 'App',
 
-/* onMounted(() => {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    Si no hay token, redirige al login
-    router.push({ name: 'login' });
-  } else {
-    Si hay token, carga el usuario
-    usuarioStore.cargarUsuario()
-  }
-}) */
+  data: () => ({
+    //
+  }),
+}
 </script>
-
-
-<style scoped>
-  #app-vue{
-    width: 100%;
-    min-height: 100dvh;
-
-
-
-  }
-</style>

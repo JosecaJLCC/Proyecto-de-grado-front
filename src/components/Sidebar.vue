@@ -20,17 +20,23 @@
         <!-- <img src="../assets/logo.svg" class="perfil-sidebar"> -->
         <div class="perfil-section">
           <img class="img-perfil" :src="`http://localhost:3000/uploads/${perfil}`" alt="" />
-          <p>{{ nombre_usuario }}</p>
-          <p>{{ rol }}</p>
+
           <!-- <p><strong>{{ rol }}</strong></p> -->
         </div>
         <div class="dropdown-sidebar">
-          <CIcon
-            :icon="cilChevronBottom"
-            class="icon-sidebar desplegar-dropdown"
-            @click="desplegarDropDown"
-          />
+
+          <svg v-if="mostrarDropDown" @click="desplegarDropDown" xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-caret-up icon-sidebar desplegar-dropdown"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11.293 7.293a1 1 0 0 1 1.32 -.083l.094 .083l6 6l.083 .094l.054 .077l.054 .096l.017 .036l.027 .067l.032 .108l.01 .053l.01 .06l.004 .057l.002 .059l-.002 .059l-.005 .058l-.009 .06l-.01 .052l-.032 .108l-.027 .067l-.07 .132l-.065 .09l-.073 .081l-.094 .083l-.077 .054l-.096 .054l-.036 .017l-.067 .027l-.108 .032l-.053 .01l-.06 .01l-.057 .004l-.059 .002h-12c-.852 0 -1.297 -.986 -.783 -1.623l.076 -.084l6 -6z" /></svg>
+
+          <svg v-else @click="desplegarDropDown" xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-caret-down icon-sidebar desplegar-dropdown"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 9c.852 0 1.297 .986 .783 1.623l-.076 .084l-6 6a1 1 0 0 1 -1.32 .083l-.094 -.083l-6 -6l-.083 -.094l-.054 -.077l-.054 -.096l-.017 -.036l-.027 -.067l-.032 -.108l-.01 -.053l-.01 -.06l-.004 -.057v-.118l.005 -.058l.009 -.06l.01 -.052l.032 -.108l.027 -.067l.07 -.132l.065 -.09l.073 -.081l.094 -.083l.077 -.054l.096 -.054l.036 -.017l.067 -.027l.108 -.032l.053 -.01l.06 -.01l.057 -.004l12.059 -.002z" /></svg>
+
           <div v-show="mostrarDropDown" class="dropdown-content">
+            <a href="">
+              <p>{{ nombre_usuario }}</p>
+            </a>
+            <a href="">
+              <p>{{ rol }}</p>
+            </a>
+
             <a href="">
               <CIcon :icon="cilSettings" class="icon-sidebar" />
               <span>Configuracion</span>
@@ -74,7 +80,6 @@
                 <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
                 <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
               </svg>
-              <!-- <CIcon :icon="cilHome" class="icon-sidebar" /> -->
               <span>Inicio</span>
             </RouterLink>
           </li>
@@ -123,13 +128,13 @@
             </RouterLink>
           </li>
           <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'personal-salud' }">
+            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-personal' }">
               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-first-aid-kit icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 8v-2a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v2" /><path d="M4 8m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M10 14h4" /><path d="M12 12v4" /></svg>
               <span>Personal</span>
             </RouterLink>
           </li>
           <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'registrar-personal' }">
+            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-usuario' }">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -152,15 +157,15 @@
             </RouterLink>
           </li>
           <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-microred' }">
-              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-building-hospital icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l18 0" /><path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16" /><path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" /><path d="M10 9l4 0" /><path d="M12 7l0 4" /></svg>
-              <span>Microred</span>
-            </RouterLink>
-          </li>
-          <li>
             <RouterLink class="rutas-sidebar" :to="{ name: 'historial-establecimiento' }">
               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-medical-cross icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M13 3a1 1 0 0 1 1 1v4.535l3.928 -2.267a1 1 0 0 1 1.366 .366l1 1.732a1 1 0 0 1 -.366 1.366l-3.927 2.268l3.927 2.269a1 1 0 0 1 .366 1.366l-1 1.732a1 1 0 0 1 -1.366 .366l-3.928 -2.269v4.536a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-4.536l-3.928 2.268a1 1 0 0 1 -1.366 -.366l-1 -1.732a1 1 0 0 1 .366 -1.366l3.927 -2.268l-3.927 -2.268a1 1 0 0 1 -.366 -1.366l1 -1.732a1 1 0 0 1 1.366 -.366l3.928 2.267v-4.535a1 1 0 0 1 1 -1h2z" /></svg>
               <span>Establecimientos</span>
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-microred' }">
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-building-hospital icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l18 0" /><path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16" /><path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" /><path d="M10 9l4 0" /><path d="M12 7l0 4" /></svg>
+              <span>Microred</span>
             </RouterLink>
           </li>
         </ul>
@@ -208,6 +213,7 @@ let mostrarDropDown = ref(false)
 
 /* Datos de usuario desde auth.js de store */
 import { useUsuarioStore } from '@/store/usuario.js'
+import ChooseCentroSalud from './ChooseCentroSalud.vue'
 let authStore = useUsuarioStore()
 let usuario = computed(() => authStore.usuario)
 console.log('usuario sidebar', usuario.value)
@@ -231,6 +237,7 @@ watch(
 /*  */
 const desplegarDropDown = () => {
   mostrarDropDown.value = !mostrarDropDown.value
+  console.log("dropdown", mostrarDropDown.value)
 }
 
 /* al pulsar el boton de cerrar sesion se ejecutara esta funcion */

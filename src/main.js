@@ -19,3 +19,4 @@ app.provide('icons', iconSet)
 app.use(router)
 .use(pinia)
 .mount('#app')
+

@@ -3,7 +3,7 @@
     <form action="" v-on:submit.prevent="createMicrored">
       <fieldset class="form-microred">
         <legend class="legend-form-microred">
-          <!-- <CIcon :icon="cilUserPlus" class="icon-microred"/> -->
+
           <span class="titulo-form-microred">NUEVA MICRORED</span>
         </legend>
 
@@ -20,8 +20,8 @@
           </section>
         </div>
         <div class="form-content-microred2">
-          <button class="form-btn btn-cancel" type="button" v-on:click="enviarValorModal"><CIcon :icon="cilX" class="icon-microred"/>CANCELAR</button>
-          <button class="form-btn btn-accept" type="submit"><CIcon :icon="cilCheckAlt" class="icon-microred"/>ACEPTAR</button>
+          <button class="form-btn btn-cancel" type="button" v-on:click="sendValueModal"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M10 10l4 4m0 -4l-4 4" /></svg>CANCELAR</button>
+          <button class="form-btn btn-accept" type="submit"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" /></svg>ACEPTAR</button>
         </div>
       </fieldset>
     </form>
@@ -30,21 +30,18 @@
 
 <script setup>
 import { microredService } from '@/services/Microred.js';
-import { CIcon } from '@coreui/icons-vue';
-import { cilCheckAlt, cilX } from '@coreui/icons';
-import { ref, defineEmits} from 'vue';
+import { ref} from 'vue';
 import Swal from 'sweetalert2';
 import { Microred } from '@/models/Microred.js';
-/* router */
 let id_microred=ref("");
 let nombre_microred=ref("");
 let red=ref("");
 let ci_director=ref("");
 let result = ref({})
-const emits = defineEmits(['modificarModalAgregar'])
+const emits = defineEmits(['modifyModalAdd'])
 
-const enviarValorModal = () => {
-  emits('modificarModalAgregar', false)
+const sendValueModal = () => {
+  emits('modifyModalAdd', false)
 }
 
 const createMicrored = async() =>{
@@ -57,8 +54,11 @@ const createMicrored = async() =>{
     return;
   }
 
-  let microred = new Microred(id_microred.value, nombre_microred.value, red.value, ci_director.value);
-  console.log("mi microred",microred)
+  let microred = new Microred(id_microred.value,
+                              nombre_microred.value.toUpperCase(),
+                              red.value.toUpperCase(),
+                              ci_director.value);
+
   try {
     let resultSwal = await Swal.fire({
       title: "¿Estas seguro?",
@@ -72,17 +72,15 @@ const createMicrored = async() =>{
 
     if (resultSwal.isConfirmed) {
       result.value = await microredService.createMicrored(microred);
-      console.log("ok: ",result.value)
       if(result.value.ok){
 
         Swal.fire({
           title: "¡Registro Exitoso!",
-          text: "Tus datos fueron registrados",
+          text: result.value.message,
           icon: "success"
         });
-        enviarValorModal();
+        sendValueModal();
       }else{
-        console.log(result.value)
         Swal.fire({
           title: "¡Registro no realizado!",
           text: result.value.message,
@@ -92,7 +90,7 @@ const createMicrored = async() =>{
 
     };
   } catch (error) {
-      console.log("Error fatal")
+      console.log("Error en el agregar microred", error)
     }
   }
 </script>
@@ -132,9 +130,9 @@ const createMicrored = async() =>{
 
   .content-microred > input{
     padding-left:5px;
-    border: none;
+    border-radius: 20px;
     outline: none;
-    border-bottom:2px solid var(--color-primary);
+    border:2px solid var(--color-primary);
     height: 25px;
     font-weight: bold;
   }

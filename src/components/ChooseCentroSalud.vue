@@ -49,7 +49,7 @@
 <script setup>
 import { CIcon } from '@coreui/icons-vue'
 import { cilCheckAlt, cilX } from '@coreui/icons'
-import { ref, defineEmits, defineProps, toRaw } from 'vue'
+import { ref} from 'vue'
 import Swal from 'sweetalert2'
 import { userService } from '@/services/Usuario.js';
 import { useUsuarioStore } from '@/store/usuario.js'

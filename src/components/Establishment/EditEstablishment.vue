@@ -10,18 +10,18 @@
         <div class="form-content-microred">
           <section class="content-microred">
             <label for="">NOMBRE DEL ESTABLECIMIENTO</label>
-            <input type="text" v-model="nombre_establecimiento">
+            <input type="text" v-model="establishment.nombre_establecimiento">
             <label for="">TIPO DE ESTABLECIMIENTO</label>
-            <select v-model="tipo_establecimiento" name="" id="">
+            <select v-model="establishment.tipo_establecimiento" name="" id="">
               <option value="CENTRO DE SALUD">CENTRO DE SALUD</option>
               <option value="CONSULTORIO VECINAL">CONSULTORIO VECINAL</option>
             </select>
             <label for="">MICRORED</label>
-            <select v-model="id_microred" name="" id="">
+            <select v-model="establishment.id_microred" name="" id="">
               <option :value="item.id_microred" v-for="item in resultMicrored" :key="item.id_microred">{{ item.nombre_microred }}</option>
             </select>
              <label for="">DEPARTAMENTO</label>
-            <select v-model="departamento" name="" id="">
+            <select v-model="direction.departamento" name="" id="">
               <option value="LA PAZ">LA PAZ</option>
               <option value="ORURO">ORURO</option>
               <option value="POTOSI">POTOSI</option>
@@ -33,16 +33,16 @@
               <option value="CHUQUISACA">CHUQUISACA</option>
             </select>
             <label for="">MUNICIPIO</label>
-            <input type="text" v-model="municipio">
+            <input type="text" v-model="direction.municipio">
             <label for="">ZONA</label>
-            <input type="text" v-model="zona">
+            <input type="text" v-model="direction.zona">
             <label for="">AVENIDA/CALLE</label>
-            <input type="text" v-model="av_calle">
+            <input type="text" v-model="direction.av_calle">
           </section>
         </div>
         <div class="form-content-microred2">
-          <button class="form-btn btn-cancel" type="button" v-on:click="enviarValorModal"><CIcon :icon="cilX" class="icon-microred"/>CANCELAR</button>
-          <button class="form-btn btn-accept" type="submit"><CIcon :icon="cilCheckAlt" class="icon-microred"/>ACEPTAR</button>
+          <button class="form-btn btn-cancel" type="button" v-on:click="sendValueModal"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M10 10l4 4m0 -4l-4 4" /></svg>CANCELAR</button>
+          <button class="form-btn btn-accept" type="submit"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" /></svg>ACEPTAR</button>
         </div>
       </fieldset>
     </form>
@@ -51,44 +51,47 @@
 
 <script setup>
 import { microredService } from '@/services/Microred.js';
-import { CIcon } from '@coreui/icons-vue';
-import { cilCheckAlt, cilX } from '@coreui/icons';
-import { ref, defineEmits, defineProps, onMounted} from 'vue';
+import { ref, onMounted, reactive} from 'vue';
 import Swal from 'sweetalert2';
-import { Microred } from '@/models/Microred.js';
 import { Establecimiento } from '@/models/Establecimiento.js';
 import { establishmentService } from '@/services/Establecimiento';
-/* router */
-let departamento = ref("");
-let municipio = ref("");
-let zona = ref("");
-let av_calle = ref("");
-let nombre_establecimiento=ref("");
-let tipo_establecimiento=ref("");
-let id_microred = ref("");
+
+let direction = reactive({
+  departamento:"",
+  municipio:"",
+  zona:"",
+  av_calle:""
+})
+let establishment = reactive({
+  nombre_establecimiento:"",
+  tipo_establecimiento:"",
+  id_microred:""
+})
+
 let resultMicrored = ref({});
 let result = ref({});
 
 onMounted(  async()=>{
   resultMicrored.value = await microredService.showMicrored();
-  console.log("mi res:: ",resultMicrored.value)
 })
 
-const emits = defineEmits(['modificarModalEditar'])
+const emits = defineEmits(['modifyModalEdit'])
+const sendValueModal = () => {
+  emits('modifyModalEdit', false)
+}
+
 let props = defineProps({
   id_establecimiento: {
-    type: String, // o Array si envías varios roles/Microreds
+    type: Number, // o Array si envías varios roles/Microreds
     required: true,
   },
 });
-console.log("mi id",props.id_establecimiento)
-const enviarValorModal = () => {
-  emits('modificarModalEditar', false)
-}
 
 const editEstablishment = async() =>{
-  if(!departamento.value && !municipio.value && !zona.value && !av_calle.value &&
-     !nombre_establecimiento.value && !id_microred.value && !tipo_establecimiento.value){
+  if(!direction.departamento && !direction.municipio &&
+    !direction.zona && !direction.av_calle &&
+    !establishment.nombre_establecimiento &&
+    !establishment.id_microred && !establishment.tipo_establecimiento){
     Swal.fire({
         title: "¡Intente nuevamente!",
         text: "Debe haber al menos un cambio",
@@ -96,16 +99,17 @@ const editEstablishment = async() =>{
       });
       return;
   }
-  let establishment = {
-                id_establecimiento: props.id_establecimiento,
-                departamento: departamento.value,
-                municipio:municipio.value,
-                zona:zona.value,
-                av_calle:av_calle.value,
-                nombre_establecimiento:nombre_establecimiento.value,
-                id_microred:id_microred.value,
-                tipo_establecimiento: tipo_establecimiento.value}
-              console.log("microred", establishment)
+  let establishmentClass = new Establecimiento(
+                          direction.departamento.toUpperCase(),
+                          direction.municipio.toUpperCase(),
+                          direction.zona.toUpperCase(),
+                          direction.av_calle.toUpperCase(),
+                          establishment.nombre_establecimiento.toUpperCase(),
+                          establishment.tipo_establecimiento.toUpperCase(),
+                          establishment.id_microred,
+                          props.id_establecimiento
+                        );
+  console.log("class ",establishmentClass)
   try {
     let resultSwal = await Swal.fire({
       title: "¿Estas seguro?",
@@ -118,16 +122,14 @@ const editEstablishment = async() =>{
     })
 
     if (resultSwal.isConfirmed) {
-      result.value = await establishmentService.updateEstablishment(establishment);
-      console.log("my result", result.value)
+      result.value = await establishmentService.updateEstablishment(establishmentClass);
       if(result.value.ok){
-        console.log("myRes",result)
         Swal.fire({
           title: "¡Cambio exitoso!",
           text: "Tus datos fueron corregidos",
           icon: "success"
         });
-        enviarValorModal();
+        sendValueModal();
       }else{
         Swal.fire({
           title: "¡Cambio fallido!",
@@ -135,11 +137,9 @@ const editEstablishment = async() =>{
           icon: "error"
         });
       }
-
-
     };
   } catch (error) {
-      console.log("errorPatient", error)
+      console.log("Error en editar microred", error)
     }
   }
 </script>

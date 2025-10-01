@@ -5,7 +5,7 @@
         <h2 class="fecha-header">FECHA: {{ date }}</h2>
         <section class="input-tableattention">
 
-          <input type="text" placeholder="INGRESE SU CI" class="input-text-search" v-model="searchCi">
+          <input type="text" placeholder="Ingrese el CI" class="input-text-search" v-model="searchCi">
           <CIcon :icon="cilSearch" class="icon-tableattention"/>
         </section>
 

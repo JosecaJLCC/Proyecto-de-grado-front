@@ -23,8 +23,9 @@
           <tr>
             <th>N°</th>
             <th>CI</th>
+            <th>PERFIL</th>
             <th>NOMBRES</th>
-            <th>INSCRITO</th>
+            <th>CORREO</th>
             <th>ACCIONES</th>
           </tr>
         </thead>
@@ -32,13 +33,15 @@
           <tr v-for="(item, Nro) in filterData" v-bind:key="item.id_paciente">
             <td data-title="N°">{{ Nro + 1 }}</td>
             <td data-title="CI">{{ item.ci}}</td>
-            <td data-title="NOMBRES">{{ item.nombres }}</td>
-            <td data-title="INSCRITO">{{ item.nombre_microred }}</td>
+            <td data-title="CI">
+              <img class="img-profile" :src="`http://localhost:3000/uploads/${item.perfil}`" alt="" />
+            </td>
+
+            <td data-title="NOMBRES">{{ item.nombre }}</td>
+            <td data-title="CORREO">{{ item.correo }}</td>
             <td data-title="ACCIONES">
               <div class="content-btn-actions">
-                <button class="btn-acciones btn-attention" v-on:click="pacientAttention(item.id_paciente)">
-                  <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-location"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" /></svg>
-                </button>
+
                 <button class="btn-acciones btn-view" v-on:click="verHospital">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +62,7 @@
                     />
                   </svg>
                 </button>
-                <button class="btn-acciones btn-edit" v-on:click="editEstablishment(item.id_establecimiento)">
+                <button class="btn-acciones btn-edit" v-on:click="editUser(item.id_usuario)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -77,7 +80,7 @@
                     <path d="M13.5 6.5l4 4" />
                   </svg>
                 </button>
-                <button class="btn-acciones btn-delete" v-on:click="deleteEstablishment(item.id_establecimiento)"
+                <button class="btn-acciones btn-delete" v-on:click="deleteUser(item.id_usuario)"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -106,35 +109,29 @@
       </table>
     </div>
 
-    <FormAttention
+    <FormUser
       class="content-form-microred"
       v-if="modalVisibleAgregar"
       @modificarModalAgregar="ocultarModalAgregar"
     />
-    <EditAttention
+    <EditUser
       class="content-edit-microred"
       v-if="modalVisibleEditar"
       @modificarModalEditar="ocultarModalEditar"
-      :id_establecimiento="idProp"
+      :id_usuario="idProp"
     />
   </div>
 </template>
 
 <script setup>
 import '@/assets/styles/table.css'
-import { establishmentService } from '@/services/Establecimiento.js'
-import { patientService } from '@/services/Paciente.js'
-import { attentionService } from '@/services/Atencion.js'
-import FormAttention from '@/components/Attention/FormAttention.vue'
-import EditAttention from '@/components/Attention/EditAttention.vue'
+import { userService } from '@/services/Usuario.js'
+import FormUser from '@/components/User/FormUser.vue'
+import EditUser from '@/components/User/EditUser.vue'
 import { computed, onMounted, ref } from 'vue'
 import { CIcon } from '@coreui/icons-vue'
 import { cilSearch } from '@coreui/icons'
 import Swal from 'sweetalert2'
-
-import { useUsuarioStore } from '@/store/usuario.js';
-let usuarioStore = useUsuarioStore();
-let usuario = computed(() => usuarioStore.usuario)
 
 let data = ref([])
 let originalData = ref([])
@@ -144,34 +141,6 @@ let modalVisibleEditar = ref(false)
 let idProp=ref("");
 /* let modalVisibleVer = ref(false) */
 let result = ref({})
-
-const pacientAttention = async(id_paciente) =>{
-  try {
-    console.log("id: ", usuario.value.id_usuario_rol, id_paciente)
-    const result = await attentionService.createAttention({id_paciente, id_usuario_rol:usuario.value.id_usuario_rol })
-    if(result.ok){
-      Swal.fire({
-        icon: "success",
-        title: "El paciente será atendido",
-        text: `${result.message}`,
-      });
-    }
-    else{
-       Swal.fire({
-        icon: "error",
-        title: "Paciente ya atendido",
-        text: `${result.message}`,
-      });
-    }
-    console.log("mi atencion:",  result);
-
-
-    /* router.push({name: 'inicio'}) */
-  } catch (error) {
-      console.log("my error en table attention", error);
-  }
-
-}
 
 const filterData = computed(() => {
   const health_center = searchCi.value.trim()
@@ -183,20 +152,20 @@ const filterData = computed(() => {
   return result;
 })
 
-const showPatient = async () => {
+const showUser = async () => {
   try {
-    result.value = await patientService.showPatient()
-    console.log('mi result show patient', result.value)
+    result.value = await userService.showUser()
+    console.log('mi result show user', result.value)
     // Asignar aunque esté vacío
     data.value = Array.isArray(result.value) ? result.value : [result.value]
     originalData.value = [...data.value]
   } catch (error) {
-    console.log('Error al obtener los datos de establecimiento:', error)
+    console.log('Error al obtener los datos de usuario:', error)
   }
 }
 
 onMounted(async () => {
-  showPatient()
+  showUser()
 })
 /* boton de agregar nuevo cs */
 const createPatient = () => {
@@ -205,51 +174,57 @@ const createPatient = () => {
 
 const ocultarModalAgregar = (valor) => {
   modalVisibleAgregar.value = valor
-  showPatient()
+  showUser()
 }
 /* boton de editar cs */
-const editEstablishment = (id_establecimiento) => {
-  console.log("edit", id_establecimiento)
-  idProp.value=id_establecimiento;
+const editUser = (id_usuario) => {
+  console.log("edit", id_usuario)
+  idProp.value=id_usuario;
   modalVisibleEditar.value = true
 }
 
 const ocultarModalEditar = (valor) => {
   modalVisibleEditar.value = valor
-  showPatient();
+  showUser();
 }
 
 /* boton eliminar cs */
-const deleteEstablishment = async(id_establecimiento) => {
+const deleteUser = async(id_usuario) => {
   const resultSwal = await Swal.fire({
     title: "¿Estás seguro?",
     text: "Se eliminará el establecimiento",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "rgb(5, 135, 137)",
-        cancelButtonColor: "rgb(224, 63, 62)",
+    cancelButtonColor: "rgb(224, 63, 62)",
     confirmButtonText: "Aceptar"
   })
   if (resultSwal.isConfirmed) {
     try {
-      console.log('mi id:', id_establecimiento)
-      let resultDelete = ref(await establishmentService.deleteEstablishment(id_establecimiento));
+      console.log('mi id:', id_usuario)
+      let resultDelete = ref(await userService.deleteUser(id_usuario));
       console.log("eliminado",resultDelete.value)
-      showPatient();
+      showUser();
       Swal.fire({
         title: "¡Eliminado!",
-        text: "Microred eliminada.",
+        text: "Usuario eliminado.",
         icon: "success"
       });
     } catch (error) {
       console.log("Error en eliminar microred")
     }
-
   }
 }
 </script>
 
 <style scoped>
+.img-profile {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .container-table-microred {
   color: var(--color-black);
   padding-left: 3px;

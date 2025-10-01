@@ -155,4 +155,47 @@ chmod +x .husky/commit-msg
   npm run lint
   ```
 
-### Me quede en FormEstablishment, se debe incorporar tabs para una mejor vision
+## Instalacion de Vuetify
+
+  ```sh
+  npm install vuetify
+  ```
+
+### Instala el plugin de Vuetify para Vite
+
+```sh
+npm install vite-plugin-vuetify -D
+```
+
+### Navega al archivo principal de tu aplicación main.js
+
+  ```js
+
+  import 'vuetify/styles'
+  import { createVuetify } from 'vuetify';
+  import * as components from 'vuetify/components'
+  import * as directives from 'vuetify/directives'
+
+  const vuetify = createVuetify({
+    components,
+    directives,
+  })
+  /* const app = createApp(App) */
+  app.use(vuetify)
+
+  ```  
+
+### Configurar vite.config.js
+
+```js
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vuetify from 'vite-plugin-vuetify'
+
+export default defineConfig({
+  plugins: [
+    vue(),
+    vuetify({ autoImport: true }), // 🔥 agrega Vuetify a Vite
+  ],
+})
+```

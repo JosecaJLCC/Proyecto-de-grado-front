@@ -3,13 +3,12 @@
     <form action="" v-on:submit.prevent="editMicrored">
       <fieldset class="form-microred">
         <legend class="legend-form-microred">
-          <!-- <CIcon :icon="cilUserPlus" class="icon-microred"/> -->
           <span class="titulo-form-microred">EDITAR MICRORED</span>
         </legend>
 
         <div class="form-content-microred">
           <section class="content-microred">
-            <h3>CODIGO DE MICRORED: {{ props.id_director }}</h3>
+            <h3>CODIGO DE MICRORED: {{ props.id_microred }}</h3>
 
             <label for="">NOMBRE DE LA MICRORED</label>
             <input type="text" v-model="nombre_microred">
@@ -20,8 +19,8 @@
           </section>
         </div>
         <div class="form-content-microred2">
-          <button class="form-btn btn-cancel" type="button" v-on:click="enviarValorModal"><CIcon :icon="cilX" class="icon-microred"/>CANCELAR</button>
-          <button class="form-btn btn-accept" type="submit"><CIcon :icon="cilCheckAlt" class="icon-microred"/>ACEPTAR</button>
+          <button class="form-btn btn-cancel" type="button" v-on:click="sendValueModal"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M10 10l4 4m0 -4l-4 4" /></svg>CANCELAR</button>
+          <button class="form-btn btn-accept" type="submit"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" /></svg>ACEPTAR</button>
         </div>
       </fieldset>
     </form>
@@ -30,27 +29,23 @@
 
 <script setup>
 import { microredService } from '@/services/Microred.js';
-import { CIcon } from '@coreui/icons-vue';
-import { cilCheckAlt, cilX } from '@coreui/icons';
-import { ref, defineEmits, defineProps} from 'vue';
+import { ref} from 'vue';
 import Swal from 'sweetalert2';
 import { Microred } from '@/models/Microred.js';
-/* router */
 let nombre_microred=ref("");
 let red=ref("");
 let ci_director=ref("");
 let result = ref({})
 
-const emits = defineEmits(['modificarModalEditar'])
+const emits = defineEmits(['modifyModalEdit'])
 let props = defineProps({
-  id_director: {
-    type: String, // o Array si envías varios roles/Microreds
+  id_microred: {
+    type: String,
     required: true,
   },
 });
-console.log("mi id",props.id_director)
-const enviarValorModal = () => {
-  emits('modificarModalEditar', false)
+const sendValueModal = () => {
+  emits('modifyModalEdit', false)
 }
 
 const editMicrored = async() =>{
@@ -62,8 +57,11 @@ const editMicrored = async() =>{
       });
       return;
   }
-  let microred = new Microred(props.id_director, nombre_microred.value, red.value, ci_director.value);
-              console.log("microred", microred)
+  let microred = new Microred(props.id_microred,
+                              nombre_microred.value.toUpperCase(),
+                              red.value.toUpperCase(),
+                              ci_director.value
+                );
   try {
     let resultSwal = await Swal.fire({
       title: "¿Estas seguro?",
@@ -77,15 +75,13 @@ const editMicrored = async() =>{
 
     if (resultSwal.isConfirmed) {
       result.value = await microredService.updateMicrored(microred);
-      console.log("my result", result.value)
       if(result.value.ok){
-        console.log("myRes",result)
         Swal.fire({
           title: "¡Cambio exitoso!",
           text: "Tus datos fueron corregidos",
           icon: "success"
         });
-        enviarValorModal();
+        sendValueModal();
       }else{
         Swal.fire({
           title: "¡Cambio fallido!",
@@ -93,11 +89,9 @@ const editMicrored = async() =>{
           icon: "error"
         });
       }
-
-
     };
   } catch (error) {
-      console.log("errorPatient", error)
+      console.log("error en editar la microred", error)
     }
   }
 </script>

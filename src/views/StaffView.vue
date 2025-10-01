@@ -1,20 +1,12 @@
 <template>
-    <main class="container-newperson">
-      <FormPersona redirectTo="registrar-usuario"/>
-    </main>
+      <TableStaff/>
 </template>
 
 <script setup>
-import FormPersona from '@/components/FormPersona.vue';
+import TableStaff from '@/components/Staff/TableStaff.vue';
 /* router */
 </script>
 
 <style scoped>
-.container-newperson{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
 
-  }
 </style>

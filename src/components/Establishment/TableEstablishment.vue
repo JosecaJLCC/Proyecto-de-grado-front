@@ -1,61 +1,42 @@
 <template>
-  <div class="container-table-microred">
-    <div class="header-table-microred">
-      <section class="search-table-microred">
-        <button class="btn-add-microred" v-on:click="createEstablishment">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="25"
-            height="25"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="icon icon-tabler icons-tabler-outline icon-tabler-home-plus"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M19 12h2l-9 -9l-9 9h2v7a2 2 0 0 0 2 2h5.5" />
-            <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2" />
-            <path d="M16 19h6" />
-            <path d="M19 16v6" />
-          </svg>
+  <div class="container-table">
+    <div class="header-table">
+      <section class="search-table">
+        <button class="btn-add-item" v-on:click="createEstablishment">
+          <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-medical-cross icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M13 3a1 1 0 0 1 1 1v4.535l3.928 -2.267a1 1 0 0 1 1.366 .366l1 1.732a1 1 0 0 1 -.366 1.366l-3.927 2.268l3.927 2.269a1 1 0 0 1 .366 1.366l-1 1.732a1 1 0 0 1 -1.366 .366l-3.928 -2.269v4.536a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-4.536l-3.928 2.268a1 1 0 0 1 -1.366 -.366l-1 -1.732a1 1 0 0 1 .366 -1.366l3.927 -2.268l-3.927 -2.268a1 1 0 0 1 -.366 -1.366l1 -1.732a1 1 0 0 1 1.366 -.366l3.928 2.267v-4.535a1 1 0 0 1 1 -1h2z" /></svg>
           Agregar Establecimiento
         </button>
-        <section class="input-table-microred">
+        <section class="input-table">
           <input
             type="text"
             placeholder="Establecimiento de salud"
             class="input-text-search"
             v-model="searchName"
           />
-          <CIcon :icon="cilSearch" class="icon-table-microred"/>
+          <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-search icon-table"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
         </section>
       </section>
     </div>
-    <div class="content-table-microred">
-      <table class="table-attention">
+    <div class="content-table">
+      <table>
         <thead>
           <tr>
             <th>N°</th>
             <th>ESTABLECIMIENTO</th>
             <th>TIPO</th>
             <th>MICRORED</th>
-            <th>FECHA DE CREACION</th>
             <th>ACCIONES</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, Nro) in filterData" v-bind:key="item.id_establecimiento">
+          <tr v-for="(item, Nro) in filterData" v-bind:key="item.id_establishment">
             <td data-title="N°">{{ Nro + 1 }}</td>
             <td data-title="ESTABLECIMIENTO">{{ item.nombre_establecimiento}}</td>
             <td data-title="TIPO">{{ item.tipo_establecimiento }}</td>
             <td data-title="MICRORED">{{ item.nombre_microred }}</td>
-            <td data-title="FECHA DE CREACION">{{ item.fecha_creacion }}</td>
             <td data-title="ACCIONES">
               <div class="content-btn-actions">
-                <button class="btn-acciones btn-view" v-on:click="verHospital">
+                <button class="btn-actions btn-view" v-on:click="viewEstablishment(item)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -75,7 +56,7 @@
                     />
                   </svg>
                 </button>
-                <button class="btn-acciones btn-edit" v-on:click="editEstablishment(item.id_establecimiento)">
+                <button class="btn-actions btn-edit" v-on:click="editEstablishment(item.id_establecimiento)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -93,7 +74,7 @@
                     <path d="M13.5 6.5l4 4" />
                   </svg>
                 </button>
-                <button class="btn-acciones btn-delete" v-on:click="deleteEstablishment(item.id_establecimiento)"
+                <button class="btn-actions btn-delete" v-on:click="deleteEstablishment(item.id_establecimiento)"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -121,48 +102,55 @@
         </tbody>
       </table>
     </div>
-    <!--  <div v-else class="alternative-div">
-      <h2>NO SE ENCONTRARON REGISTROS</h2>
-    </div> -->
     <FormEstablishment
-      class="content-form-microred"
-      v-if="modalVisibleAgregar"
-      @modificarModalAgregar="ocultarModalAgregar"
+      class="content-form"
+      v-if="modalVisibleAdd"
+      @modifyModalAdd="hideModalAdd"
     />
     <EditEstablishment
-      class="content-edit-microred"
-      v-if="modalVisibleEditar"
-      @modificarModalEditar="ocultarModalEditar"
+      class="content-edit"
+      v-if="modalVisibleEdit"
+      @modifyModalEdit="hideModalEdit"
       :id_establecimiento="idProp"
+    />
+    <ViewEstablishment
+      class="content-view"
+      v-if="modalVisibleView"
+      @modifyModalView="hideModalView"
+      :establishment="establishmentProp"
     />
   </div>
 </template>
 
 <script setup>
 import '@/assets/styles/table.css'
+import '@/assets/styles/tableComponent.css'
 import { establishmentService } from '@/services/Establecimiento.js'
 import FormEstablishment from '@/components/Establishment/FormEstablishment.vue'
 import EditEstablishment from '@/components/Establishment/EditEstablishment.vue'
+import ViewEstablishment from '@/components/Establishment/ViewEstablishment.vue'
 import { computed, onMounted, ref } from 'vue'
-import { CIcon } from '@coreui/icons-vue'
-import { cilSearch } from '@coreui/icons'
 import Swal from 'sweetalert2'
 
 let data = ref([])
 let originalData = ref([])
 let searchName = ref('')
-let modalVisibleAgregar = ref(false)
-let modalVisibleEditar = ref(false)
+
+let modalVisibleAdd = ref(false)
+let modalVisibleEdit = ref(false)
+let modalVisibleView = ref(false)
+
 let idProp=ref("");
-/* let modalVisibleVer = ref(false) */
+let establishmentProp=ref("");
 let result = ref({})
+let resultDelete=ref([]);
 
 const filterData = computed(() => {
   const health_center = searchName.value.trim()
   const result= health_center === ''
     ? data.value
     : originalData.value.filter((item) =>
-        item.nombre_microred.toString().toUpperCase().includes(health_center.toUpperCase()),
+        item.nombre_establecimiento.toString().toUpperCase().includes(health_center.toUpperCase()),
       )
   return result;
 })
@@ -170,9 +158,9 @@ const filterData = computed(() => {
 const showEstablishment = async () => {
   try {
     result.value = await establishmentService.showEstablishment()
-    console.log('mi result show establecimiento', result.value[2].fecha_creacion)
+    /* console.log('mi result show establecimiento', result.value[2].fecha_creacion) */
     // Asignar aunque esté vacío
-    data.value = Array.isArray(result.value) ? result.value : []
+    data.value = Array.isArray(result.value) ? result.value : [result.value]
     originalData.value = [...data.value]
   } catch (error) {
     console.log('Error al obtener los datos de establecimiento:', error)
@@ -182,29 +170,40 @@ const showEstablishment = async () => {
 onMounted(async () => {
   showEstablishment()
 })
-/* boton de agregar nuevo cs */
-const createEstablishment = () => {
-  modalVisibleAgregar.value = true
+/* Ver establecimiento */
+const viewEstablishment=(item)=>{
+  establishmentProp.value=item;
+  console.log("establishment prop: ", establishmentProp.value)
+  modalVisibleView.value=true;
 }
 
-const ocultarModalAgregar = (valor) => {
-  modalVisibleAgregar.value = valor
+const hideModalView = (valor) =>{
+  modalVisibleView.value=valor;
+}
+
+/* boton de agregar nuevo cs */
+const createEstablishment = () => {
+  modalVisibleAdd.value = true;
+}
+
+const hideModalAdd = (valor) => {
+  modalVisibleAdd.value = valor
   showEstablishment()
 }
 /* boton de editar cs */
-const editEstablishment = (id_establecimiento) => {
-  console.log("edit", id_establecimiento)
-  idProp.value=id_establecimiento;
-  modalVisibleEditar.value = true
+const editEstablishment = (id_establishment) => {
+  idProp.value=id_establishment;
+  console.log("idProp", idProp.value)
+  modalVisibleEdit.value = true
 }
 
-const ocultarModalEditar = (valor) => {
-  modalVisibleEditar.value = valor
+const hideModalEdit = (valor) => {
+  modalVisibleEdit.value = valor
   showEstablishment();
 }
 
 /* boton eliminar cs */
-const deleteEstablishment = async(id_establecimiento) => {
+const deleteEstablishment = async(id_establishment) => {
   const resultSwal = await Swal.fire({
     title: "¿Estás seguro?",
     text: "Se eliminará el establecimiento",
@@ -216,17 +215,25 @@ const deleteEstablishment = async(id_establecimiento) => {
   })
   if (resultSwal.isConfirmed) {
     try {
-      console.log('mi id:', id_establecimiento)
-      let resultDelete = ref(await establishmentService.deleteEstablishment(id_establecimiento));
-      console.log("eliminado",resultDelete.value)
-      showEstablishment();
-      Swal.fire({
-        title: "¡Eliminado!",
-        text: "Microred eliminada.",
-        icon: "success"
-      });
+      resultDelete.value = await establishmentService.deleteEstablishment(id_establishment);
+      if(resultDelete.value.ok){
+        showEstablishment();
+        Swal.fire({
+          title: "¡Eliminado!",
+          text: resultDelete.value.messsage,
+          icon: "success"
+        });
+      }
+      else{
+        Swal.fire({
+          title: "¡Error!",
+          text: "Algo anda mal",
+          icon: "error"
+        });
+      }
+
     } catch (error) {
-      console.log("Error en eliminar microred")
+      console.log("Error en eliminar establecimiento", error);
     }
 
   }
@@ -234,154 +241,4 @@ const deleteEstablishment = async(id_establecimiento) => {
 </script>
 
 <style scoped>
-.container-table-microred {
-  color: var(--color-black);
-  padding-left: 3px;
-  transition: width 0.8s ease;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  position: relative;
-     /*  background-color: var(--color-white-transparent);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px); */
-}
-.content-table-microred {
-  width: 100%;
-  position: relative;
-  /* min-height: 100vh; */
-}
-
-.content-form-microred,
-.content-edit-microred {
-  position: absolute; /* o fixed, si prefieres */
-  top: 0px;
-  left: 0;
-  width: 100%;
-  min-height: 85dvh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--color-white);
-  background-color: var(--color-black-transparent); /* blanco semitransparente */
-  backdrop-filter: blur(5px); /* 🔥 Aquí se hace el desenfoque */
-  -webkit-backdrop-filter: blur(5px); /* compatibilidad con Safari */
-  z-index: 10;
-}
-
-.alternative-div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 85dvh;
-  width: 100%;
-  color: var(--color-black);
-}
-
-.header-table-microred {
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  height: 80px;
-  padding: 10px;
-}
-
-.search-table-microred {
-  display: flex;
-  justify-content: space-between;
-  column-gap: 10px;
-  row-gap: 10px;
-  width: 100%;
-  flex-wrap: wrap;
-}
-
-.input-table-microred {
-  display: flex;
-  position: relative;
-  align-items: center;
-}
-
-.icon-table-microred {
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  left: 5px;
-}
-
-.input-text-search {
-  padding-left: 25px;
-  border-radius: 20px;
-}
-
-.btn-add-microred {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  color: var(--color-white);
-  background-color: var(--color-primary);
-  border: none;
-  outline: none;
-  border-radius: 20px;
-  padding: 5px 10px;
-}
-
-.btn-add-microred:hover {
-  background-color: var(--color-secondary);
-}
-
-.btn-search {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  width: 150px;
-  border-radius: 20px;
-  outline: none;
-  border: none;
-  font-weight: bold;
-}
-
-.btn-search,
-.input-text-search,
-.btn-add-microred {
-  font-size: 1.3em;
-  height: 35px;
-}
-
-.date-table-microred {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  padding: 5px;
-  border-radius: 20px;
-}
-
-.btn-attention {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  width: 100px;
-  border-radius: 20px;
-  outline: none;
-  border: none;
-  font-weight: bold;
-}
-
-.btn-acciones {
-  display: flex;
-  align-content: center;
-  justify-content: center;
-  border-radius: 50%;
-  outline: none;
-  border: none;
-}
-
-.btn-view {
-  background-color: var(--color-primary);
-}
-
-.btn-edit {
-  background-color: rgb(229, 229, 25);
-}
-
-.btn-delete {
-  background-color: var(--color-secondary);
-}
 </style>
