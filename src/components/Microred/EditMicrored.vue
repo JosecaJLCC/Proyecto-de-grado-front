@@ -1,6 +1,6 @@
 <template>
   <div class="container-form-microred">
-    <form action="" v-on:submit.prevent="editMicrored">
+    <form action="" v-on:submit.prevent="editMicrored" class="form-content">
       <fieldset class="form-microred">
         <legend class="legend-form-microred">
           <span class="titulo-form-microred">EDITAR MICRORED</span>
@@ -18,11 +18,11 @@
             <input type="text" v-model="ci_director">
           </section>
         </div>
-        <div class="form-content-microred2">
+      </fieldset>
+      <div class="form-content-microred2">
           <button class="form-btn btn-cancel" type="button" v-on:click="sendValueModal"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M10 10l4 4m0 -4l-4 4" /></svg>CANCELAR</button>
           <button class="form-btn btn-accept" type="submit"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" /></svg>ACEPTAR</button>
         </div>
-      </fieldset>
     </form>
   </div>
 </template>
@@ -103,16 +103,31 @@ const editMicrored = async() =>{
     justify-content: center;
     align-items: center;
     width: 100%;
+    min-height: 85dvh;
+  }
+
+  .form-content{
+    background-color: var(--color-white);
+    border-radius: 20px;
+    padding: 10px;
   }
 
   .form-microred{
     display: flex;
     flex-direction: column;
     background-color: var(--color-white);
-    border-radius: 20px;
-    border: none;
-    padding: 20px;
+     border: none;
     row-gap: 20px;
+      /* 👇 Control de altura y scroll interno */
+    max-height: 70vh; /* ocupa como máximo el 90% de la pantalla */
+    overflow-y: auto; /* scroll vertical si se desborda */
+  }
+
+  .form-content-microred2{
+    display: flex;
+    justify-content: space-around;
+    column-gap: 20px;
+    padding-top: 10px;
   }
 
   .form-content-microred {
@@ -157,12 +172,6 @@ const editMicrored = async() =>{
   .icon-microred{
     width: 20px;
     height: 20px;
-  }
-
-  .form-content-microred2{
-    display: flex;
-    justify-content: space-around;
-    column-gap: 20px;
   }
 
   .form-btn{

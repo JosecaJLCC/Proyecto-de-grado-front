@@ -2,6 +2,8 @@
   <TableHome/>
 </template>
 
-<script>
+<script setup>
  import TableHome from '@/components/TableHome.vue';
 </script>
+
+<style scoped></style>

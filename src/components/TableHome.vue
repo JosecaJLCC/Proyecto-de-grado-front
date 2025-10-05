@@ -1,14 +1,11 @@
 <template>
-  <div v-if="true" class="container-tableattention" >
+  <div class="container-tableattention" >
     <div class="header-tableattention">
       <section class="search-tableattention">
         <h2 class="fecha-header">FECHA: {{ date }}</h2>
         <section class="input-tableattention">
-
           <input type="text" placeholder="Ingrese el CI" class="input-text-search" v-model="searchCi">
-          <CIcon :icon="cilSearch" class="icon-tableattention"/>
         </section>
-
       </section>
     </div>
     <table class="table-attention">
@@ -37,19 +34,13 @@
               </td> -->
           </tr>
       </tbody>
-  </table>
-  </div>
-  <div v-else class="alternative-div">
-    <h2 >NO SE ENCONTRARON REGISTROS EN FECHA {{ date }}</h2>
-  </div >
+    </table>
+    </div>
 </template>
 
 <script setup>
 import '@/assets/styles/table.css';
 import { computed, onMounted, ref } from 'vue';
-import { CIcon } from '@coreui/icons-vue';
-import { cilSearch } from '@coreui/icons';
-import axios from 'axios';
 import { attentionService } from '@/services/Atencion.js';
 /* import { useUsuarioStore } from '@/store/usuario.js';
 
@@ -73,10 +64,6 @@ const filterData = computed(() => {
   return result;
 });
 
-/* verPaciente = () => {
-
-}
- */
 onMounted(async () => {
   try {
     const res = await attentionService.showAttention();

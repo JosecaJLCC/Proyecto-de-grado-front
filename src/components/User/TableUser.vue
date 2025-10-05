@@ -1,24 +1,24 @@
 <template>
-  <div class="container-table-microred">
-    <div class="header-table-microred">
-      <section class="search-table-microred">
-        <button class="btn-add-microred" v-on:click="createPatient">
+  <div class="container-table">
+    <div class="header-table">
+      <section class="search-table">
+        <button class="btn-add-item" v-on:click="createPatient">
           <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user-plus icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M16 19h6" /><path d="M19 16v6" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4" /></svg>
-          Agregar Paciente
+          Agregar Usuario
         </button>
-        <section class="input-table-microred">
+        <section class="input-table">
           <input
             type="text"
             placeholder="Ingrese su CI"
             class="input-text-search"
             v-model="searchCi"
           />
-          <CIcon :icon="cilSearch" class="icon-table-microred"/>
+           <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-search icon-table"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
         </section>
       </section>
     </div>
-    <div class="content-table-microred">
-      <table class="table-attention">
+    <div class="content-table">
+      <table>
         <thead>
           <tr>
             <th>N°</th>
@@ -32,17 +32,15 @@
         <tbody>
           <tr v-for="(item, Nro) in filterData" v-bind:key="item.id_paciente">
             <td data-title="N°">{{ Nro + 1 }}</td>
-            <td data-title="CI">{{ item.ci}}</td>
+            <td data-title="CI">{{ item.ci}} {{ item.extension }}</td>
             <td data-title="CI">
               <img class="img-profile" :src="`http://localhost:3000/uploads/${item.perfil}`" alt="" />
             </td>
-
-            <td data-title="NOMBRES">{{ item.nombre }}</td>
+            <td data-title="NOMBRES">{{ item.paterno }} {{ item.materno }} {{ item.nombre }}</td>
             <td data-title="CORREO">{{ item.correo }}</td>
             <td data-title="ACCIONES">
               <div class="content-btn-actions">
-
-                <button class="btn-acciones btn-view" v-on:click="verHospital">
+                <button class="btn-actions btn-view" v-on:click="viewUser(item)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -62,7 +60,7 @@
                     />
                   </svg>
                 </button>
-                <button class="btn-acciones btn-edit" v-on:click="editUser(item.id_usuario)">
+                <button class="btn-actions btn-edit" v-on:click="editUser(item.id_usuario)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -80,8 +78,7 @@
                     <path d="M13.5 6.5l4 4" />
                   </svg>
                 </button>
-                <button class="btn-acciones btn-delete" v-on:click="deleteUser(item.id_usuario)"
-                >
+                <button class="btn-actions btn-delete" v-on:click="deleteUser(item.id_usuario)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -109,15 +106,21 @@
       </table>
     </div>
 
+    <ViewUser
+      class="content-view"
+      v-if="modalVisibleView"
+      @modifyModalView="hideModalView"
+    />
+
     <FormUser
-      class="content-form-microred"
-      v-if="modalVisibleAgregar"
-      @modificarModalAgregar="ocultarModalAgregar"
+      class="content-form"
+      v-if="modalVisibleAdd"
+      @modifyModalAdd="hideModalAdd"
     />
     <EditUser
-      class="content-edit-microred"
-      v-if="modalVisibleEditar"
-      @modificarModalEditar="ocultarModalEditar"
+      class="content-edit"
+      v-if="modalVisibleEdit"
+      @modifyModalEdit="hideModalEdit"
       :id_usuario="idProp"
     />
   </div>
@@ -128,19 +131,23 @@ import '@/assets/styles/table.css'
 import { userService } from '@/services/Usuario.js'
 import FormUser from '@/components/User/FormUser.vue'
 import EditUser from '@/components/User/EditUser.vue'
+import ViewUser from '@/components/User/ViewUser.vue'
 import { computed, onMounted, ref } from 'vue'
-import { CIcon } from '@coreui/icons-vue'
-import { cilSearch } from '@coreui/icons'
 import Swal from 'sweetalert2'
+
 
 let data = ref([])
 let originalData = ref([])
 let searchCi = ref('')
-let modalVisibleAgregar = ref(false)
-let modalVisibleEditar = ref(false)
+
+let modalVisibleView=ref(false)
+let modalVisibleAdd = ref(false)
+let modalVisibleEdit = ref(false)
+
+let userProp=ref("");
 let idProp=ref("");
-/* let modalVisibleVer = ref(false) */
 let result = ref({})
+let resultDelete=ref({})
 
 const filterData = computed(() => {
   const health_center = searchCi.value.trim()
@@ -167,24 +174,30 @@ const showUser = async () => {
 onMounted(async () => {
   showUser()
 })
+
+const viewUser = (item) =>{
+  userProp.value=item;
+  console.log("staff prop: ", userProp.value)
+  modalVisibleView=true;
+}
 /* boton de agregar nuevo cs */
 const createPatient = () => {
-  modalVisibleAgregar.value = true
+  modalVisibleAdd.value = true
 }
 
-const ocultarModalAgregar = (valor) => {
-  modalVisibleAgregar.value = valor
+const hideModalAdd = (valor) => {
+  modalVisibleAdd.value = valor
   showUser()
 }
 /* boton de editar cs */
 const editUser = (id_usuario) => {
   console.log("edit", id_usuario)
   idProp.value=id_usuario;
-  modalVisibleEditar.value = true
+  modalVisibleEdit.value = true
 }
 
-const ocultarModalEditar = (valor) => {
-  modalVisibleEditar.value = valor
+const hideModalEdit = (valor) => {
+  modalVisibleEdit.value = valor
   showUser();
 }
 
@@ -202,7 +215,7 @@ const deleteUser = async(id_usuario) => {
   if (resultSwal.isConfirmed) {
     try {
       console.log('mi id:', id_usuario)
-      let resultDelete = ref(await userService.deleteUser(id_usuario));
+      resultDelete.value = await userService.deleteUser(id_usuario);
       console.log("eliminado",resultDelete.value)
       showUser();
       Swal.fire({
@@ -225,7 +238,7 @@ const deleteUser = async(id_usuario) => {
   object-fit: cover;
 }
 
-.container-table-microred {
+.container-table {
   color: var(--color-black);
   padding-left: 3px;
   transition: width 0.8s ease;
@@ -237,14 +250,15 @@ const deleteUser = async(id_usuario) => {
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px); */
 }
-.content-table-microred {
+.content-table {
   width: 100%;
   position: relative;
   /* min-height: 100vh; */
 }
 
-.content-form-microred,
-.content-edit-microred {
+.content-form,
+.content-edit,
+.content-view {
   position: absolute; /* o fixed, si prefieres */
   top: 0px;
   left: 0;
@@ -269,7 +283,7 @@ const deleteUser = async(id_usuario) => {
   color: var(--color-black);
 }
 
-.header-table-microred {
+.header-table {
   display: flex;
   justify-content: end;
   align-items: center;
@@ -277,7 +291,7 @@ const deleteUser = async(id_usuario) => {
   padding: 10px;
 }
 
-.search-table-microred {
+.search-table {
   display: flex;
   justify-content: space-between;
   column-gap: 10px;
@@ -286,7 +300,7 @@ const deleteUser = async(id_usuario) => {
   flex-wrap: wrap;
 }
 
-.input-table-microred {
+.input-table {
   display: flex;
   position: relative;
   align-items: center;
@@ -304,7 +318,7 @@ const deleteUser = async(id_usuario) => {
   border-radius: 20px;
 }
 
-.btn-add-microred {
+.btn-add-item {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -317,7 +331,7 @@ const deleteUser = async(id_usuario) => {
   padding: 5px 10px;
 }
 
-.btn-add-microred:hover {
+.btn-add-item:hover {
   background-color: var(--color-secondary);
 }
 
@@ -333,7 +347,7 @@ const deleteUser = async(id_usuario) => {
 
 .btn-search,
 .input-text-search,
-.btn-add-microred {
+.btn-add-item {
   font-size: 1.3em;
   height: 35px;
 }
@@ -355,7 +369,7 @@ const deleteUser = async(id_usuario) => {
   font-weight: bold;
 } */
 
-.btn-acciones {
+.btn-actions {
   display: flex;
   align-content: center;
   justify-content: center;

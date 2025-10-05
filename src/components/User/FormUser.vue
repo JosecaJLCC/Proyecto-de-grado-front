@@ -1,12 +1,10 @@
 <template>
   <div class="container-newuser">
-    <form @submit.prevent="registrarUsuario">
+    <form @submit.prevent="createUser" class="form-content">
       <fieldset class="form-newuser">
         <legend class="legend-newuser">
-          <!-- <CIcon :icon="cilUserPlus" class="icon-newuser"/> -->
           <span class="titulo-newuser">DATOS DE USUARIO</span>
         </legend>
-
         <div class="form-content-newuser">
           <label for="">FOTO DE PERFIL</label>
           <img
@@ -15,7 +13,7 @@
             :src="imagenPerfil"
             alt="Imagen seleccionada"
           />
-          <img class="img-perfil" v-else src="../assets/usuario.png" alt="" />
+          <img class="img-perfil" v-else src="@/assets/usuario.png" alt="" />
           <section class="content-newuser">
             <input
               class="input-file"
@@ -26,38 +24,35 @@
               style="display: none"
             />
             <button class="input-file" @click.prevent="abrirSelector">Seleccionar imagen</button>
-            <!-- <CIcon :icon="cilPlus" class="icon-sidebar" /> -->
-            <label for="">NOMBRE DE USUARIO</label>
-            <input type="text" v-model="nombre_usuario" />
+            <label for="">ROL</label>
+            <select name="" id="" v-model="id_rol">
+              <option value="2">PERSONAL</option>
+              <option value="3">DIRECTOR</option>
+            </select>
             <label for="">CORREO</label>
             <input type="email" v-model="correo" />
             <label for="">CLAVE</label>
             <input type="password" v-model="clave" />
             <label for="">REINTRODUZCA LA CLAVE</label>
             <input type="password" v-model="clave2" />
-            <label for="">ROL</label>
-            <select name="" id="" v-model="id_rol">
-              <option value="2">PERSONAL</option>
-              <option value="3">DIRECTOR</option>
-            </select>
+
           </section>
         </div>
-        <div class="form-content-newuser2">
-          <button class="form-btn btn-cancel" v-on:click="retornarInicio">
-            <CIcon :icon="cilX" class="icon-newuser" />CANCELAR
-          </button>
-          <button class="form-btn btn-accept" type="submit">
-            <CIcon :icon="cilCheckAlt" class="icon-newuser" />CONTINUAR
-          </button>
-        </div>
       </fieldset>
+      <div class="form-content-newuser2">
+          <button class="form-btn btn-cancel" @click="sendValueModal">
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M10 10l4 4m0 -4l-4 4" /></svg>
+            CANCELAR</button>
+          <button class="form-btn btn-accept" type="submit">
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" /></svg>
+            ACEPTAR</button>
+      </div>
     </form>
   </div>
 </template>
 
 <script setup>
-import { CIcon } from '@coreui/icons-vue'
-import { cilCheckAlt, cilX } from '@coreui/icons'
+
 import { ref } from 'vue'
 import Swal from 'sweetalert2'
 import axios from 'axios'
@@ -79,8 +74,10 @@ let imagenPerfil = ref(null)
 let fileInput = ref(null)
 let archivoImagen = ref(null)
 
-const retornarInicio = () => {
-  router.push({ name: 'inicio' })
+
+const emits = defineEmits(['modifyModalAdd']);
+const sendValueModal = () => {
+  emits('modifyModalAdd', false)
 }
 
 function mostrarImagen(event) {
@@ -99,7 +96,7 @@ const abrirSelector = () => {
   fileInput.value?.click()
 }
 
-const registrarUsuario = async () => {
+const createUser = async () => {
   if (!nombre_usuario.value || !correo.value || !clave.value || !clave2.value || !id_rol.value) {
     Swal.fire({
       icon: 'error',
@@ -149,52 +146,61 @@ const registrarUsuario = async () => {
 
 <style scoped>
 /* contenedor principal que abarca toda la pantalla */
-.container-newuser {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
+  .container-newuser {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 85dvh;
+  }
+  .form-content{
+    background-color: var(--color-white);
+    border-radius: 20px;
+    padding: 10px;
+  }
 
 .form-newuser {
   display: flex;
   flex-direction: column;
-  /* background-color: rgba(0, 128, 128, .4); */
-  background-color: rgba(0, 128, 128, 0.5);
+  background-color:  var(--color-white);
   border: none;
-  padding: 20px;
   row-gap: 20px;
+  /* 👇 Control de altura y scroll interno */
+  max-height: 70vh; /* ocupa como máximo el 90% de la pantalla */
+  overflow-y: auto; /* scroll vertical si se desborda */
+}
+
+.form-content-newuser2 {
+  display: flex;
+  justify-content: space-around;
+  column-gap: 20px;
+  padding-top: 10px;
 }
 
 .form-content-newuser {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   gap: 20px;
-  /* border: 2px solid black; */
   width: 100%;
+  color: var(--color-black);
 }
 
 .content-newuser {
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
   row-gap: 20px;
-  /* background-color: rgba(0, 128, 128, .5); */
   width: 100%;
-  /* border: 2px solid silver */
 }
 
-.content-newuser > input {
+.content-newuser > input, select {
   padding-left: 5px;
-}
-
-input, select/* , .form-btn  */ {
   border-radius: 20px;
-  outline: none;
-  border: none;
-  /* width: 100%; */
-  height: 20px;
+    outline: none;
+    border:2px solid var(--color-primary);
+    height: 25px;
+    font-weight: bold;
 }
 
 .img-perfil {
@@ -223,31 +229,17 @@ input, select/* , .form-btn  */ {
 
 .titulo-newuser {
   display: flex;
-  /* background-color: rgb(224, 63, 62); */
-  background-color: rgb(0, 128, 128);
+  background-color: var(--color-primary);
   border-radius: 20px;
   padding: 5px;
   font-weight: bold;
 }
 
-.icon-newuser {
-  width: 20px;
-  height: 20px;
-  /* background-color: rgb(224, 63, 62) */
-}
-
-.form-content-newuser2 {
-  display: flex;
-  justify-content: space-around;
-  column-gap: 20px;
-}
-
 .form-btn {
-  background-color: rgb(0, 128, 128);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  color: white;
+  color: var(--color-white);
   font-weight: bold;
   border-radius: 20px;
   outline: none;
@@ -260,6 +252,23 @@ input, select/* , .form-btn  */ {
   background-color: rgb(224, 63, 62);
 }
 
+.btn-cancel{
+    background-color: var(--color-secondary);
+  }
+
+  .btn-cancel:hover{
+    background-color: var(--color-secondary-transparent);
+    transition: .3s;
+  }
+
+  .btn-accept{
+    background-color: var(--color-primary);
+  }
+
+  .btn-accept:hover{
+    background-color: var(--color-primary-transparent);
+    transition: .3s;
+  }
 /* Una columna en pantallas pequeñas */
 @media (max-width: 767px) {
   .form-content-newuser2 {

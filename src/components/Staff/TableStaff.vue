@@ -11,7 +11,7 @@
             type="text"
             placeholder="Ingrese su CI"
             class="input-text-search"
-            v-model="searchName"
+            v-model="searchCi"
           />
           <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-search icon-table"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
         </section>
@@ -128,25 +128,27 @@
 import '@/assets/styles/table.css';
 import '@/assets/styles/tableComponent.css';
 import FormStaff from '@/components/Staff/FormStaff.vue';
-/* import NewForm from '@/components/Staff/NewForm.vue'; */
 import EditStaff from '@/components/Staff/EditStaff.vue';
 import ViewStaff from '@/components/Staff/ViewStaff.vue';
 import { computed, onMounted, ref } from 'vue'
-
 import Swal from 'sweetalert2'
 import { staffService } from '@/services/Personal.js'
 
 let data = ref([])
 let originalData = ref([])
-let searchName = ref('')
+let searchCi = ref('')
+
+let modalVisibleView=ref(false)
 let modalVisibleAdd = ref(false)
 let modalVisibleEdit = ref(false)
+
+let staffProp=ref("");
 let idProp=ref("");
-/* let modalVisibleVer = ref(false) */
 let result = ref({})
+let resultDelete=ref([]);
 
 const filterData = computed(() => {
-  const ci = searchName.value.trim()
+  const ci = searchCi.value.trim()
   const result= ci === ''
     ? data.value
     : originalData.value.filter((item) =>
@@ -158,7 +160,7 @@ const filterData = computed(() => {
 const showStaff = async () => {
   try {
     result.value = await staffService.showStaff()
-    console.log('mi result show establecimiento', result.value)
+    console.log('mi result show staff', result.value)
     data.value = Array.isArray(result.value) ? result.value : [result.value]
     originalData.value = [...data.value]
   } catch (error) {
@@ -169,6 +171,12 @@ const showStaff = async () => {
 onMounted(async () => {
   showStaff()
 })
+const viewStaff = (item) =>{
+  staffProp.value=item;
+  console.log("staff prop: ", staffProp.value)
+  modalVisibleView=true;
+}
+
 /* boton de agregar nuevo cs */
 const createEstablishment = () => {
   modalVisibleAdd.value = true
@@ -180,7 +188,7 @@ const hideModalAdd = (valor) => {
 }
 /* boton de editar cs */
 const editStaff = (id_personal) => {
-  console.log("edit", id_personal)
+  console.log("edit id", id_personal)
   idProp.value=id_personal;
   modalVisibleEdit.value = true
 }
@@ -204,7 +212,7 @@ const deleteStaff = async(id_personal) => {
   if (resultSwal.isConfirmed) {
     try {
       console.log('mi id:', id_personal)
-      let resultDelete = ref(await staffService.deleteStaff(id_personal));
+      resultDelete.value = await staffService.deleteStaff(id_personal);
       console.log("eliminado",resultDelete.value)
       showStaff();
       Swal.fire({
@@ -215,7 +223,6 @@ const deleteStaff = async(id_personal) => {
     } catch (error) {
       console.log("Error en eliminar microred")
     }
-
   }
 }
 </script>

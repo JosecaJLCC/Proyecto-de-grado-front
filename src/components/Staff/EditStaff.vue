@@ -1,12 +1,10 @@
 <template>
   <div class="container-form-microred">
-    <form action="" v-on:submit.prevent="editEstablishment">
+    <form action="" v-on:submit.prevent="editEstablishment" class="form-content">
       <fieldset class="form-microred">
         <legend class="legend-form-microred">
-          <!-- <CIcon :icon="cilUserPlus" class="icon-microred"/> -->
           <span class="titulo-form-microred">EDITAR PERSONAL</span>
         </legend>
-
         <div class="form-content-microred">
           <section class="content-microred">
             <label for="">CI</label>
@@ -91,22 +89,21 @@
             </select>
             <input v-if="workAreaValue" placeholder="Ingrese el area de trabajo" type="text" v-model="staff.nombre_area">
             <label for="">CARGO</label>
-            <select name="" id="" v-model="staff.cargo" @change="choosePosition">
+            <input placeholder="Ingrese el cargo" type="text" list="cargo" v-model="staff.cargo">
+            <datalist id="cargo">
               <option :value="item.cargo" v-for="item in resultPosition" :key="item.cargo">{{ item.cargo }}</option>
-              <option value="OTRO">OTRO</option>
-            </select>
-            <input v-if="positionValue" placeholder="Ingrese el cargo" type="text" v-model="staff.nombre_cargo">
+            </datalist>
             <label for="">MATRICULA</label>
             <input type="text" v-model="staff.nro_matricula">
             <label for="">FECHA DE INGRESO</label>
             <input type="date" v-model="staff.fecha_ingreso">
           </section>
         </div>
-        <div class="form-content-microred2">
-          <button class="form-btn btn-cancel" type="button" v-on:click="sendValueModal"><CIcon :icon="cilX" class="icon-microred"/>CANCELAR</button>
-          <button class="form-btn btn-accept" type="submit"><CIcon :icon="cilCheckAlt" class="icon-microred"/>ACEPTAR</button>
-        </div>
       </fieldset>
+      <div class="form-content-microred2">
+          <button class="form-btn btn-cancel" type="button" v-on:click="sendValueModal"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M10 10l4 4m0 -4l-4 4" /></svg>CANCELAR</button>
+          <button class="form-btn btn-accept" type="submit"><svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" /></svg>ACEPTAR</button>
+        </div>
     </form>
   </div>
 </template>
@@ -137,7 +134,6 @@ let staff=reactive({
   id_area:"",
   nombre_area:"",
   cargo:"",
-  nombre_cargo:"",
   nro_matricula:"",
   fecha_ingreso:""
 })
@@ -168,11 +164,12 @@ onMounted(  async()=>{
 
 const emits = defineEmits(['modifyModalEdit'])
 let props = defineProps({
-  id_establecimiento: {
-    type: String, // o Array si envías varios roles/Microreds
+  id_personal: {
+    type: Number, // o Array si envías varios roles/Microreds
     required: true,
   },
 });
+
 
 const sendValueModal = () => {
   emits('modifyModalEdit', false)
@@ -206,12 +203,12 @@ const choosePosition=()=>{
 }
 
 const editEstablishment = async() =>{
-  if(!person.ci || !person.extension || !person.nombre || !person.paterno ||
-  !person.materno || !person.nro_telf || !person.estado_civil ||
-  !person.fecha_nacimiento || !person.nacionalidad || !person.sexo ||
-  !residence.departamento || !residence.municipio || !residence.zona || !residence.av_calle ||
-  !residence.nro_puerta || !(staff.id_profesion || staff.nombre_profesion) ||
-  !(staff.id_area || staff.nombre_area) || !(staff.cargo || staff.nombre_cargo)){
+  if(!person.ci && !person.extension && !person.nombre && !person.paterno &&
+  !person.materno && !person.nro_telf && !person.estado_civil &&
+  !person.fecha_nacimiento && !person.nacionalidad && !person.sexo &&
+  !residence.departamento && !residence.municipio && !residence.zona && !residence.av_calle &&
+  !residence.nro_puerta && !(staff.id_profesion && staff.nombre_profesion) &&
+  !(staff.id_area || staff.nombre_area) && !staff.cargo){
     Swal.fire({
         title: "¡Intente nuevamente!",
         text: "Debe haber al menos un cambio",
@@ -224,14 +221,13 @@ const editEstablishment = async() =>{
     person.paterno.toUpperCase(), person.materno.toUpperCase(),
     person.nacionalidad.toUpperCase(), person.estado_civil.toUpperCase(),
     person.nro_telf, person.sexo.toUpperCase(),
-    person.fecha_nacimiento, direction.departamento.toUpperCase(),
-    direction.municipio.toUpperCase(), direction.zona.toUpperCase(),
-    direction.av_calle.toUpperCase(), direction.nro_puerta,
+    person.fecha_nacimiento, residence.departamento.toUpperCase(),
+    residence.municipio.toUpperCase(), residence.zona.toUpperCase(),
+    residence.av_calle.toUpperCase(), residence.nro_puerta,
     staff.id_microred, staff.cargo.toUpperCase(),
-    staff.nombre_cargo.toUpperCase(), staff.id_profesion,
-    staff.nombre_profesion.toUpperCase(), staff.id_area,
-    staff.nombre_area.toUpperCase(),
-    staff.nro_matricula, staff.fecha_ingreso
+    staff.id_profesion, staff.nombre_profesion.toUpperCase(),
+    staff.id_area, staff.nombre_area.toUpperCase(),
+    staff.nro_matricula, staff.fecha_ingreso, props.id_personal
   );
   try {
     let resultSwal = await Swal.fire({
@@ -245,7 +241,7 @@ const editEstablishment = async() =>{
     })
 
     if (resultSwal.isConfirmed) {
-      result.value = await staffService.createStaff(staffClass);
+      result.value = await staffService.updateStaff(staffClass);
       console.log("my result", result.value)
       if(result.value.ok){
         console.log("myRes",result)
@@ -276,16 +272,23 @@ const editEstablishment = async() =>{
     justify-content: center;
     align-items: center;
     width: 100%;
+    min-height: 85dvh;
+  }
+  .form-content{
+    background-color: var(--color-white);
+    border-radius: 20px;
+    padding: 10px;
   }
 
   .form-microred{
     display: flex;
     flex-direction: column;
     background-color: var(--color-white);
-    border-radius: 20px;
     border: none;
-    padding: 20px;
     row-gap: 20px;
+      /* 👇 Control de altura y scroll interno */
+    max-height: 70vh; /* ocupa como máximo el 90% de la pantalla */
+    overflow-y: auto; /* scroll vertical si se desborda */
   }
 
   .form-content-microred {
@@ -336,6 +339,7 @@ const editEstablishment = async() =>{
     display: flex;
     justify-content: space-around;
     column-gap: 20px;
+    padding-top: 10px;
   }
 
   .form-btn{
