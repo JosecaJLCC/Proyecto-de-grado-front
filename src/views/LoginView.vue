@@ -7,9 +7,9 @@
         </legend>
         <h2 id="title-login">INICIO DE SESIÓN</h2>
 
-        <label for=""> CORREO</label>
+        <label for=""> NOMBRE DE USUARIO</label>
         <div class="entrada-icon-login">
-          <input class="input-login" v-model="correo" type="email" />
+          <input class="input-login" v-model="nombre_usuario" type="text" />
           <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-user icon-login"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2a5 5 0 1 1 -5 5l.005 -.217a5 5 0 0 1 4.995 -4.783z" /><path d="M14 14a5 5 0 0 1 5 5v1a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-1a5 5 0 0 1 5 -5h4z" /></svg>
         </div>
 
@@ -37,7 +37,7 @@ import { userService } from '@/services/Usuario.js'
 import Swal from 'sweetalert2'
 import { ref } from 'vue'
 
-let correo = ref('')
+let nombre_usuario = ref('')
 let clave = ref('')
 let tipoClave = ref('password');
 
@@ -46,7 +46,7 @@ let modalVisibleChoose=ref(false);
 let result=ref({});
 const iniciarSesion = async () => {
   /* Validar si los inputs no esten vacios */
-    if(correo.value == '' || clave.value == '') {
+    if(nombre_usuario.value == '' || clave.value == '') {
       Swal.fire({
         icon: "error",
         title: "Campos vacios",
@@ -55,12 +55,18 @@ const iniciarSesion = async () => {
       return;
     }
     try {
-        result.value = await userService.login({correo: correo.value, clave: clave.value })
+        result.value = await userService.login({nombre_usuario: nombre_usuario.value, clave: clave.value })
           if (result.value.ok) {
             console.log("ok: ", result.value.data)
             result.value=result.value.data;
             modalVisibleChoose.value = !modalVisibleChoose.value;
-
+          }
+          else{
+            Swal.fire({
+              icon: "error",
+              title: "Credenciales incorrectas",
+              text: `${result.value.message}`
+            });
           }
   }
   catch (error) {
@@ -71,29 +77,6 @@ const iniciarSesion = async () => {
           text: "No se pudo conectar al servidor. Intente más tarde.",
         });
         return;
-      }
-      if(!error.response.data.correo && !error.response.data.clave){
-
-        Swal.fire({
-          icon: "error",
-          title: "Credenciales incorrectas",
-          text: `Vuelva a ingresar sus datos`,
-
-        });
-      }
-      else if(!error.response.data.correo){
-        Swal.fire({
-          icon: "error",
-          title: "Credenciales incorrectas",
-          text: `${error.response.data.msg}`,
-        });
-      }
-      else if(!error.response.data.clave){
-        Swal.fire({
-          icon: "error",
-          title: "Credenciales incorrectas",
-          text: `${error.response.data.msg}`,
-        });
       }
     }
 }

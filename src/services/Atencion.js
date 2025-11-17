@@ -4,7 +4,7 @@ let API_URL = 'http://localhost:3000/api/v1/attention'
 
 const createAttention = async(attention)=>{
   const {data} = await axios.post(API_URL+'/create', attention);
-  return data;
+  return data;z
 }
 
 const showAttention = async()=>{

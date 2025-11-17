@@ -2,10 +2,14 @@
   <div class="container-table">
     <div class="header-table">
       <section class="search-table">
-        <button class="btn-add-item" v-on:click="createPatient">
+        <button class="btn-add-item" v-on:click="createUser">
           <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-user-plus icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M16 19h6" /><path d="M19 16v6" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4" /></svg>
           Agregar Usuario
         </button>
+        <select v-model="statusSelect" >
+          <option value="1">Activo</option>
+          <option value="0">Inactivo</option>
+        </select>
         <section class="input-table">
           <input
             type="text"
@@ -25,7 +29,7 @@
             <th>CI</th>
             <th>PERFIL</th>
             <th>NOMBRES</th>
-            <th>CORREO</th>
+            <th>USUARIO</th>
             <th>ACCIONES</th>
           </tr>
         </thead>
@@ -37,9 +41,9 @@
               <img class="img-profile" :src="`http://localhost:3000/uploads/${item.perfil}`" alt="" />
             </td>
             <td data-title="NOMBRES">{{ item.paterno }} {{ item.materno }} {{ item.nombre }}</td>
-            <td data-title="CORREO">{{ item.correo }}</td>
+            <td data-title="USUARIO">{{ item.nombre_usuario }}</td>
             <td data-title="ACCIONES">
-              <div class="content-btn-actions">
+              <div v-if="parseInt(statusSelect, 10)" class="content-btn-actions">
                 <button class="btn-actions btn-view" v-on:click="viewUser(item)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -60,7 +64,7 @@
                     />
                   </svg>
                 </button>
-                <button class="btn-actions btn-edit" v-on:click="editUser(item.id_usuario)">
+                <button class="btn-actions btn-edit" v-on:click="editUser(item.id)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -78,7 +82,7 @@
                     <path d="M13.5 6.5l4 4" />
                   </svg>
                 </button>
-                <button class="btn-actions btn-delete" v-on:click="deleteUser(item.id_usuario)">
+                <button class="btn-actions btn-delete" v-on:click="deleteUser(item.id)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -100,41 +104,45 @@
                   </svg>
                 </button>
               </div>
+              <div v-else class="content-btn-actions">
+                <button  class="btn-actions btn-delete" v-on:click="reactivateUser(item.codigo)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-recycle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 17l-2 2l2 2" /><path d="M10 19h9a2 2 0 0 0 1.75 -2.75l-.55 -1" /><path d="M8.536 11l-.732 -2.732l-2.732 .732" /><path d="M7.804 8.268l-4.5 7.794a2 2 0 0 0 1.506 2.89l1.141 .024" /><path d="M15.464 11l2.732 .732l.732 -2.732" /><path d="M18.196 11.732l-4.5 -7.794a2 2 0 0 0 -3.256 -.14l-.591 .976" /></svg>
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-
-    <ViewUser
-      class="content-view"
-      v-if="modalVisibleView"
-      @modifyModalView="hideModalView"
-    />
-
     <FormUser
       class="content-form"
       v-if="modalVisibleAdd"
       @modifyModalAdd="hideModalAdd"
     />
+    <ViewUser
+      class="content-view"
+      v-if="modalVisibleView"
+      @modifyModalView="hideModalView"
+      :user="userProp"
+    />
     <EditUser
       class="content-edit"
       v-if="modalVisibleEdit"
       @modifyModalEdit="hideModalEdit"
-      :id_usuario="idProp"
+      :id="idProp"
     />
   </div>
 </template>
 
 <script setup>
 import '@/assets/styles/table.css'
+import '@/assets/styles/tableComponent.css'
 import { userService } from '@/services/Usuario.js'
-import FormUser from '@/components/User/FormUser.vue'
+import FormUser from '@/components/User/FormUser.vue';
 import EditUser from '@/components/User/EditUser.vue'
 import ViewUser from '@/components/User/ViewUser.vue'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref,watch } from 'vue'
 import Swal from 'sweetalert2'
-
 
 let data = ref([])
 let originalData = ref([])
@@ -144,24 +152,31 @@ let modalVisibleView=ref(false)
 let modalVisibleAdd = ref(false)
 let modalVisibleEdit = ref(false)
 
-let userProp=ref("");
 let idProp=ref("");
+let userProp=ref("");
 let result = ref({})
 let resultDelete=ref({})
+let resultReactivate=ref([]);
+let statusSelect=ref(1);
 
 const filterData = computed(() => {
-  const health_center = searchCi.value.trim()
-  const result= health_center === ''
+  const ciUser = searchCi.value.trim()
+  const result= ciUser === ''
     ? data.value
     : originalData.value.filter((item) =>
-        item.ci.toString().toUpperCase().includes(health_center.toUpperCase()),
+        item.ci.toString().toUpperCase().includes(ciUser.toUpperCase()),
       )
   return result;
 })
 
-const showUser = async () => {
+watch(statusSelect, (newValue) => {
+  console.log("Estado cambiado a:", newValue)
+  showUser(parseInt(newValue, 10))
+})
+
+const showUser = async (status) => {
   try {
-    result.value = await userService.showUser()
+    result.value = await userService.showUser(status)
     console.log('mi result show user', result.value)
     // Asignar aunque esté vacío
     data.value = Array.isArray(result.value) ? result.value : [result.value]
@@ -172,40 +187,43 @@ const showUser = async () => {
 }
 
 onMounted(async () => {
-  showUser()
+  showUser(statusSelect.value)
 })
-
+/* boton de ver usuario*/
 const viewUser = (item) =>{
   userProp.value=item;
   console.log("staff prop: ", userProp.value)
-  modalVisibleView=true;
+  modalVisibleView.value=true;
 }
-/* boton de agregar nuevo cs */
-const createPatient = () => {
+/* ocultar vista usuario*/
+const hideModalView = (valor) =>{
+  modalVisibleView.value=valor;
+  showUser(statusSelect.value);
+}
+/* boton de busqueda de usuario por ci para su agregacion */
+const createUser = () => {
   modalVisibleAdd.value = true
 }
-
+/* ocultar modal de busqueda de usuario*/
 const hideModalAdd = (valor) => {
   modalVisibleAdd.value = valor
-  showUser()
+  showUser(statusSelect.value)
 }
-/* boton de editar cs */
-const editUser = (id_usuario) => {
-  console.log("edit", id_usuario)
-  idProp.value=id_usuario;
+/* boton de editar usuario */
+const editUser = (id) => {
+  idProp.value=id;
   modalVisibleEdit.value = true
 }
-
+/* ocultar modal de editar usuario */
 const hideModalEdit = (valor) => {
   modalVisibleEdit.value = valor
   showUser();
 }
-
-/* boton eliminar cs */
-const deleteUser = async(id_usuario) => {
+/* boton eliminar usuario */
+const deleteUser = async(id) => {
   const resultSwal = await Swal.fire({
     title: "¿Estás seguro?",
-    text: "Se eliminará el establecimiento",
+    text: "Se eliminará al usuario",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "rgb(5, 135, 137)",
@@ -214,17 +232,60 @@ const deleteUser = async(id_usuario) => {
   })
   if (resultSwal.isConfirmed) {
     try {
-      console.log('mi id:', id_usuario)
-      resultDelete.value = await userService.deleteUser(id_usuario);
+      console.log('mi id:', id)
+      resultDelete.value = await userService.deleteUser(id);
       console.log("eliminado",resultDelete.value)
-      showUser();
-      Swal.fire({
-        title: "¡Eliminado!",
-        text: "Usuario eliminado.",
-        icon: "success"
-      });
+      if(resultDelete.value.ok){
+        showUser(statusSelect.value);
+        Swal.fire({
+          title: "¡Eliminado!",
+          text: resultDelete.value.message,
+          icon: "success"
+        });
+      }
+      else{
+        Swal.fire({
+          title: "¡Error!",
+          text: 'Algo anda mal',
+          icon: "error"
+        });
+      }
     } catch (error) {
       console.log("Error en eliminar microred")
+    }
+  }
+}
+
+const reactivateUser=async(id)=>{
+  const resultSwal = await Swal.fire({
+    title: "¿Estás seguro?",
+    text: "Se reactivará al personal",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "rgb(5, 135, 137)",
+        cancelButtonColor: "rgb(224, 63, 62)",
+    confirmButtonText: "Aceptar"
+  })
+  if (resultSwal.isConfirmed) {
+    try {
+      resultReactivate.value = await userService.reactivateUser(id);
+      if(resultReactivate.value.ok){
+        showUser(statusSelect.value);
+        Swal.fire({
+          title: "¡Reactivado!",
+          text: resultReactivate.value.message,
+          icon: "success"
+        });
+      }
+      else{
+        Swal.fire({
+          title: "¡Error!",
+          text: 'Algo anda mal',
+          icon: "error"
+        });
+      }
+    } catch (error) {
+      console.log("Error al reactivar personal", error)
     }
   }
 }
@@ -236,161 +297,5 @@ const deleteUser = async(id_usuario) => {
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
-}
-
-.container-table {
-  color: var(--color-black);
-  padding-left: 3px;
-  transition: width 0.8s ease;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  position: relative;
-     /*  background-color: var(--color-white-transparent);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px); */
-}
-.content-table {
-  width: 100%;
-  position: relative;
-  /* min-height: 100vh; */
-}
-
-.content-form,
-.content-edit,
-.content-view {
-  position: absolute; /* o fixed, si prefieres */
-  top: 0px;
-  left: 0;
-  width: 100%;
-  min-height: 85dvh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--color-white);
-  background-color: var(--color-black-transparent); /* blanco semitransparente */
-  backdrop-filter: blur(5px); /* 🔥 Aquí se hace el desenfoque */
-  -webkit-backdrop-filter: blur(5px); /* compatibilidad con Safari */
-  z-index: 10;
-}
-
-.alternative-div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 85dvh;
-  width: 100%;
-  color: var(--color-black);
-}
-
-.header-table {
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  height: 80px;
-  padding: 10px;
-}
-
-.search-table {
-  display: flex;
-  justify-content: space-between;
-  column-gap: 10px;
-  row-gap: 10px;
-  width: 100%;
-  flex-wrap: wrap;
-}
-
-.input-table {
-  display: flex;
-  position: relative;
-  align-items: center;
-}
-
-.icon-table-microred {
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  left: 5px;
-}
-
-.input-text-search {
-  padding-left: 25px;
-  border-radius: 20px;
-}
-
-.btn-add-item {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  color: var(--color-white);
-  background-color: var(--color-primary);
-  border: none;
-  outline: none;
-  border-radius: 20px;
-  padding: 5px 10px;
-}
-
-.btn-add-item:hover {
-  background-color: var(--color-secondary);
-}
-
-.btn-search {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  width: 150px;
-  border-radius: 20px;
-  outline: none;
-  border: none;
-  font-weight: bold;
-}
-
-.btn-search,
-.input-text-search,
-.btn-add-item {
-  font-size: 1.3em;
-  height: 35px;
-}
-
-.date-table-microred {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  padding: 5px;
-  border-radius: 20px;
-}
-
-/* .btn-attention {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  width: 100px;
-  border-radius: 20px;
-  outline: none;
-  border: none;
-  font-weight: bold;
-} */
-
-.btn-actions {
-  display: flex;
-  align-content: center;
-  justify-content: center;
-  border-radius: 50%;
-  outline: none;
-  border: none;
-}
-
-.btn-attention{
-  background-color: aqua;
-}
-
-.btn-view {
-  background-color: var(--color-primary);
-}
-
-.btn-edit {
-  background-color: rgb(229, 229, 25);
-}
-
-.btn-delete {
-  background-color: var(--color-secondary);
 }
 </style>

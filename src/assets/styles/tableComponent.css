@@ -18,7 +18,7 @@
 .content-edit,
 .content-view {
   position: absolute; /* o fixed, si prefieres */
-  top: 0px;
+  top: 0;
   left: 0;
   width: 100%;
   min-height: 85dvh;
@@ -30,6 +30,15 @@
   backdrop-filter: blur(5px); /* 🔥 Aquí se hace el desenfoque */
   -webkit-backdrop-filter: blur(5px); /* compatibilidad con Safari */
   z-index: 10;
+}
+
+@media (max-width: 800px) {
+  .content-form,
+  .content-edit,
+  .content-view{
+    position: fixed;
+    top: 15dvh;
+  }
 }
 
 .header-table {
@@ -101,13 +110,6 @@
   height: 35px;
 }
 
-.date-table-microred {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  padding: 5px;
-  border-radius: 20px;
-}
-
 .btn-attention {
   background-color: var(--color-primary);
   color: var(--color-white);
@@ -120,11 +122,17 @@
 
 .btn-actions {
   display: flex;
-  align-content: center;
+  align-items: center;
   justify-content: center;
+  height: 30px;
+  width: 30px;
   border-radius: 50%;
   outline: none;
   border: none;
+}
+
+.btn-patient{
+  background-color: rgb(40, 6, 232);
 }
 
 .btn-view {

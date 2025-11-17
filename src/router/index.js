@@ -25,7 +25,7 @@ const router = createRouter({
         {
           path: 'nuevo-registro',
           name: 'nuevo-registro',
-          component: ()=>import('@/views/AttentionView.vue'),
+          component: ()=>import('@/views/PatientView.vue'),
         },
 
         {
@@ -53,6 +53,11 @@ const router = createRouter({
           path: 'historial-microred',
           name: 'historial-microred',
           component:()=>import('@/views/MicroredView.vue')
+        },
+        {
+          path: 'reportes',
+          name: 'reportes',
+          component:()=>import('@/views/ReportView.vue')
         },
       ]
     },

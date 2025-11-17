@@ -7,18 +7,23 @@ const createStaff = async(staff)=>{
   return data;
 }
 
-const showStaff = async()=>{
-  const {data} = await axios.get(API_URL+'/show');
+const showStaff = async(estado_personal)=>{
+  const {data} = await axios.get(API_URL+`/show/${estado_personal}`);
   return data.data;
 }
 
-const deleteStaff = async(id_personal) =>{
-  const {data} = await axios.delete(API_URL+`/delete/${id_personal}`)
+const deleteStaff = async(id) =>{
+  const {data} = await axios.patch(API_URL+`/delete/${id}`)
   return data;
 }
 
-const updateStaff = async(staff) =>{
-  const {data} = await axios.patch(API_URL+`/update/${staff.id_personal}`, staff)
+const updateStaff = async(id, staff) =>{
+  const {data} = await axios.patch(API_URL+`/update/${id}`, staff)
+  return data;
+}
+
+const reactivateStaff = async(id) =>{
+  const {data} = await axios.patch(API_URL+`/reactivate/${id}`)
   return data;
 }
 
@@ -42,6 +47,7 @@ export const staffService = {
   showStaff,
   deleteStaff,
   updateStaff,
+  reactivateStaff,
   showProfession,
   showWorkArea,
   showPosition

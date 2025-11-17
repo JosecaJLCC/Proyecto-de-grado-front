@@ -1,254 +1,180 @@
 <template>
-  <div class="container-form-microred">
-    <form action="" v-on:submit.prevent="editEstablishment">
-      <fieldset class="form-microred">
-        <legend class="legend-form-microred">
-          <!-- <CIcon :icon="cilUserPlus" class="icon-microred"/> -->
-          <span class="titulo-form-microred">EDITAR MICRORED</span>
+  <div class="container-form-modal">
+    <form @submit.prevent="createUser" class="content-form-modal">
+      <fieldset class="fieldset-form-modal">
+        <legend class="legend-form-modal">
+          <span class="title-form-modal">NUEVO USUARIO</span>
         </legend>
+        <div class="register-div-modal">
 
-        <div class="form-content-microred">
-          <section class="content-microred">
-            <label for="">NOMBRE DEL ESTABLECIMIENTO</label>
-            <input type="text" v-model="nombre_establecimiento">
-            <label for="">TIPO DE ESTABLECIMIENTO</label>
-            <select v-model="tipo_establecimiento" name="" id="">
-              <option value="CENTRO DE SALUD">CENTRO DE SALUD</option>
-              <option value="CONSULTORIO VECINAL">CONSULTORIO VECINAL</option>
+          <section class="register-form-modal">
+          <div class="form-section-perfil">
+            <label for="">FOTO DE PERFIL</label>
+            <img
+              class="img-perfil"
+              v-if="imagenPerfil"
+              :src="imagenPerfil"
+              alt="Imagen seleccionada"
+            />
+            <img class="img-perfil" v-else src="@/assets/usuario.png" alt="" />
+            <input
+              class="input-file"
+              ref="fileInput"
+              type="file"
+              @change="mostrarImagen"
+              accept="image/*"
+              style="display: none"
+            />
+            <button class="input-file" @click.prevent="abrirSelector">Seleccionar imagen</button>
+          </div>
+            <label for="">ROL</label>
+            <select name="" id="" v-model="id_rol">
+              <option value="1">DIRECTOR</option>
+              <option value="2">PERSONAL MEDICO</option>
+              <option value="3">PERSONAL OPERATIVO</option>
             </select>
-            <label for="">MICRORED</label>
-            <select v-model="id_microred" name="" id="">
-              <option :value="item.id_microred" v-for="item in resultMicrored" :key="item.id_microred">{{ item.nombre_microred }}</option>
-            </select>
-             <label for="">DEPARTAMENTO</label>
-            <select v-model="departamento" name="" id="">
-              <option value="LA PAZ">LA PAZ</option>
-              <option value="ORURO">ORURO</option>
-              <option value="POTOSI">POTOSI</option>
-              <option value="COCHABAMBA">COCHABAMBA</option>
-              <option value="SANTA CRUZ">SANTA CRUZ</option>
-              <option value="TARIJA">TARIJA</option>
-              <option value="BENI">BENI</option>
-              <option value="PANDO">PANDO</option>
-              <option value="CHUQUISACA">CHUQUISACA</option>
-            </select>
-            <label for="">MUNICIPIO</label>
-            <input type="text" v-model="municipio">
-            <label for="">ZONA</label>
-            <input type="text" v-model="zona">
-            <label for="">AVENIDA/CALLE</label>
-            <input type="text" v-model="av_calle">
+            <label for="">USUARIO</label>
+            <input type="text" v-model="nombre_usuario" />
+            <label for="">CLAVE</label>
+            <input type="password" v-model="clave" />
           </section>
         </div>
-        <div class="form-content-microred2">
-          <button class="form-btn btn-cancel" type="button" v-on:click="enviarValorModal"><CIcon :icon="cilX" class="icon-microred"/>CANCELAR</button>
-          <button class="form-btn btn-accept" type="submit"><CIcon :icon="cilCheckAlt" class="icon-microred"/>ACEPTAR</button>
-        </div>
       </fieldset>
+      <div class="actions-form-modal">
+          <button class="form-btn btn-cancel" @click="sendValueModal">
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M10 10l4 4m0 -4l-4 4" /></svg>
+            CANCELAR</button>
+          <button class="form-btn btn-accept" type="submit">
+            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" /></svg>
+            ACEPTAR</button>
+      </div>
     </form>
   </div>
 </template>
 
 <script setup>
-import { microredService } from '@/services/Microred.js';
-import { CIcon } from '@coreui/icons-vue';
-import { cilCheckAlt, cilX } from '@coreui/icons';
-import { ref, onMounted} from 'vue';
-import Swal from 'sweetalert2';
-import { Microred } from '@/models/Microred.js';
-import { Establecimiento } from '@/models/Establecimiento.js';
-import { establishmentService } from '@/services/Establecimiento';
-/* router */
-let departamento = ref("");
-let municipio = ref("");
-let zona = ref("");
-let av_calle = ref("");
-let nombre_establecimiento=ref("");
-let tipo_establecimiento=ref("");
-let id_microred = ref("");
-let resultMicrored = ref({});
-let result = ref({});
+import '@/assets/styles/modalForm.css';
+import { userService } from '@/services/Usuario.js';
+import { ref } from 'vue'
+import Swal from 'sweetalert2'
 
-onMounted(  async()=>{
-  resultMicrored.value = await microredService.showMicrored();
-  console.log("mi res:: ",resultMicrored.value)
-})
 
-const emits = defineEmits(['modificarModalEditar'])
-let props = defineProps({
-  id_establecimiento: {
-    type: String, // o Array si envías varios roles/Microreds
-    required: true,
-  },
-});
-console.log("mi id",props.id_establecimiento)
-const enviarValorModal = () => {
-  emits('modificarModalEditar', false)
+let nombre_usuario = ref('')
+let clave = ref('')
+let id_rol = ref('')
+let id_personal = ref('');
+
+let ci=ref('');
+let resultSearch=ref([]);
+
+let imagenPerfil = ref(null)
+let fileInput = ref(null)
+let archivoImagen = ref(null)
+
+const emits = defineEmits(['modifyModalAdd']);
+const sendValueModal = () => {
+  emits('modifyModalAdd', false)
 }
 
-const editEstablishment = async() =>{
-  if(!departamento.value && !municipio.value && !zona.value && !av_calle.value &&
-     !nombre_establecimiento.value && !id_microred.value && !tipo_establecimiento.value){
-    Swal.fire({
-        title: "¡Intente nuevamente!",
-        text: "Debe haber al menos un cambio",
-        icon: "warning"
-      });
-      return;
+function mostrarImagen(event) {
+  const file = event.target.files[0]
+  if (file) {
+    archivoImagen.value = file // Guarda el archivo original
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      imagenPerfil.value = e.target.result
+    }
+    reader.readAsDataURL(file)
   }
-  let establishment = {
-                id_establecimiento: props.id_establecimiento,
-                departamento: departamento.value,
-                municipio:municipio.value,
-                zona:zona.value,
-                av_calle:av_calle.value,
-                nombre_establecimiento:nombre_establecimiento.value,
-                id_microred:id_microred.value,
-                tipo_establecimiento: tipo_establecimiento.value}
-              console.log("microred", establishment)
+}
+
+const abrirSelector = () => {
+  fileInput.value?.click()
+}
+
+const createUser = async () => {
+  if (!nombre_usuario.value || !clave.value || !id_rol.value) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Campos vacios',
+      text: `Por favor complete todos los campos`,
+    })
+    return
+  }
+  const formData = new FormData()
+  formData.append('nombre_usuario', nombre_usuario.value)
+  formData.append('clave', clave.value)
+  formData.append('imagenPerfil', archivoImagen.value)
+  formData.append('id_personal', id_personal.value)
+  formData.append('id_rol', id_rol.value)
   try {
     let resultSwal = await Swal.fire({
-      title: "¿Estas seguro?",
-      text: "Se editará la información del establecimiento",
-      icon: "question",
+      title: '¿Estas seguro?',
+      text: 'Se registrara nuevos datos',
+      icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: "rgb(5, 135, 137)",
-      cancelButtonColor: "rgb(224, 63, 62)",
-      confirmButtonText: "Aceptar cambios"
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Agregar registro',
     })
 
     if (resultSwal.isConfirmed) {
-      result.value = await establishmentService.updateEstablishment(establishment);
-      console.log("my result", result.value)
-      if(result.value.ok){
-        console.log("myRes",result)
-        Swal.fire({
-          title: "¡Cambio exitoso!",
-          text: "Tus datos fueron corregidos",
-          icon: "success"
-        });
-        enviarValorModal();
-      }else{
-        Swal.fire({
-          title: "¡Cambio fallido!",
-          text: result.value.message,
-          icon: "error"
-        });
-      }
+      const resultado = await  userService.createUser(formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
 
-
-    };
-  } catch (error) {
-      console.log("errorPatient", error)
+      console.log('myRes', resultado)
+      Swal.fire({
+        title: '¡Registro Exitoso!',
+        text: 'Tus datos han sido registrados',
+        icon: 'success',
+      })
+      router.push({ name: 'inicio' })
     }
+  } catch (error) {
+    console.log('errorPatient', error)
   }
+}
 </script>
 
 <style scoped>
-  /* contenedor principal que abarca toda la pantalla */
-  .container-form-microred{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
 
-  .form-microred{
-    display: flex;
-    flex-direction: column;
-    background-color: var(--color-white);
-    border-radius: 20px;
-    border: none;
-    padding: 20px;
-    row-gap: 20px;
-  }
+.register-div-modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  color: var(--color-black);
+}
 
-  .form-content-microred {
-    gap: 20px;
-    width: 100%;
-    color: var(--color-black);
-  }
+.img-perfil {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+}
 
-  .content-microred{
-    display: flex;
-    flex-direction: column;
-    row-gap: 20px;
-    /* background-color: rgba(0, 128, 128, .5); */
-    width: 100%;
-  }
+.input-file {
+  background-color: rgb(0, 128, 128);
+  color: white;
+  border-radius: 20px;
+  border: none;
+  width: 100%;
+}
 
- .content-microred > input,select{
-    padding-left:5px;
-    border-radius: 20px;
-    outline: none;
-    border:2px solid var(--color-primary);
-    height: 25px;
-    font-weight: bold;
-  }
+.input-file:hover {
+  background-color: rgb(224, 63, 62);
+}
 
-
-  .legend-form-microred{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
-
-  .titulo-form-microred {
-    display: flex;
-    background-color: var(--color-primary);
-    border-radius: 20px;
-    padding: 5px;
-    font-weight: bold;
-  }
-
-  .icon-microred{
-    width: 20px;
-    height: 20px;
-  }
-
-  .form-content-microred2{
-    display: flex;
-    justify-content: space-around;
-    column-gap: 20px;
-  }
-
-  .form-btn{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    color: var(--color-white);
-    font-weight: bold;
-    border-radius: 20px;
-    outline: none;
-    border: none;
-    min-width: 200px;
-    height: 30px;
-  }
-
-  .btn-cancel{
-    background-color: var(--color-secondary);
-  }
-
-  .btn-cancel:hover{
-    background-color: var(--color-secondary-transparent);
-    transition: .3s;
-  }
-
-  .btn-accept{
-    background-color: var(--color-primary);
-  }
-
-  .btn-accept:hover{
-    background-color: var(--color-primary-transparent);
-    transition: .3s;
-  }
-
-  /* Una columna en pantallas pequeñas */
-  @media (max-width: 767px) {
-    .form-content-microred2{
-      flex-direction: column;
-      row-gap: 20px;
-    }
-  }
+.form-section-perfil{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 10px;
+  width: 100%;
+}
 </style>

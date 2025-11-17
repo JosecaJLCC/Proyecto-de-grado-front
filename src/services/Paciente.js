@@ -17,6 +17,11 @@ const showPatientById = async() =>{
   return data;
 }
 
+const showFolder=async()=>{
+  const {data} = await axios.get(API_URL+'/showfolder');
+  return data.data;
+}
+
 const deletePatient = async(id_paciente) =>{
   const {data} = await axios.delete(API_URL+`/delete/${id_paciente}`)
   return data;
@@ -31,6 +36,7 @@ export const patientService = {
   showPatient,
   createPatient,
   showPatientById,
+  showFolder,
   updatePatient,
   deletePatient
 }

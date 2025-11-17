@@ -14,7 +14,6 @@ export class Usuario {
     } catch (error) {
       console.log("Error al obtener el perfil", error);
       if (error.response?.status === 401) {
-
         return null;  // Retorna null si el token expiró
       }
     }

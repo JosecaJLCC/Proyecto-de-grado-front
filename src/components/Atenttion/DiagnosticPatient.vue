@@ -1,13 +1,25 @@
 <template>
   <div class="container-form-modal">
-    <form action="" v-on:submit.prevent="createStaff" class="content-form-modal">
+    <form @submit.prevent="createPatient" class="content-form-modal">
       <fieldset class="fieldset-form-modal">
         <legend class="legend-form-modal">
-          <span class="title-form-modal">NUEVO PERSONAL</span>
+          <span class="title-form-modal">NUEVO PACIENTE</span>
         </legend>
           <section class="register-form-modal">
             <label for="">CI</label>
             <input type="text" v-model="person.ci">
+            <label for="">EXPEDIDO</label>
+            <select name="" id="" v-model="person.extension">
+              <option value="LP">LP</option>
+              <option value="SC">SC</option>
+              <option value="CB">CB</option>
+              <option value="PT">PT</option>
+              <option value="OR">OR</option>
+              <option value="BN">BN</option>
+              <option value="PD">PD</option>
+              <option value="TJ">TJ</option>
+              <option value="CH">CH</option>
+            </select>
             <label for="">NOMBRES</label>
             <input type="text" v-model="person.nombre">
             <label for="">AP. PATERNO</label>
@@ -37,7 +49,11 @@
               <option value="FEMENINO">FEMENINO</option>
               <option value="OTRO">OTRO</option>
             </select>
+            <label for="">MICRORED DE SALUD</label>
+            <select name="" id="" v-model="patient.id_microred">
+              <option :value="item.id_microred" v-for="item in resultMicrored" :key="item.id_microred">{{ item.nombre_microred }}</option>
 
+            </select>
             <label for="">DEPARTAMENTO</label>
               <select name="" id="" v-model="residence.departamento">
                 <option value="LA PAZ">LA PAZ</option>
@@ -58,32 +74,11 @@
             <input type="text" v-model="residence.av_calle">
             <label for="">NRO PUERTA</label>
             <input type="text" v-model="residence.nro_puerta">
-
-            <label for="">MICRORED DE SALUD</label>
-            <select name="" id="" v-model="staff.id_microred">
-              <option :value="item.codigo" v-for="item in resultMicrored" :key="item.codigo">{{ item.nombre_microred }}</option>
-            </select>
-            <label for="">PROFESION</label>
-            <select name="" id="" v-model="staff.id_profesion" @change="chooseProfesion">
-              <option :value="item.id" v-for="item in resultProfession" :key="item.id">{{ item.nombre_profesion }}</option>
-              <option value="OTRO">OTRO</option>
-            </select>
-            <input v-if="profesionValue" placeholder="Ingrese la profesion" type="text" v-model="staff.nombre_profesion">
-            <label for="">AREA</label>
-            <select name="" id="" v-model="staff.id_area" @change="chooseWorkArea">
-              <option :value="item.id" v-for="item in resultWorkArea" :key="item.id">{{ item.nombre_area }}</option>
-              <option value="OTRO">OTRO</option>
-            </select>
-            <input v-if="workAreaValue" placeholder="Ingrese el area de trabajo" type="text" v-model="staff.nombre_area">
-            <label for="">CARGO</label>
-            <input placeholder="Ingrese el cargo" type="text" list="cargo" v-model="staff.cargo">
-            <datalist id="cargo">
-              <option :value="item.cargo" v-for="item in resultPosition" :key="item.cargo">{{ item.cargo }}</option>
+            <label for="">CARPETA</label>
+            <input placeholder="Nombre de la carpeta" type="text" list="carpeta" v-model="patient.nombre_carpeta">
+            <datalist id="carpeta">
+              <option :value="item.nombre_carpeta" v-for="item in resultFolder" :key="item.nombre_carpeta">{{ item.nombre_carpeta }}</option>
             </datalist>
-            <label for="">MATRICULA</label>
-            <input type="text" v-model="staff.nro_matricula">
-            <label for="">FECHA DE INGRESO</label>
-            <input type="date" v-model="staff.fecha_ingreso">
           </section>
       </fieldset>
       <div class="actions-form-modal">
@@ -102,12 +97,13 @@
 import '@/assets/styles/modalForm.css';
 import { ref, onMounted, reactive} from 'vue';
 import Swal from 'sweetalert2';
-import { Personal } from '@/models/Personal.js';
+import { Paciente } from '@/models/Paciente.js';
 import { microredService } from '@/services/Microred.js';
-import { staffService } from '@/services/Personal.js';
+import { patientService } from '@/services/Paciente.js';
 
 let person=reactive({
   ci:"",
+  extension:"",
   nombre:"",
   paterno:"",
   materno:"",
@@ -118,17 +114,6 @@ let person=reactive({
   nro_telf:""
 })
 
-let staff=reactive({
-  id_microred:"",
-  id_profesion:"",
-  nombre_profesion:"",
-  id_area:"",
-  nombre_area:"",
-  cargo:"",
-  nro_matricula:"",
-  fecha_ingreso:""
-})
-
 let residence=reactive({
   departamento:"",
   municipio:"",
@@ -137,14 +122,14 @@ let residence=reactive({
   nro_puerta:""
 })
 
-let resultMicrored = ref({});
-let resultProfession = ref([]);
-let resultPosition = ref([]);
-let resultWorkArea = ref([]);
+let patient=reactive({
+  id_microred : "",
+  nombre_carpeta : ""
+})
 
+let resultMicrored = ref({});
+let resultFolder = ref({});
 let result = ref({});
-let profesionValue=ref(false);
-let workAreaValue=ref(false);
 
 const emits = defineEmits(['modifyModalAdd']);
 const sendValueModal = () => {
@@ -152,37 +137,17 @@ const sendValueModal = () => {
 }
 
 onMounted(  async()=>{
-  resultMicrored.value = await microredService.showMicrored(1);
-  resultProfession.value = await staffService.showProfession();
-  resultPosition.value = await staffService.showPosition();
-  resultWorkArea.value = await staffService.showWorkArea();
+  resultMicrored.value = await microredService.showMicrored();
+  resultFolder.value=await patientService.showFolder();
 })
 
-const chooseProfesion=()=>{
-  if(staff.id_profesion=="OTRO"){
-    profesionValue.value=true;
-    staff.id_profesion=""
-    return;
-  }
-  profesionValue.value=false;
-}
-
-const chooseWorkArea=()=>{
-  if(staff.id_area=="OTRO"){
-    workAreaValue.value=true;
-    staff.id_area=""
-    return;
-  }
-  workAreaValue.value=false;
-}
-
-const createStaff = async() =>{
-  if(!person.ci || !person.nombre || !person.paterno ||
-  !person.materno || !person.nro_telf || !person.estado_civil ||
-  !person.fecha_nacimiento || !person.nacionalidad || !person.sexo ||
-  !residence.departamento || !residence.municipio || !residence.zona || !residence.av_calle ||
-    !residence.nro_puerta || !(staff.id_profesion || staff.nombre_profesion) ||
-    !(staff.id_area || staff.nombre_area) || !staff.cargo) {
+const createPatient = async() =>{
+  if(!residence.departamento || !residence.municipio ||
+    !residence.zona || !residence.av_calle || !residence.nro_puerta ||
+    !person.ci || !person.extension || !person.nombre ||
+    !person.nacionalidad || !person.fecha_nacimiento || !person.sexo ||
+    !person.estado_civil || !person.nro_telf || !patient.id_microred ||
+    !patient.nombre_carpeta) {
     Swal.fire({
       icon: "error",
       title: "Campos vacios",
@@ -191,25 +156,29 @@ const createStaff = async() =>{
     return;
   }
 
-  let staffClass=new Personal(
-    person.ci, person.nombre.toUpperCase(),
-    person.paterno.toUpperCase(), person.materno.toUpperCase(),
-    person.nacionalidad.toUpperCase(), person.estado_civil.toUpperCase(),
-    person.nro_telf, person.sexo.toUpperCase(),
-    person.fecha_nacimiento, residence.departamento.toUpperCase(),
-    residence.municipio.toUpperCase(), residence.zona.toUpperCase(),
-    residence.av_calle.toUpperCase(), residence.nro_puerta,
-    staff.id_microred, staff.cargo.toUpperCase(),
-    staff.id_profesion,
-    staff.nombre_profesion.toUpperCase(), staff.id_area,
-    staff.nombre_area.toUpperCase(),
-    staff.nro_matricula, staff.fecha_ingreso
+  let patientClass = new Paciente(
+                  person.ci,
+                  person.extension,
+                  person.nombre.toUpperCase(),
+                  person.paterno.toUpperCase(),
+                  person.materno.toUpperCase(),
+                  person.nacionalidad.toUpperCase(),
+                  person.estado_civil.toUpperCase(),
+                  person.nro_telf,
+                  person.sexo.toUpperCase(),
+                  person.fecha_nacimiento,
+                  residence.departamento.toUpperCase(),
+                  residence.municipio.toUpperCase(),
+                  residence.zona.toUpperCase(),
+                  residence.av_calle.toUpperCase(),
+                  residence.nro_puerta,
+                  patient.id_microred, patient.nombre_carpeta.toUpperCase()
   );
-
+  console.log("paciente: ",patientClass);
   try {
     let resultSwal = await Swal.fire({
-      title: "¿Estas seguro?",
-      text: "Se registrará el personal",
+      title: "¿Estás seguro?",
+      text: "Se registrará el paciente",
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "rgb(5, 135, 137)",
@@ -218,8 +187,7 @@ const createStaff = async() =>{
     })
 
     if (resultSwal.isConfirmed) {
-      console.log("mi staff", staff);
-      result.value = await staffService.createStaff(staffClass);
+      result.value = await patientService.createPatient(patientClass);
       console.log("ok: ",result.value)
       if(result.value.ok){
         Swal.fire({
@@ -236,9 +204,10 @@ const createStaff = async() =>{
           icon: "error"
         });
       }
+
     };
   } catch (error) {
-      console.log("Error en registrar personal ", error)
+      console.log("Error fatal")
     }
   }
 </script>

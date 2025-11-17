@@ -7,29 +7,30 @@ const createMicrored = async(microred)=>{
   return data;
 }
 
-const showMicrored = async()=>{
-  const {data} = await axios.get(API_URL+'/show');
+const showMicrored = async(estado_microred)=>{
+  const {data} = await axios.get(API_URL+`/show/${estado_microred}`);
   return data.data;
 }
 
-const showMicroredById = async(id_microred)=>{
-  const {data} = await axios.get(API_URL+`/show/${id_microred}`);
+const deleteMicrored = async(id) =>{
+  const {data} = await axios.patch(API_URL+`/delete/${id}`);
   return data;
 }
 
-const deleteMicrored = async(id_microred) =>{
-  const {data} = await axios.delete(API_URL+`/delete/${id_microred}`);
+const updateMicrored = async(id, microred) =>{
+  const {data} = await axios.patch(API_URL+`/update/${id}`, microred);
   return data;
 }
 
-const updateMicrored = async(microred) =>{
-  const {data} = await axios.patch(API_URL+`/update/${microred.id_microred}`, microred);
+const reactivateMicrored = async(id) =>{
+  const {data} = await axios.patch(API_URL+`/reactivate/${id}`);
   return data;
 }
+
 export const microredService = {
   createMicrored,
   showMicrored,
-  showMicroredById,
   deleteMicrored,
-  updateMicrored
+  updateMicrored,
+  reactivateMicrored
 }

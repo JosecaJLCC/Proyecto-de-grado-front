@@ -1,49 +1,33 @@
 <template>
   <div>
     <header class="header-sidebar">
-      <section class="main-sidebar">
-        <!-- <transition name="fade"> -->
-        <transition name="fade" mode="out-in">
-          <CIcon
-            v-if="cambioIcon"
-            :icon="cilArrowLeft"
-            class="icon-sidebar"
-            v-on:click="mostrarSidebar"
-          />
-          <CIcon v-else :icon="cilMenu" class="icon-sidebar" v-on:click="mostrarSidebar" />
-        </transition>
-      </section>
-      <h3 class="titulo-sidebar">
-        SISTEMA DE CONTROL DE PREVENCION DEL USO INDEBIDO DEL SISTEMA UNICO DE SALUD
+      <!-- <transition name="fade"> -->
+      <transition name="fade" mode="out-in">
+        <svg v-if="cambioIcon" v-on:click="mostrarSidebar" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+          <svg v-else v-on:click="mostrarSidebar" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-menu-2 icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 6l16 0" /><path d="M4 12l16 0" /><path d="M4 18l16 0" /></svg>
+      </transition>
+
+      <h3 class="title-sidebar">
+        SOFTWARE DE CONTROL DE PREVENCION DEL USO INDEBIDO DEL SISTEMA UNICO DE SALUD
       </h3>
       <section class="user-sidebar">
-        <!-- <img src="../assets/logo.svg" class="perfil-sidebar"> -->
-        <div class="perfil-section">
-          <img class="img-perfil" :src="`http://localhost:3000/uploads/${perfil}`" alt="" />
-
-          <!-- <p><strong>{{ rol }}</strong></p> -->
+        <div class="profile-section">
+          <img class="img-profile" :src="`http://localhost:3000/uploads/${perfil}`" alt="" />
         </div>
-        <div class="dropdown-sidebar">
-
+        <div class="dropdown-header">
           <svg v-if="mostrarDropDown" @click="desplegarDropDown" xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-caret-up icon-sidebar desplegar-dropdown"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11.293 7.293a1 1 0 0 1 1.32 -.083l.094 .083l6 6l.083 .094l.054 .077l.054 .096l.017 .036l.027 .067l.032 .108l.01 .053l.01 .06l.004 .057l.002 .059l-.002 .059l-.005 .058l-.009 .06l-.01 .052l-.032 .108l-.027 .067l-.07 .132l-.065 .09l-.073 .081l-.094 .083l-.077 .054l-.096 .054l-.036 .017l-.067 .027l-.108 .032l-.053 .01l-.06 .01l-.057 .004l-.059 .002h-12c-.852 0 -1.297 -.986 -.783 -1.623l.076 -.084l6 -6z" /></svg>
-
           <svg v-else @click="desplegarDropDown" xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-caret-down icon-sidebar desplegar-dropdown"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 9c.852 0 1.297 .986 .783 1.623l-.076 .084l-6 6a1 1 0 0 1 -1.32 .083l-.094 -.083l-6 -6l-.083 -.094l-.054 -.077l-.054 -.096l-.017 -.036l-.027 -.067l-.032 -.108l-.01 -.053l-.01 -.06l-.004 -.057v-.118l.005 -.058l.009 -.06l.01 -.052l.032 -.108l.027 -.067l.07 -.132l.065 -.09l.073 -.081l.094 -.083l.077 -.054l.096 -.054l.036 -.017l.067 -.027l.108 -.032l.053 -.01l.06 -.01l.057 -.004l12.059 -.002z" /></svg>
-
-          <div v-show="mostrarDropDown" class="dropdown-content">
+          <div v-show="mostrarDropDown" class="dropdown-header-content">
+            <p>{{ nombre_usuario }}</p>
+            <p>{{ nombre_rol }}</p>
+            <p>{{ nombre_establecimiento }}</p>
             <a href="">
-              <p>{{ nombre_usuario }}</p>
-            </a>
-            <a href="">
-              <p>{{ rol }}</p>
-            </a>
-
-            <a href="">
-              <CIcon :icon="cilSettings" class="icon-sidebar" />
-              <span>Configuracion</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-settings"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
+              <span>Actualizar perfil</span>
             </a>
             <a href="" v-on:click="cerrarSesion">
-              <CIcon :icon="cilPowerStandby" class="icon-sidebar" />
-              <span>Cerrar Sesion</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-power"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 6a7.75 7.75 0 1 0 10 0" /><path d="M12 4l0 8" /></svg>
+              <span>Cerrar sesión</span>
             </a>
           </div>
         </div>
@@ -64,7 +48,7 @@
       <nav class="nav-sidebar">
         <ul>
           <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'inicio' }">
+            <RouterLink class="routes-sidebar" :to="{ name: 'inicio' }">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -84,7 +68,7 @@
             </RouterLink>
           </li>
           <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'nuevo-registro' }">
+            <RouterLink class="routes-sidebar" :to="{ name: 'nuevo-registro' }">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -107,7 +91,7 @@
             </RouterLink>
           </li>
           <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-general' }">
+            <RouterLink class="routes-sidebar" :to="{ name: 'historial-general' }">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -128,13 +112,13 @@
             </RouterLink>
           </li>
           <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-personal' }">
+            <RouterLink class="routes-sidebar" :to="{ name: 'historial-personal' }">
               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-first-aid-kit icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 8v-2a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v2" /><path d="M4 8m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M10 14h4" /><path d="M12 12v4" /></svg>
               <span>Personal</span>
             </RouterLink>
           </li>
           <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-usuario' }">
+            <RouterLink class="routes-sidebar" :to="{ name: 'historial-usuario' }">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -157,15 +141,21 @@
             </RouterLink>
           </li>
           <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-establecimiento' }">
+            <RouterLink class="routes-sidebar" :to="{ name: 'historial-establecimiento' }">
               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-medical-cross icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M13 3a1 1 0 0 1 1 1v4.535l3.928 -2.267a1 1 0 0 1 1.366 .366l1 1.732a1 1 0 0 1 -.366 1.366l-3.927 2.268l3.927 2.269a1 1 0 0 1 .366 1.366l-1 1.732a1 1 0 0 1 -1.366 .366l-3.928 -2.269v4.536a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-4.536l-3.928 2.268a1 1 0 0 1 -1.366 -.366l-1 -1.732a1 1 0 0 1 .366 -1.366l3.927 -2.268l-3.927 -2.268a1 1 0 0 1 -.366 -1.366l1 -1.732a1 1 0 0 1 1.366 -.366l3.928 2.267v-4.535a1 1 0 0 1 1 -1h2z" /></svg>
               <span>Establecimientos</span>
             </RouterLink>
           </li>
           <li>
-            <RouterLink class="rutas-sidebar" :to="{ name: 'historial-microred' }">
+            <RouterLink class="routes-sidebar" :to="{ name: 'historial-microred' }">
               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-building-hospital icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l18 0" /><path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16" /><path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" /><path d="M10 9l4 0" /><path d="M12 7l0 4" /></svg>
               <span>Microred</span>
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink class="routes-sidebar" :to="{ name: 'reportes' }">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-dots icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 3v18h18" /><path d="M9 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M19 7m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M14 15m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M10.16 10.62l2.34 2.88" /><path d="M15.088 13.328l2.837 -4.586" /></svg>
+              <span>Reportes</span>
             </RouterLink>
           </li>
         </ul>
@@ -175,23 +165,6 @@
 </template>
 
 <script setup>
-import { CIcon } from '@coreui/icons-vue'
-import {
-  cilHospital,
-  cilHistory,
-  cilHome,
-  cilUserPlus,
-  cilClipboard,
-  cilNoteAdd,
-  cilSettings,
-  cilMenu,
-  cilArrowLeft,
-  cilChevronBottom,
-  cilChatBubble,
-  cilPowerStandby,
-  cilBell,
-  cilPeople,
-} from '@coreui/icons'
 import { ref, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
 /* Para cambio de rutas cuando se cierra cesion */
@@ -213,16 +186,13 @@ let mostrarDropDown = ref(false)
 
 /* Datos de usuario desde auth.js de store */
 import { useUsuarioStore } from '@/store/usuario.js'
-import ChooseCentroSalud from './ChooseCentroSalud.vue'
 let authStore = useUsuarioStore()
 let usuario = computed(() => authStore.usuario)
 console.log('usuario sidebar', usuario.value)
 /* faltan detalles */
-let nombre_usuario = computed(() => usuario.value?.correo ?? 'x')
-
-let rol = computed(() => usuario.value?.nombre_rol ?? 'x')
-
-let establecimiento = computed(() => usuario.value?.nombre_establecimiento ?? 'x')
+let nombre_usuario = computed(() => usuario.value?.nombre_usuario ?? 'x')
+let nombre_rol = computed(() => usuario.value?.nombre_rol ?? 'x')
+let nombre_establecimiento = computed(() => usuario.value?.nombre_establecimiento ?? 'x')
 
 let perfil = computed(() => usuario.value?.perfil ?? 'usuario.png')
 
@@ -253,37 +223,30 @@ const mostrarSidebar = () => {
 </script>
 
 <style scoped>
+/* Header */
 .header-sidebar {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  /* border: 2px solid red; */
   align-items: center;
-  background-color: rgb(0, 128, 128);
-  /* border: 3px solid green; */
+  background-color: var(--color-primary);
   padding: 10px;
   position: fixed;
-  left: 0;
+  /* left: 0; */
   width: 100%;
   height: 15dvh;
   z-index: 100;
-
 }
 
-.main-sidebar {
-  display: flex;
-  align-items: center;
-  column-gap: 10px;
-  /* border: 2px solid red; */
+.title-sidebar {
+  text-align: center;
   flex-grow: 1;
 }
-
+/* Aqui se encuentra la foto de perfil y el dropdown */
 .user-sidebar {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  /* border: 2px solid yellow; */
   column-gap: 20px;
-  flex-grow: 1;
 }
 
 .user-sidebar > .icon-sidebar {
@@ -291,20 +254,69 @@ const mostrarSidebar = () => {
   height: 20px;
 }
 
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-profile {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dropdown-header {
+  position: relative;
+}
+
+.dropdown-header-content {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-white);
+  margin: 0;
+  right: 0;
+  z-index: 1;
+  row-gap: 10px;
+  color: var(--color-black);
+  border: 2px solid green;
+  /* padding: 10px; */
+}
+
+.dropdown-header-content a {
+  color: var(--color-black);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 10px;
+  padding: 10px;
+  width: 100%;
+
+}
+
+.dropdown-header-content a:hover {
+  background-color: var(--color-secondary);
+  color: white;
+}
+/*  */
 .sidebar {
   min-height: 85dvh;
-  /* width: 300px; */
   display: flex;
   flex-direction: column;
   row-gap: 10px;
-  background-color: rgb(0, 128, 128);
+  background-color: var(--color-primary);
   transition: width 0.3s ease, height 0.3s ease;
   position: fixed;
   top: 15dvh;
   padding-top: 10px;
-  /* border-radius: 0px 20px 20px 0px; */
   z-index: 100;
-
 }
 
 .section-logo-sidebar {
@@ -315,6 +327,10 @@ const mostrarSidebar = () => {
   row-gap: 10px;
 }
 
+.logo-sidebar {
+  border-radius: 50%;
+}
+
 .icon-sidebar {
   width: 30px;
   height: 30px;
@@ -322,22 +338,9 @@ const mostrarSidebar = () => {
   transition: all 0.3s ease;
 }
 
-.logo-sidebar {
-  border-radius: 50%;
-}
 
-.perfil-sidebar {
-  width: 40px;
-  height: 40px;
-}
 
-.titulo-sidebar {
-  text-align: center;
-  /* border: 2px solid gold; */
-  flex-grow: 1;
-}
-
-.rutas-sidebar {
+.routes-sidebar {
   display: flex;
   align-items: center;
   column-gap: 20px;
@@ -349,18 +352,13 @@ const mostrarSidebar = () => {
   border-bottom: 2px solid transparent;
 }
 
-.rutas-sidebar:hover {
-  /* border-bottom: 2px solid #ffffff; */
-  background-color: rgb(224, 63, 62);
-}
-
-.rutas-sidebar:focus {
+.routes-sidebar:hover {
   background-color: rgb(224, 63, 62);
 }
 
 @media (max-width: 620px) {
   /* El titulo del header desaparecera */
-  .titulo-sidebar {
+  .title-sidebar {
     display: none;
   }
   /* Mi sidebar adoptara automaticamente ese ancho */
@@ -369,70 +367,9 @@ const mostrarSidebar = () => {
     padding: 0;
   }
 
-  /* .section-logo-sidebar > h3{
-    display: none
-  } */
-}
-/* dropdown */
-.desplegar-dropdown {
-  cursor: pointer;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: white;
-  /* min-width: 160px; */
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-  margin: 0;
-  /* border: 2px solid greenyellow; */
-}
-
-.dropdown-content a {
-  color: rgb(0, 128, 128);
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  column-gap: 10px;
-  padding: 10px;
-  /* border: 2px solid black; */
-}
-
-.dropdown-content a:hover {
-  background-color: rgb(224, 63, 62);
-  color: white;
-}
-
-.dropdown-sidebar {
-  position: relative;
-  display: inline-block;
-  /* border: 2px solid black; */
-}
-
-.dropdown-sidebar:hover .dropdown-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  /* padding: 10px; */
-  right: 0px;
-  row-gap: 10px;
-}
-
-.perfil-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.img-perfil {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
+  .header-sidebar{
+    justify-content: space-between;
+  }
 }
 
 .fade-enter-active, .fade-leave-active {

@@ -1,45 +1,31 @@
 <template>
-  <div class="container-newuser">
-    <form @submit.prevent="createUser" class="form-content">
-      <fieldset class="form-newuser">
-        <legend class="legend-newuser">
-          <span class="titulo-newuser">DATOS DE USUARIO</span>
+  <div class="container-form-modal">
+    <form @submit.prevent="createUser" class="content-form-modal">
+      <fieldset class="fieldset-form-modal">
+        <legend class="legend-form-modal">
+          <span class="title-form-modal">NUEVO USUARIO</span>
         </legend>
-        <div class="form-content-newuser">
-          <label for="">FOTO DE PERFIL</label>
-          <img
-            class="img-perfil"
-            v-if="imagenPerfil"
-            :src="imagenPerfil"
-            alt="Imagen seleccionada"
-          />
-          <img class="img-perfil" v-else src="@/assets/usuario.png" alt="" />
-          <section class="content-newuser">
-            <input
-              class="input-file"
-              ref="fileInput"
-              type="file"
-              @change="mostrarImagen"
-              accept="image/*"
-              style="display: none"
-            />
-            <button class="input-file" @click.prevent="abrirSelector">Seleccionar imagen</button>
+        <div class="register-div-modal">
+          <section class="register-form-modal">
+            <label for="">DOCUMENTO DE IDENTIDAD</label>
+            <input type="text" v-model="ci" placeholder="Ingrese solo el número">
+            <button class="form-btn btn-accept" v-on:click.prevent="verifyUser">VERIFICAR</button>
+          </section>
+          <section class="register-form-modal">
             <label for="">ROL</label>
             <select name="" id="" v-model="id_rol">
-              <option value="2">PERSONAL</option>
-              <option value="3">DIRECTOR</option>
+              <option value="1">DIRECTOR</option>
+              <option value="2">PERSONAL MEDICO</option>
+              <option value="3">PERSONAL OPERATIVO</option>
             </select>
-            <label for="">CORREO</label>
-            <input type="email" v-model="correo" />
+            <label for="">USUARIO</label>
+            <input type="text" v-model="nombre_usuario" />
             <label for="">CLAVE</label>
             <input type="password" v-model="clave" />
-            <label for="">REINTRODUZCA LA CLAVE</label>
-            <input type="password" v-model="clave2" />
-
           </section>
         </div>
       </fieldset>
-      <div class="form-content-newuser2">
+      <div class="actions-form-modal">
           <button class="form-btn btn-cancel" @click="sendValueModal">
             <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M10 10l4 4m0 -4l-4 4" /></svg>
             CANCELAR</button>
@@ -52,52 +38,28 @@
 </template>
 
 <script setup>
-
+import '@/assets/styles/modalForm.css';
+import { userService } from '@/services/Usuario.js';
 import { ref } from 'vue'
 import Swal from 'sweetalert2'
-import axios from 'axios'
-
-/* router */
-import { useRouter, useRoute } from 'vue-router'
-/* Te da acceso a la información de la ruta actual. */
-let route = useRoute()
-let id_persona = ref(route.params.id)
-let router = useRouter()
 
 let nombre_usuario = ref('')
-let correo = ref('')
 let clave = ref('')
-let clave2 = ref('')
 let id_rol = ref('')
+let id_personal = ref('');
 
-let imagenPerfil = ref(null)
-let fileInput = ref(null)
+let ci=ref('');
+let resultSearch=ref([]);
+
 let archivoImagen = ref(null)
-
 
 const emits = defineEmits(['modifyModalAdd']);
 const sendValueModal = () => {
   emits('modifyModalAdd', false)
 }
 
-function mostrarImagen(event) {
-  const file = event.target.files[0]
-  if (file) {
-    archivoImagen.value = file // Guarda el archivo original
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      imagenPerfil.value = e.target.result
-    }
-    reader.readAsDataURL(file)
-  }
-}
-
-const abrirSelector = () => {
-  fileInput.value?.click()
-}
-
 const createUser = async () => {
-  if (!nombre_usuario.value || !correo.value || !clave.value || !clave2.value || !id_rol.value) {
+  if (!nombre_usuario.value || !clave.value || !id_rol.value) {
     Swal.fire({
       icon: 'error',
       title: 'Campos vacios',
@@ -107,10 +69,9 @@ const createUser = async () => {
   }
   const formData = new FormData()
   formData.append('nombre_usuario', nombre_usuario.value)
-  formData.append('correo', correo.value)
   formData.append('clave', clave.value)
   formData.append('imagenPerfil', archivoImagen.value)
-  formData.append('id_persona', id_persona.value)
+  formData.append('id_personal', id_personal.value)
   formData.append('id_rol', id_rol.value)
   try {
     let resultSwal = await Swal.fire({
@@ -124,7 +85,7 @@ const createUser = async () => {
     })
 
     if (resultSwal.isConfirmed) {
-      const resultado = await axios.post('http://localhost:3000/api/v1/users/register', formData, {
+      const resultado = await  userService.createUser(formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -142,42 +103,48 @@ const createUser = async () => {
     console.log('errorPatient', error)
   }
 }
+
+const verifyUser = async () => {
+  if (!ci.value) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Campos vacios',
+      text: `Por favor complete todos los campos`,
+    })
+    return
+  }
+  try {
+    resultSearch.value = await userService.searchUser(ci.value)
+    console.log('myRes', resultSearch.value)
+    if(!resultSearch.value.ok){
+      Swal.fire({
+        title: '¡Algo salió mal!',
+        text: `${resultSearch.value.message}`,
+        icon: 'warning',
+      })
+    }
+    else{
+      nombre_usuario.value=concatUserName(ci, resultSearch.value.data.nombres);
+      clave.value=nombre_usuario.value;
+      id_personal.value=resultSearch.value.data.id_personal;
+    }
+  }
+  catch (error) {
+    console.log('errorPatient', error)
+  }
+}
+
+const concatUserName=(ci, fullname)=>{
+  let name=fullname.split(" ");
+  let acronyms=""
+  name.forEach((item)=> {acronyms+=item.slice(0,1).toLowerCase()})
+  return ci.value+acronyms;
+}
 </script>
 
 <style scoped>
-/* contenedor principal que abarca toda la pantalla */
-  .container-newuser {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    min-height: 85dvh;
-  }
-  .form-content{
-    background-color: var(--color-white);
-    border-radius: 20px;
-    padding: 10px;
-  }
 
-.form-newuser {
-  display: flex;
-  flex-direction: column;
-  background-color:  var(--color-white);
-  border: none;
-  row-gap: 20px;
-  /* 👇 Control de altura y scroll interno */
-  max-height: 70vh; /* ocupa como máximo el 90% de la pantalla */
-  overflow-y: auto; /* scroll vertical si se desborda */
-}
-
-.form-content-newuser2 {
-  display: flex;
-  justify-content: space-around;
-  column-gap: 20px;
-  padding-top: 10px;
-}
-
-.form-content-newuser {
+.register-div-modal {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -185,22 +152,6 @@ const createUser = async () => {
   gap: 20px;
   width: 100%;
   color: var(--color-black);
-}
-
-.content-newuser {
-  display: flex;
-  flex-direction: column;
-  row-gap: 20px;
-  width: 100%;
-}
-
-.content-newuser > input, select {
-  padding-left: 5px;
-  border-radius: 20px;
-    outline: none;
-    border:2px solid var(--color-primary);
-    height: 25px;
-    font-weight: bold;
 }
 
 .img-perfil {
@@ -215,65 +166,18 @@ const createUser = async () => {
   color: white;
   border-radius: 20px;
   border: none;
+  width: 100%;
 }
 
 .input-file:hover {
   background-color: rgb(224, 63, 62);
 }
-.legend-newuser {
+
+.form-section-perfil{
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  row-gap: 10px;
   width: 100%;
-}
-
-.titulo-newuser {
-  display: flex;
-  background-color: var(--color-primary);
-  border-radius: 20px;
-  padding: 5px;
-  font-weight: bold;
-}
-
-.form-btn {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  color: var(--color-white);
-  font-weight: bold;
-  border-radius: 20px;
-  outline: none;
-  border: none;
-  min-width: 200px;
-  height: 30px;
-}
-
-.form-btn:hover {
-  background-color: rgb(224, 63, 62);
-}
-
-.btn-cancel{
-    background-color: var(--color-secondary);
-  }
-
-  .btn-cancel:hover{
-    background-color: var(--color-secondary-transparent);
-    transition: .3s;
-  }
-
-  .btn-accept{
-    background-color: var(--color-primary);
-  }
-
-  .btn-accept:hover{
-    background-color: var(--color-primary-transparent);
-    transition: .3s;
-  }
-/* Una columna en pantallas pequeñas */
-@media (max-width: 767px) {
-  .form-content-newuser2 {
-    flex-direction: column;
-    row-gap: 20px;
-  }
 }
 </style>
