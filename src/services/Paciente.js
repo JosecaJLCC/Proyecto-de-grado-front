@@ -1,20 +1,15 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/v1/patient'
-
-const showPatient = async() =>{
-  const {data} = await axios.get(API_URL+'/show');
-  return data.data;
-}
+const API_URL = `${import.meta.env.VITE_API_URL}/api/v1/patient`
 
 const createPatient = async(patient) =>{
   const {data} = await axios.post(API_URL+'/create', patient);
   return data;
 }
 
-const showPatientById = async() =>{
-  const data = await axios.get(API_URL+'/show/:id');
-  return data;
+const showPatient = async(estado_paciente) =>{
+  const {data} = await axios.get(API_URL+`/show/${estado_paciente}`);
+  return data.data;
 }
 
 const showFolder=async()=>{
@@ -22,21 +17,26 @@ const showFolder=async()=>{
   return data.data;
 }
 
-const deletePatient = async(id_paciente) =>{
-  const {data} = await axios.delete(API_URL+`/delete/${id_paciente}`)
+const deletePatient = async(id) =>{
+  const {data} = await axios.patch(API_URL+`/delete/${id}`)
   return data;
 }
 
-const updatePatient = async(patient) =>{
-  const {data} = await axios.patch(API_URL+`/update/${patient.id_paciente}`, patient)
+const updatePatient = async(id, patient) =>{
+  const {data} = await axios.patch(API_URL+`/update/${id}`, patient)
+  return data;
+}
+
+const reactivatePatient = async(id) =>{
+  const {data} = await axios.patch(API_URL+`/reactivate/${id}`)
   return data;
 }
 
 export const patientService = {
-  showPatient,
   createPatient,
-  showPatientById,
-  showFolder,
+  showPatient,
   updatePatient,
-  deletePatient
+  deletePatient,
+  reactivatePatient,
+  showFolder,
 }

@@ -199,3 +199,10 @@ export default defineConfig({
   ],
 })
 ```
+
+## Instalar html2pdf
+
+  ```sh
+  npm i html2pdf
+  ```
+  

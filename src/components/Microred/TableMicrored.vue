@@ -21,8 +21,8 @@
         </section>
       </section>
     </div>
-    <div class="content-table">
-      <table>
+    <div class="table-wrapper">
+      <table class="content-table">
         <thead>
           <tr>
             <th>N°</th>

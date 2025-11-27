@@ -47,6 +47,7 @@ let nombre_usuario = ref('')
 let clave = ref('')
 let id_rol = ref('')
 let id_personal = ref('');
+let result = ref({});
 
 let ci=ref('');
 let resultSearch=ref([]);
@@ -75,32 +76,40 @@ const createUser = async () => {
   formData.append('id_rol', id_rol.value)
   try {
     let resultSwal = await Swal.fire({
-      title: '¿Estas seguro?',
-      text: 'Se registrara nuevos datos',
+      title: '¿Estás seguro?',
+      text: 'Se registrará un nuevo usuario',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Agregar registro',
+      confirmButtonColor: "rgb(5, 135, 137)",
+      cancelButtonColor: "rgb(224, 63, 62)",
+      confirmButtonText: 'Aceptar registro',
     })
 
     if (resultSwal.isConfirmed) {
-      const resultado = await  userService.createUser(formData, {
+      result.value = await  userService.createUser(formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
-
-      console.log('myRes', resultado)
-      Swal.fire({
-        title: '¡Registro Exitoso!',
-        text: 'Tus datos han sido registrados',
-        icon: 'success',
-      })
-      router.push({ name: 'inicio' })
+      console.log("result add user: ",result.value)
+      if(result.value.ok){
+        Swal.fire({
+          title: '¡Registro Exitoso!',
+          text: result.value.message,
+          icon: 'success',
+        })
+        sendValueModal();
+      }
+      else{
+        Swal.fire({
+          title: '¡Registro no realizado!',
+          text: result.value.message,
+          icon: 'error',
+        })
+      }
     }
   } catch (error) {
-    console.log('errorPatient', error)
+    console.log('error en agregar usuario', error)
   }
 }
 

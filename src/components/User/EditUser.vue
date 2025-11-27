@@ -1,47 +1,36 @@
 <template>
   <div class="container-form-modal">
-    <form @submit.prevent="createUser" class="content-form-modal">
+    <form @submit.prevent="editUser" class="content-form-modal">
       <fieldset class="fieldset-form-modal">
         <legend class="legend-form-modal">
-          <span class="title-form-modal">NUEVO USUARIO</span>
+          <span class="title-form-modal">EDITAR USUARIO</span>
         </legend>
-        <div class="register-div-modal">
-
           <section class="register-form-modal">
-          <div class="form-section-perfil">
-            <label for="">FOTO DE PERFIL</label>
-            <img
-              class="img-perfil"
-              v-if="imagenPerfil"
-              :src="imagenPerfil"
-              alt="Imagen seleccionada"
-            />
-            <img class="img-perfil" v-else src="@/assets/usuario.png" alt="" />
-            <input
-              class="input-file"
-              ref="fileInput"
-              type="file"
-              @change="mostrarImagen"
-              accept="image/*"
-              style="display: none"
-            />
-            <button class="input-file" @click.prevent="abrirSelector">Seleccionar imagen</button>
-          </div>
-            <label for="">ROL</label>
-            <select name="" id="" v-model="id_rol">
-              <option value="1">DIRECTOR</option>
-              <option value="2">PERSONAL MEDICO</option>
-              <option value="3">PERSONAL OPERATIVO</option>
-            </select>
-            <label for="">USUARIO</label>
-            <input type="text" v-model="nombre_usuario" />
+            <div class="form-section-perfil">
+              <label for="">FOTO DE PERFIL</label>
+              <img
+                class="img-perfil"
+                v-if="imagenPerfil"
+                :src="imagenPerfil"
+                alt="Imagen seleccionada"
+              />
+              <img class="img-perfil" v-else src="@/assets/usuario.png" alt="" />
+              <input
+                class="input-file"
+                ref="fileInput"
+                type="file"
+                @change="mostrarImagen"
+                accept="image/*"
+                style="display: none"
+              />
+              <button class="input-file" @click.prevent="abrirSelector">Seleccionar imagen</button>
+            </div>
             <label for="">CLAVE</label>
             <input type="password" v-model="clave" />
           </section>
-        </div>
       </fieldset>
       <div class="actions-form-modal">
-          <button class="form-btn btn-cancel" @click="sendValueModal">
+          <button class="form-btn btn-cancel" type="button" @click="sendValueModal">
             <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M10 10l4 4m0 -4l-4 4" /></svg>
             CANCELAR</button>
           <button class="form-btn btn-accept" type="submit">
@@ -58,22 +47,23 @@ import { userService } from '@/services/Usuario.js';
 import { ref } from 'vue'
 import Swal from 'sweetalert2'
 
-
 let nombre_usuario = ref('')
 let clave = ref('')
-let id_rol = ref('')
-let id_personal = ref('');
-
-let ci=ref('');
-let resultSearch=ref([]);
-
+let result=ref({})
 let imagenPerfil = ref(null)
 let fileInput = ref(null)
 let archivoImagen = ref(null)
 
-const emits = defineEmits(['modifyModalAdd']);
+const emits = defineEmits(['modifyModalEdit']);
+let props = defineProps({
+  id: {
+    type: String,
+    required: true,
+  },
+});
+
 const sendValueModal = () => {
-  emits('modifyModalAdd', false)
+  emits('modifyModalEdit', false)
 }
 
 function mostrarImagen(event) {
@@ -92,46 +82,48 @@ const abrirSelector = () => {
   fileInput.value?.click()
 }
 
-const createUser = async () => {
-  if (!nombre_usuario.value || !clave.value || !id_rol.value) {
+const editUser = async () => {
+  if (!clave.value && !imagenPerfil.value) {
     Swal.fire({
-      icon: 'error',
+      icon: 'warning',
       title: 'Campos vacios',
-      text: `Por favor complete todos los campos`,
+      text: "Debe haber al menos un cambio",
     })
-    return
+    return;
   }
   const formData = new FormData()
-  formData.append('nombre_usuario', nombre_usuario.value)
   formData.append('clave', clave.value)
   formData.append('imagenPerfil', archivoImagen.value)
-  formData.append('id_personal', id_personal.value)
-  formData.append('id_rol', id_rol.value)
   try {
     let resultSwal = await Swal.fire({
-      title: '¿Estas seguro?',
-      text: 'Se registrara nuevos datos',
+      title: '¿Estás seguro?',
+      text: "Se editará la información del usuario",
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Agregar registro',
+      confirmButtonColor: "rgb(5, 135, 137)",
+      cancelButtonColor: "rgb(224, 63, 62)",
+      confirmButtonText: "Aceptar cambios"
     })
-
     if (resultSwal.isConfirmed) {
-      const resultado = await  userService.createUser(formData, {
+      result.value = await  userService.updateUser(props.id, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
-
-      console.log('myRes', resultado)
-      Swal.fire({
-        title: '¡Registro Exitoso!',
-        text: 'Tus datos han sido registrados',
-        icon: 'success',
-      })
-      router.push({ name: 'inicio' })
+       if(result.value.ok){
+        Swal.fire({
+          title: "¡Cambio exitoso!",
+          text: "Tus datos fueron corregidos",
+          icon: "success"
+        });
+        sendValueModal();
+      }else{
+        Swal.fire({
+          title: "¡Cambio fallido!",
+          text: result.value.message,
+          icon: "error"
+        });
+      }
     }
   } catch (error) {
     console.log('errorPatient', error)

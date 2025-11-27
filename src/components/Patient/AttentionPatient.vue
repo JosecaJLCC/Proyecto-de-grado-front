@@ -1,20 +1,21 @@
 <template>
   <div class="container-form-modal">
-    <form action="" v-on:submit.prevent="createMicrored" class="content-form-modal">
+    <form @submit.prevent="createAttention" class="content-form-modal">
       <fieldset class="fieldset-form-modal">
         <legend class="legend-form-modal">
-          <span class="title-form-modal">NUEVA MICRORED</span>
+          <span class="title-form-modal">NUEVA ATENCIÓN</span>
         </legend>
-        <section class="register-form-modal">
-          <label for="">CODIGO DE LA MICRORED</label>
-          <input type="text" v-model="codigo">
-          <label for="">NOMBRE DE LA MICRORED</label>
-          <input type="text" v-model="nombre_microred">
-          <label for="">RED PERTENECIENTE</label>
-          <input type="text" v-model="red">
-          <label for="">CI DEL DIRECTOR</label>
-          <input type="text" v-model="ci_director">
-        </section>
+          <section class="register-form-modal">
+            <label for="">AREA DE ATENCIÓN</label>
+            <select name="" id="" v-model="attention.id_area">
+              <option :value=item.id v-for="item in resultArea" v-bind:key="item.id">{{ item.nombre_area }}</option>
+            </select>
+            <label for="">TURNO</label>
+              <select name="" id="" v-model="attention.turno">
+                <option value="MAÑANA">MAÑANA</option>
+                <option value="TARDE">TARDE</option>
+              </select>
+          </section>
       </fieldset>
       <div class="actions-form-modal">
         <button class="form-btn btn-cancel" type="button" v-on:click="sendValueModal">
@@ -30,23 +31,46 @@
 
 <script setup>
 import '@/assets/styles/modalForm.css';
-import { microredService } from '@/services/Microred.js';
-import { ref} from 'vue';
+import { onMounted, reactive, ref, computed} from 'vue';
 import Swal from 'sweetalert2';
-import { Microred } from '@/models/Microred.js';
-let codigo=ref("");
-let nombre_microred=ref("");
-let red=ref("");
-let ci_director=ref("");
-let result = ref({})
+import { staffService } from '@/services/Personal.js';
+import { attentionService } from '@/services/Atencion.js';
+import { useUsuarioStore } from '@/store/usuario.js';
+let authStore = useUsuarioStore()
+let usuario = computed(() => authStore.usuario)
 
-const emits = defineEmits(['modifyModalAdd'])
+
+let attention=reactive({
+  id_area:0,
+  estado_atencion:"EN ESPERA",
+  id_usuario_rol_atencion:0,
+  id_paciente:0,
+  turno:""
+})
+attention.id_usuario_rol_atencion=usuario.value.id;
+
+let resultArea=ref({});
+let result=ref({});
+
+const emits = defineEmits(['modifyModalAttention'])
+let props = defineProps({
+  id: {
+    type: Number,
+    required: true
+  }
+});
+attention.id_paciente=props.id;
+
 const sendValueModal = () => {
-  emits('modifyModalAdd', false)
+  emits('modifyModalAttention', false)
 }
 
-const createMicrored = async() =>{
-  if(!codigo.value || !nombre_microred.value || !red.value || !ci_director.value) {
+onMounted(async()=>{
+  resultArea.value=await staffService.showWorkArea();
+})
+
+const createAttention=async()=>{
+  if(!attention.id_area || !attention.turno){
     Swal.fire({
       icon: "error",
       title: "Campos vacios",
@@ -54,47 +78,42 @@ const createMicrored = async() =>{
     });
     return;
   }
-
-  let microred = new Microred(
-                              nombre_microred.value.toUpperCase(),
-                              red.value.toUpperCase(),
-                              ci_director.value,
-                              codigo.value);
-
+  console.log("datos de atencion: ", attention)
   try {
     let resultSwal = await Swal.fire({
       title: "¿Estás seguro?",
-      text: "Se registrará la nueva microred",
+      text: "Se registrará la petición de atención",
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "rgb(5, 135, 137)",
       cancelButtonColor: "rgb(224, 63, 62)",
       confirmButtonText: "Agregar registro"
     })
-
     if (resultSwal.isConfirmed) {
-      result.value = await microredService.createMicrored(microred);
+      result.value = await attentionService.createAttention(attention);
+      console.log("ok: ",result.value)
       if(result.value.ok){
         Swal.fire({
           title: "¡Registro Exitoso!",
-          text: result.value.message,
+          text: "Tus datos fueron registrados",
           icon: "success"
         });
         sendValueModal();
       }else{
+        console.log(result.value)
         Swal.fire({
           title: "¡Registro no realizado!",
           text: result.value.message,
           icon: "error"
         });
       }
-
     };
   } catch (error) {
-      console.log("Error en el agregar microred", error)
+      console.log("Error fatal en atencion", error)
     }
-  }
+}
 </script>
 
 <style scoped>
+
 </style>

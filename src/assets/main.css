@@ -5,24 +5,19 @@
 }
 
 body{
-  /* background: linear-gradient( to right, #0E2E27, rgb(0, 128, 128)); */
-  /* background-color: rgb(0,128 ,128); */
   background-color:white;
-  
   width: 100%;
   min-height: 100vh;
   color: white;
-
   font-family: Tahoma, sans-serif;
   font-family: "Oswald", sans-serif;
-
   /* border: 2px solid red; */
-  font-style: italic bold;
+  /* font-style: italic bold; */
+  /* font-size: medium; */
 }
 
 a{
   text-decoration: none;
-  
 }
 
 ul{

@@ -8,18 +8,6 @@
         <section class="register-form-modal">
             <label for="">CI</label>
             <input type="text" v-model="person.ci">
-            <label for="">EXPEDIDO</label>
-            <select name="" id="" v-model="person.extension">
-              <option value="LP">LP</option>
-              <option value="SC">SC</option>
-              <option value="CB">CB</option>
-              <option value="PT">PT</option>
-              <option value="OR">OR</option>
-              <option value="BN">BN</option>
-              <option value="PD">PD</option>
-              <option value="TJ">TJ</option>
-              <option value="CH">CH</option>
-            </select>
             <label for="">NOMBRES</label>
             <input type="text" v-model="person.nombre">
             <label for="">AP. PATERNO</label>
@@ -120,7 +108,6 @@ import { patientService } from '@/services/Paciente.js';
 /* router */
 let person=reactive({
   ci:"",
-  extension:"",
   nombre:"",
   paterno:"",
   materno:"",
@@ -152,24 +139,24 @@ let resultFolder = ref({});
 let result = ref({});
 
 onMounted(  async()=>{
-  resultMicrored.value = await microredService.showMicrored();
+  resultMicrored.value = await microredService.showMicrored(1);
   resultFolder.value=await patientService.showFolder();
 })
 
 const emits = defineEmits(['modifyModalEdit'])
 let props = defineProps({
-  id_paciente: {
-    type: String, // o Array si envías varios roles/Microreds
+  id: {
+    type: Number, // o Array si envías varios roles/Microreds
     required: true,
   },
 });
-console.log("mi id",props.id_paciente)
+console.log("mi id",props.id)
 const sendValueModal = () => {
   emits('modifyModalEdit', false)
 }
 
 const editEstablishment = async() =>{
-  if(!person.ci && !person.extension && !person.nombre && !person.paterno &&
+  if(!person.ci && !person.nombre && !person.paterno &&
   !person.materno && !person.nro_telf && !person.estado_civil &&
   !person.fecha_nacimiento && !person.nacionalidad && !person.sexo &&
   !residence.departamento && !residence.municipio &&
@@ -186,7 +173,6 @@ const editEstablishment = async() =>{
   }
   let patientClass = new Paciente(
                   person.ci,
-                  person.extension,
                   person.nombre.toUpperCase(),
                   person.paterno.toUpperCase(),
                   person.materno.toUpperCase(),
@@ -203,7 +189,7 @@ const editEstablishment = async() =>{
                   patient.id_microred,
                   patient.nombre_carpeta.toUpperCase(),
                   patient.peso, patient.estatura,
-                  patient.tipo_sangre, props.id_paciente
+                  patient.tipo_sangre
   );
   console.log("paciente: ",patientClass);
   try {
@@ -218,7 +204,7 @@ const editEstablishment = async() =>{
     })
 
     if (resultSwal.isConfirmed) {
-      result.value = await patientService.updatePatient(patientClass);
+      result.value = await patientService.updatePatient(id, patientClass);
       console.log("my result", result.value)
       if(result.value.ok){
         console.log("myRes",result)

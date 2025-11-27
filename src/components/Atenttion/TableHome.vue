@@ -2,7 +2,7 @@
   <div class="container-table" >
     <div class="header-table">
       <section class="search-table">
-        <h2 class="date-header-table">FECHA: {{ date }}</h2>
+        <h2 class="btn-add-item">FECHA: {{ date }}</h2>
         <section class="input-table">
           <input type="text"
           placeholder="Ingrese el CI"
@@ -27,53 +27,106 @@
         </section>
       </section>
     </div>
-    <table class="content-table">
-      <thead>
-          <tr>
-              <th>N°</th>
-              <th>CI</th>
-              <th>NOMBRES</th>
-              <th>ESTADO</th>
-              <th>ACCIONES</th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr v-for="(item, Nro) in filterData" v-bind:key="item.id_paciente">
-            <!--  -->
-              <td data-title="N°">{{ Nro + 1 }}</td>
-              <td data-title="CI">{{ item.ci}}</td>
-              <td data-title="NOMBRES">{{ item.nombres }}</td>
-              <td data-title="ESTADO">{{ item.nombres }}</td>
-              <td data-title="ACCIONES">
-                <div class="content-btn-actions">
-                  <button class="btn-actions btn-patient" v-on:click="diagnosticPatient(item.id_paciente)">
-                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M10 14h4" /><path d="M12 12v4" /></svg>
-                  </button>
-                </div>
-              </td>
-          </tr>
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <table class="content-table">
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>CI</th>
+                <th>NOMBRES</th>
+                <th>ESTABLECIMIENTO</th>
+                <th>ÁREA</th>
+                <th>ESTADO</th>
+                <th>ACCIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(item, Nro) in filterData" v-bind:key="item.id">
+              <!--  -->
+                <td data-title="N°">{{ Nro + 1 }}</td>
+                <td data-title="CI">{{ item.ci}}</td>
+                <td data-title="NOMBRES">{{ item.nombres }}</td>
+                <td data-title="ESTABLECIMIENTO">{{ item.nombre_establecimiento }}</td>
+                <td data-title="ÁREA">{{ item.nombre_area }}</td>
+                <td
+                  :style="{backgroundColor:'var(--color-yellow)'}"
+                  data-title="ESTADO"
+                  v-if="item.estado_atencion=='EN ESPERA'">
+                  {{ item.estado_atencion }}
+                </td>
+                <td
+                  :style="{backgroundColor:'var(--color-blue)'}"
+                  data-title="ESTADO"
+                  v-else-if="item.estado_atencion=='EN ATENCIÓN'">
+                  {{ item.estado_atencion }}
+                </td>
+                <td
+                  :style="{backgroundColor:'var(--color-primary)'}"
+                  data-title="ESTADO"
+                  v-else-if="item.estado_atencion=='FINALIZADO'">
+                  {{ item.estado_atencion }}
+                </td>
+                <td
+                  :style="{backgroundColor:'var(--color-secondary)'}"
+                  data-title="ESTADO"
+                  v-else-if="item.estado_atencion=='INCOMPLETA'">
+                  {{ item.estado_atencion }}
+                </td>
+                <td data-title="ACCIONES">
+                  <div class="content-btn-actions">
+                    <button class="btn-actions btn-view" v-on:click="viewAttention(item)">
+                      <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="icon icon-tabler icons-tabler-outline icon-tabler-eye"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                    <path
+                      d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"
+                    />
+                  </svg>
+                    </button>
+                  </div>
+                </td>
+            </tr>
+        </tbody>
+      </table>
     </div>
+    <DiagnosticAttention
+      class="content-view"
+      v-if="modalVisibleAttention"
+      @modifyModalAttention="hideModalAttention"
+      :attention="attentionProp"
+    />
+  </div>
 </template>
 
 <script setup>
-import '@/assets/styles/table.css';
+import '@/assets/styles/table.css'
 import '@/assets/styles/tableComponent.css'
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { attentionService } from '@/services/Atencion.js';
+import DiagnosticAttention from './DiagnosticAttention.vue';
 
-/* import { useUsuarioStore } from '@/store/usuario.js';
 
-let usuarioStore = useUsuarioStore();
-let usuario = usuarioStore.usuario; */
 let date = new Date();
 date = date.toISOString().split("T")[0];
 
 let data = ref([]);
 let originalData = ref([])
 let searchCi = ref("");
-let result = ref([])
+
+let modalVisibleAttention=ref(false);
+let attentionProp=ref("");
+let result = ref({})
 
 const filterData = computed(() => {
   const ci = searchCi.value.trim();
@@ -85,24 +138,64 @@ const filterData = computed(() => {
   return result;
 });
 
-onMounted(async () => {
+const showAttention = async () => {
   try {
-    const res = await attentionService.showAttention();
-    console.log("my res", res);
-    data.value = Array.isArray(res) ? res : [res]; // 🔹 convertir a array si es objeto
-    originalData.value = [...data.value];
+    result.value = await attentionService.showAttention()
+    console.log('mi result show attention', result.value)
+    // Asignar aunque esté vacío
+    data.value = Array.isArray(result.value) ? result.value : [result.value]
+    originalData.value = [...data.value]
   } catch (error) {
-    console.log('Error al obtener los datos de atención:', error);
+    console.log('Error al obtener los datos de microred:', error)
   }
+}
+
+onMounted(async () => {
+  showAttention();
 });
+
+
+/* boton de ver atencion */
+const viewAttention = (item) =>{
+  attentionProp.value=item;
+  console.log("item enviado: ", attentionProp.value)
+  modalVisibleAttention.value=true;
+}
+/* ocultar vista de atencion */
+const hideModalAttention = (valor) =>{
+  modalVisibleAttention.value=valor;
+  showAttention();
+}
 
 </script>
 
 <style scoped>
+.table-wrapper {
+    /* border: 2px solid green; */
+    /* max-height: 400px;   */ /* puedes cambiar a 500px si quieres */
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+
+/* Opcional: mejora visual del scroll */
+.table-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(0, 128, 128, 0.7);
+  border-radius: 10px;
+}
 .date-header-table{
   background-color: rgb(0, 128, 128);
+
   color: white;
   padding: 5px;
   border-radius: 20px;
+}
+
+.td-status{
+  color: rgb(0, 128, 128)
 }
 </style>

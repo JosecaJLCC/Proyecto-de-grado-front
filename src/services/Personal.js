@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-let API_URL = 'http://localhost:3000/api/v1/staff'
+let API_URL = `${import.meta.env.VITE_API_URL}/api/v1/staff`
 
 const createStaff = async(staff)=>{
   const {data} = await axios.post(API_URL+'/create', staff);

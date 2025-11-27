@@ -21,8 +21,8 @@
         </section>
       </section>
     </div>
-    <div class="content-table">
-      <table>
+    <div class="table-wrapper">
+      <table class="content-table">
         <thead>
           <tr>
             <th>N°</th>
@@ -36,11 +36,11 @@
         <tbody>
           <tr v-for="(item, Nro) in filterData" v-bind:key="item.id_paciente">
             <td data-title="N°">{{ Nro + 1 }}</td>
-            <td data-title="CI">{{ item.ci}} {{ item.extension }}</td>
+            <td data-title="CI">{{ item.ci}}</td>
             <td data-title="CI">
-              <img class="img-profile" :src="`http://localhost:3000/uploads/${item.perfil}`" alt="" />
+              <img class="img-profile" :src="`${apiBaseUrl}/uploads/${item.perfil}`" alt="" />
             </td>
-            <td data-title="NOMBRES">{{ item.paterno }} {{ item.materno }} {{ item.nombre }}</td>
+            <td data-title="NOMBRES">{{ item.nombres }}</td>
             <td data-title="USUARIO">{{ item.nombre_usuario }}</td>
             <td data-title="ACCIONES">
               <div v-if="parseInt(statusSelect, 10)" class="content-btn-actions">
@@ -105,7 +105,7 @@
                 </button>
               </div>
               <div v-else class="content-btn-actions">
-                <button  class="btn-actions btn-delete" v-on:click="reactivateUser(item.codigo)">
+                <button  class="btn-actions btn-delete" v-on:click="reactivateUser(item.id)">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-recycle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 17l-2 2l2 2" /><path d="M10 19h9a2 2 0 0 0 1.75 -2.75l-.55 -1" /><path d="M8.536 11l-.732 -2.732l-2.732 .732" /><path d="M7.804 8.268l-4.5 7.794a2 2 0 0 0 1.506 2.89l1.141 .024" /><path d="M15.464 11l2.732 .732l.732 -2.732" /><path d="M18.196 11.732l-4.5 -7.794a2 2 0 0 0 -3.256 -.14l-.591 .976" /></svg>
                 </button>
               </div>
@@ -143,6 +143,8 @@ import EditUser from '@/components/User/EditUser.vue'
 import ViewUser from '@/components/User/ViewUser.vue'
 import { computed, onMounted, ref,watch } from 'vue'
 import Swal from 'sweetalert2'
+
+let apiBaseUrl= ref(import.meta.env.VITE_API_URL || 'http://192.168.0.14:3000')
 
 let data = ref([])
 let originalData = ref([])
@@ -217,7 +219,7 @@ const editUser = (id) => {
 /* ocultar modal de editar usuario */
 const hideModalEdit = (valor) => {
   modalVisibleEdit.value = valor
-  showUser();
+  showUser(statusSelect.value);
 }
 /* boton eliminar usuario */
 const deleteUser = async(id) => {
@@ -232,7 +234,6 @@ const deleteUser = async(id) => {
   })
   if (resultSwal.isConfirmed) {
     try {
-      console.log('mi id:', id)
       resultDelete.value = await userService.deleteUser(id);
       console.log("eliminado",resultDelete.value)
       if(resultDelete.value.ok){

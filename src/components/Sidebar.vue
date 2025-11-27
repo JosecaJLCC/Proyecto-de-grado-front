@@ -12,7 +12,7 @@
       </h3>
       <section class="user-sidebar">
         <div class="profile-section">
-          <img class="img-profile" :src="`http://localhost:3000/uploads/${perfil}`" alt="" />
+          <img class="img-profile" :src="`${apiBaseUrl}/uploads/${perfil}`" alt="" />
         </div>
         <div class="dropdown-header">
           <svg v-if="mostrarDropDown" @click="desplegarDropDown" xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-caret-up icon-sidebar desplegar-dropdown"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11.293 7.293a1 1 0 0 1 1.32 -.083l.094 .083l6 6l.083 .094l.054 .077l.054 .096l.017 .036l.027 .067l.032 .108l.01 .053l.01 .06l.004 .057l.002 .059l-.002 .059l-.005 .058l-.009 .06l-.01 .052l-.032 .108l-.027 .067l-.07 .132l-.065 .09l-.073 .081l-.094 .083l-.077 .054l-.096 .054l-.036 .017l-.067 .027l-.108 .032l-.053 .01l-.06 .01l-.057 .004l-.059 .002h-12c-.852 0 -1.297 -.986 -.783 -1.623l.076 -.084l6 -6z" /></svg>
@@ -64,7 +64,7 @@
                 <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
                 <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
               </svg>
-              <span>Inicio</span>
+              <span>En atención</span>
             </RouterLink>
           </li>
           <li>
@@ -87,28 +87,7 @@
                 <path d="M12 11l0 6" />
                 <path d="M9 14l6 0" />
               </svg>
-              <span>Registrar Atención</span>
-            </RouterLink>
-          </li>
-          <li>
-            <RouterLink class="routes-sidebar" :to="{ name: 'historial-general' }">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="icon icon-tabler icons-tabler-outline icon-tabler-history icon-sidebar"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <path d="M12 8l0 4l2 2" />
-                <path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5" />
-              </svg>
-              <span>Historial General</span>
+              <span>Pacientes</span>
             </RouterLink>
           </li>
           <li>
@@ -146,16 +125,22 @@
               <span>Establecimientos</span>
             </RouterLink>
           </li>
-          <li>
+          <!-- <li>
             <RouterLink class="routes-sidebar" :to="{ name: 'historial-microred' }">
               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-building-hospital icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l18 0" /><path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16" /><path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" /><path d="M10 9l4 0" /><path d="M12 7l0 4" /></svg>
               <span>Microred</span>
             </RouterLink>
-          </li>
+          </li> -->
           <li>
             <RouterLink class="routes-sidebar" :to="{ name: 'reportes' }">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-dots icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 3v18h18" /><path d="M9 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M19 7m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M14 15m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M10.16 10.62l2.34 2.88" /><path d="M15.088 13.328l2.837 -4.586" /></svg>
               <span>Reportes</span>
+            </RouterLink>
+          </li>
+          <li>
+            <RouterLink class="routes-sidebar" :to="{ name: 'auditoria' }">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-shield-half icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11.998 2l.032 .002l.086 .005a1 1 0 0 1 .342 .104l.105 .062l.097 .076l.016 .015l.247 .21a11 11 0 0 0 7.189 2.537l.342 -.01a1 1 0 0 1 1.005 .717a13 13 0 0 1 -9.208 16.25a1 1 0 0 1 -.502 0a13 13 0 0 1 -9.209 -16.25a1 1 0 0 1 1.005 -.717a11 11 0 0 0 7.791 -2.75l.046 -.036l.053 -.041a1 1 0 0 1 .217 -.112l.075 -.023l.036 -.01a1 1 0 0 1 .12 -.022l.086 -.005zm.002 2.296l-.176 .135a13 13 0 0 1 -7.288 2.572l-.264 .006l-.064 .31a11 11 0 0 0 1.064 7.175l.17 .314a11 11 0 0 0 6.49 5.136l.068 .019z" /></svg>
+              <span>Auditoria</span>
             </RouterLink>
           </li>
         </ul>
@@ -178,6 +163,8 @@ let tamanioSidebar = computed(() => sidebarStore.tamanioSidebar)
 let cambioIcon = computed(() => sidebarStore.cambioIcon)
 /* el ancho de la img de la institucion que esta dentro del sidebar */
 let tamanioLogo = computed(() => sidebarStore.tamanioLogo)
+
+let apiBaseUrl= ref(import.meta.env.VITE_API_URL || 'http://192.168.0.14:3000')
 
 const mostrarTitulo = computed(() => sidebarStore.tamanioSidebar !== '50px')
 

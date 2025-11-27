@@ -7,7 +7,7 @@ export class Usuario {
     if (!token) return;
 
     try {
-      const { data } = await axios.get("http://localhost:3000/api/v1/user/profile", {
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/user/profile`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       return data.data; // Retorna directamente los datos.

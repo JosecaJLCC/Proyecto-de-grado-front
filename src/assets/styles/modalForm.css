@@ -36,6 +36,7 @@ padding-bottom: 10px;
 .title-form-modal {
 display: flex;
 background-color: var(--color-primary);
+color:var(--color-white);
 border-radius: 20px;
 padding: 5px;
 font-weight: bold;
@@ -49,13 +50,21 @@ color: var(--color-black);
 width: 100%;
 }
 
-.register-form-modal > input,select{
+.register-form-modal > input,select, textarea{
 padding-left:5px;
 border-radius: 20px;
 outline: none;
 border:2px solid var(--color-primary);
 height: 25px;
 font-weight: bold;
+}
+
+input:invalid{
+  border: 2px solid var(--color-secondary);
+}
+
+input:valid{
+  border: 2px solid var(--color-primary);
 }
 
 .actions-form-modal{
@@ -101,12 +110,9 @@ transition: .3s;
 } */
 
   /* Una columna en pantallas pequeñas */
-@media (max-width: 767px) {
-.actions-form-modal{
-    flex-direction: column;
-    row-gap: 10px;
-}
-
-
-
+@media (max-width: 800px) {
+  .actions-form-modal{
+      flex-direction: column;
+      row-gap: 10px;
+  }
 }

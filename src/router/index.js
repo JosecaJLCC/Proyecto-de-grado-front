@@ -27,13 +27,6 @@ const router = createRouter({
           name: 'nuevo-registro',
           component: ()=>import('@/views/PatientView.vue'),
         },
-
-        {
-          path: 'historial-general',
-          name: 'historial-general',
-          component: ()=>import('@/views/HistoryPatientsView.vue'),
-        },
-
         {
           path: 'historial-usuario',
           name: 'historial-usuario',
@@ -58,6 +51,11 @@ const router = createRouter({
           path: 'reportes',
           name: 'reportes',
           component:()=>import('@/views/ReportView.vue')
+        },
+        {
+          path: 'auditoria',
+          name: 'auditoria',
+          component:()=>import('@/views/AuditView.vue')
         },
       ]
     },

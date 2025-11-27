@@ -7,27 +7,35 @@
         </legend>
           <section class="register-form-modal">
             <label for="">CI</label>
-            <input type="text" v-model="person.ci">
-            <label for="">EXPEDIDO</label>
-            <select name="" id="" v-model="person.extension">
-              <option value="LP">LP</option>
-              <option value="SC">SC</option>
-              <option value="CB">CB</option>
-              <option value="PT">PT</option>
-              <option value="OR">OR</option>
-              <option value="BN">BN</option>
-              <option value="PD">PD</option>
-              <option value="TJ">TJ</option>
-              <option value="CH">CH</option>
-            </select>
+            <input
+              type="text"
+              v-model="person.ci"
+              pattern="^[A-Za-z0-9 ]+$"
+              title="Solo se permiten letras y números">
             <label for="">NOMBRES</label>
-            <input type="text" v-model="person.nombre">
+            <input
+              type="text"
+              v-model="person.nombre"
+              pattern="^[A-Za-z ]+$"
+              title="Solo se permiten letras">
             <label for="">AP. PATERNO</label>
-            <input type="text" v-model="person.paterno">
+            <input
+              type="text"
+              v-model="person.paterno"
+              pattern="^[A-Za-z ]+$"
+              title="Solo se permiten letras">
             <label for="">AP. MATERNO</label>
-            <input type="text" v-model="person.materno">
+            <input
+              type="text"
+              v-model="person.materno"
+              pattern="^[A-Za-z ]+$"
+              title="Solo se permiten letras">
             <label for="">TELEFONO</label>
-            <input type="text" v-model="person.nro_telf">
+            <input
+              type="text"
+              v-model="person.nro_telf"
+              pattern="^[0-9]+$"
+              title="Solo se permiten números">
             <label for="">ESTADO CIVIL</label>
             <select name="" id="" v-model="person.estado_civil">
               <option value="SOLTERO">SOLTERO/A</option>
@@ -51,7 +59,7 @@
             </select>
             <label for="">MICRORED DE SALUD</label>
             <select name="" id="" v-model="patient.id_microred">
-              <option :value="item.id_microred" v-for="item in resultMicrored" :key="item.id_microred">{{ item.nombre_microred }}</option>
+              <option :value="item.codigo" v-for="item in resultMicrored" :key="item.codigo">{{ item.nombre_microred }}</option>
 
             </select>
             <label for="">DEPARTAMENTO</label>
@@ -67,15 +75,37 @@
                 <option value="CHUQUISACA">CHUQUISACA</option>
               </select>
             <label for="">MUNICIPIO</label>
-            <input type="text" v-model="residence.municipio">
+            <input
+              type="text"
+              v-model="residence.municipio"
+              pattern="^[A-Za-z ]+$"
+              title="Solo se permiten letras">
             <label for="">ZONA</label>
-            <input type="text" v-model="residence.zona">
+            <input
+              type="text"
+              v-model="residence.zona"
+              pattern="^[A-Za-z0-9-]+$"
+              title="Solo se permiten letras, números y guion (-)">
             <label for="">AVENIDA/CALLE</label>
-            <input type="text" v-model="residence.av_calle">
+            <input
+              type="text"
+              v-model="residence.av_calle"
+              pattern="^[A-Za-z0-9-]+$"
+              title="Solo se permiten letras, números y guion (-)">
             <label for="">NRO PUERTA</label>
-            <input type="text" v-model="residence.nro_puerta">
+            <input
+              type="text"
+              v-model="residence.nro_puerta"
+              pattern="^[0-9]+$"
+              title="Solo se permiten números">
             <label for="">CARPETA</label>
-            <input placeholder="Nombre de la carpeta" type="text" list="carpeta" v-model="patient.nombre_carpeta">
+            <input
+              placeholder="Nombre de la carpeta"
+              type="text"
+              list="carpeta"
+              v-model="patient.nombre_carpeta"
+              pattern="^[A-Za-z0-9-]+$"
+              title="Solo se permiten letras, números y guión (-)">
             <datalist id="carpeta">
               <option :value="item.nombre_carpeta" v-for="item in resultFolder" :key="item.nombre_carpeta">{{ item.nombre_carpeta }}</option>
             </datalist>
@@ -84,7 +114,8 @@
       <div class="actions-form-modal">
         <button class="form-btn btn-cancel" type="button" v-on:click="sendValueModal">
           <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M10 10l4 4m0 -4l-4 4" /></svg>
-          CANCELAR</button>
+          CANCELAR
+        </button>
         <button class="form-btn btn-accept" type="submit">
           <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" /></svg>
           ACEPTAR</button>
@@ -103,7 +134,6 @@ import { patientService } from '@/services/Paciente.js';
 
 let person=reactive({
   ci:"",
-  extension:"",
   nombre:"",
   paterno:"",
   materno:"",
@@ -137,16 +167,18 @@ const sendValueModal = () => {
 }
 
 onMounted(  async()=>{
-  resultMicrored.value = await microredService.showMicrored();
+  resultMicrored.value = await microredService.showMicrored(1);
   resultFolder.value=await patientService.showFolder();
 })
 
 const createPatient = async() =>{
+  console.log("crear paciente: ",residence, person, patient)
   if(!residence.departamento || !residence.municipio ||
-    !residence.zona || !residence.av_calle || !residence.nro_puerta ||
-    !person.ci || !person.extension || !person.nombre ||
-    !person.nacionalidad || !person.fecha_nacimiento || !person.sexo ||
-    !person.estado_civil || !person.nro_telf || !patient.id_microred ||
+    !residence.zona || !residence.av_calle ||
+    !residence.nro_puerta || !person.ci || !person.nombre ||
+    !person.nacionalidad || !person.fecha_nacimiento ||
+    !person.sexo || !person.estado_civil ||
+    !person.nro_telf || !patient.id_microred ||
     !patient.nombre_carpeta) {
     Swal.fire({
       icon: "error",
@@ -158,7 +190,6 @@ const createPatient = async() =>{
 
   let patientClass = new Paciente(
                   person.ci,
-                  person.extension,
                   person.nombre.toUpperCase(),
                   person.paterno.toUpperCase(),
                   person.materno.toUpperCase(),
@@ -204,7 +235,6 @@ const createPatient = async() =>{
           icon: "error"
         });
       }
-
     };
   } catch (error) {
       console.log("Error fatal")

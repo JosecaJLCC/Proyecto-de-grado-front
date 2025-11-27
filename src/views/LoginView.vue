@@ -9,22 +9,28 @@
 
         <label for=""> NOMBRE DE USUARIO</label>
         <div class="entrada-icon-login">
-          <input class="input-login" v-model="nombre_usuario" type="text" />
+          <input
+            class="input-login"
+            v-model="nombre_usuario"
+            type="text"
+           />
           <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-user icon-login"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2a5 5 0 1 1 -5 5l.005 -.217a5 5 0 0 1 4.995 -4.783z" /><path d="M14 14a5 5 0 0 1 5 5v1a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-1a5 5 0 0 1 5 -5h4z" /></svg>
         </div>
 
         <label for="">CONTRASEÑA</label>
         <div class="entrada-icon-login">
-          <input class="input-login" v-model="clave" :type="tipoClave" />
+          <input
+          class="input-login"
+          v-model="clave"
+          :type="tipoClave"
+          />
            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-lock icon-login"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2a5 5 0 0 1 5 5v3a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-10a3 3 0 0 1 -3 -3v-6a3 3 0 0 1 3 -3v-3a5 5 0 0 1 5 -5m0 12a2 2 0 0 0 -1.995 1.85l-.005 .15a2 2 0 1 0 2 -2m0 -10a3 3 0 0 0 -3 3v3h6v-3a3 3 0 0 0 -3 -3" /></svg>
           <transition name="fade" mode="out-in">
             <svg v-if="cambioIcon" v-on:click="verClave"  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-eye-off icon-login-vision"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" /><path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" /><path d="M3 3l18 18" /></svg>
             <svg v-else v-on:click="verClave" xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-eye icon-login-vision"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
           </transition>
         </div>
-
         <button id="button-login" type="submit">INGRESAR</button>
-        <a id="link-login" href="">¿Olvidó sus credenciales?</a>
       </fieldset>
     </form>
     <ChooseCentroSalud class="content-form-cs" v-if="modalVisibleChoose" :data="result" @modificarModalChoose="ocultarModalChoose"/>
@@ -46,9 +52,9 @@ let modalVisibleChoose=ref(false);
 let result=ref({});
 const iniciarSesion = async () => {
   /* Validar si los inputs no esten vacios */
-    if(nombre_usuario.value == '' || clave.value == '') {
+    if(!nombre_usuario.value || !clave.value) {
       Swal.fire({
-        icon: "error",
+        icon: "warning",
         title: "Campos vacios",
         text: `Por favor complete todos los campos`,
       });
@@ -155,7 +161,6 @@ const ocultarModalChoose = (valor) => {
 }
 
 #button-login {
-
   background-color: var(--color-primary);
   color: var(--color-white);
   border: 0;
@@ -177,11 +182,9 @@ const ocultarModalChoose = (valor) => {
   width: 100%;
   padding-left: 30px;
   height: 100%;
+  outline: none;
 }
 
-#link-login {
-  color: var(--color-primary);
-}
 
 .entrada-icon-login{
   height: 35px;

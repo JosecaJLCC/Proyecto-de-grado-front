@@ -10,8 +10,13 @@
             <p>NOMBRES: <strong>{{ props.patient.nombres }}</strong></p>
             <p>NACIONALIDAD: <strong>{{ props.patient.nacionalidad }}</strong></p>
             <p>FECHA DE NACIMIENTO: <strong>{{ fecha_nacimiento }}</strong></p>
-            <p>ESTADO CIVIL: <strong>{{ props.patient.estado_civil }}</strong></p>
+            <!-- <p>ESTADO CIVIL: <strong>{{ props.patient.estado_civil }}</strong></p> -->
             <p>NRO DE TELF: <strong>{{ props.patient.nro_telf }}</strong></p>
+            <p>DEPARTAMENTO: <strong>{{ props.patient.departamento }}</strong></p>
+            <p>MUNICIPIO: <strong>{{ props.patient.municipio }}</strong></p>
+            <p>ZONA: <strong>{{ props.patient.zona }}</strong></p>
+            <p>AVENIDA/CALLE: <strong>{{ props.patient.av_calle }}</strong></p>
+            <p>NRO DE PUERTA: <strong>{{ props.patient.nro_puerta }}</strong></p>
             <p>SEXO: <strong>{{ props.patient.sexo }}</strong></p>
             <p>FECHA DE CREACION: <strong>{{ fecha_creacion }}</strong></p>
             <p>HORA DE CREACION: <strong>{{ hora }}</strong></p>

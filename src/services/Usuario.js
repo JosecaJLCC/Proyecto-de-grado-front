@@ -1,24 +1,29 @@
 import axios from 'axios'
 
-let API_URL = 'http://localhost:3000/api/v1/user';
+let API_URL = `${import.meta.env.VITE_API_URL}/api/v1/user`;
 
 const createUser = async(user) => {
   const {data} = await axios.post(API_URL+'/create', user);
-  return data.data;
-}
-
-const showUser = async() => {
-  const {data} = await axios.get(API_URL+'/show');
-  return data.data;
-}
-
-const deleteUser = async(id) => {
-  const {data} = await axios.delete(API_URL+`/delete/${id}`)
   return data;
 }
 
-const updateUser = async(id) => {
+const showUser = async(estado_usuario) => {
+  const {data} = await axios.get(API_URL+`/show/${estado_usuario}`);
+  return data.data;
+}
+
+const updateUser = async(id, user) => {
+  const {data} = await axios.patch(API_URL+`/update/${id}`, user)
+  return data;
+}
+
+const deleteUser = async(id) => {
   const {data} = await axios.patch(API_URL+`/delete/${id}`)
+  return data;
+}
+
+const reactivateUser = async(id) => {
+  const {data} = await axios.patch(API_URL+`/reactivate/${id}`)
   return data;
 }
 
@@ -54,6 +59,7 @@ export const userService = {
   showUser,
   updateUser,
   deleteUser,
+  reactivateUser,
   profileUser,
   login,
   chooseEstablishment,

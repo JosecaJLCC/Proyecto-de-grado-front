@@ -61,7 +61,7 @@ const editMicrored = async() =>{
   console.log("microred update: ",microred)
   try {
     let resultSwal = await Swal.fire({
-      title: "¿Estas seguro?",
+      title: "¿Estás seguro?",
       text: "Se editará la información de la microred",
       icon: "question",
       showCancelButton: true,

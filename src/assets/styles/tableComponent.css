@@ -1,12 +1,11 @@
 .container-table {
   color: var(--color-black);
-  padding-left: 3px;
   transition: width 0.8s ease;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
   position: relative;
-
+  
 }
 .content-table {
   width: 100%;
@@ -38,6 +37,10 @@
   .content-view{
     position: fixed;
     top: 15dvh;
+  }
+  .container-table {
+    margin-top: 15px;
+    border: 2px solid green;
   }
 }
 
@@ -110,15 +113,7 @@
   height: 35px;
 }
 
-.btn-attention {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  width: 100px;
-  border-radius: 20px;
-  outline: none;
-  border: none;
-  font-weight: bold;
-}
+
 
 .btn-actions {
   display: flex;
@@ -131,8 +126,13 @@
   border: none;
 }
 
+.btn-attention{
+  background-color: var(--color-blue);
+}
+
+
 .btn-patient{
-  background-color: rgb(40, 6, 232);
+  background-color: var(--color-green);
 }
 
 .btn-view {
@@ -140,7 +140,7 @@
 }
 
 .btn-edit {
-  background-color: rgb(229, 229, 25);
+  background-color: var(--color-yellow);
 }
 
 .btn-delete {

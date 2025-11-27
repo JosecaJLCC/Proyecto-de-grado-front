@@ -3,7 +3,6 @@
     <form action="" class="content-form-modal">
       <fieldset class="fieldset-form-modal">
         <legend class="legend-form-modal">
-          <!-- <CIcon :icon="cilUserPlus" class="icon-microred"/> -->
           <span class="title-form-modal">MICRORED</span>
         </legend>
           <section class="register-form-modal">
