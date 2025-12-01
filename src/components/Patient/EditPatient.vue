@@ -7,15 +7,35 @@
         </legend>
         <section class="register-form-modal">
             <label for="">CI</label>
-            <input type="text" v-model="person.ci">
+            <input
+              type="text"
+              v-model="person.ci"
+              pattern="^[A-Za-z0-9 ]+$"
+              title="Solo se permiten letras y números">
             <label for="">NOMBRES</label>
-            <input type="text" v-model="person.nombre">
+            <input
+              type="text"
+              v-model="person.nombre"
+              pattern="^[A-Za-z ]+$"
+              title="Solo se permiten letras">
             <label for="">AP. PATERNO</label>
-            <input type="text" v-model="person.paterno">
+            <input
+              type="text"
+              v-model="person.paterno"
+              pattern="^[A-Za-z ]+$"
+              title="Solo se permiten letras">
             <label for="">AP. MATERNO</label>
-            <input type="text" v-model="person.materno">
+            <input
+              type="text"
+              v-model="person.materno"
+              pattern="^[A-Za-z ]+$"
+              title="Solo se permiten letras">
             <label for="">TELEFONO</label>
-            <input type="text" v-model="person.nro_telf">
+            <input
+              type="text"
+              v-model="person.nro_telf"
+              pattern="^[0-9]+$"
+              title="Solo se permiten números">
             <label for="">ESTADO CIVIL</label>
             <select name="" id="" v-model="person.estado_civil">
               <option value="SOLTERO">SOLTERO/A</option>
@@ -55,20 +75,39 @@
                 <option value="CHUQUISACA">CHUQUISACA</option>
               </select>
             <label for="">MUNICIPIO</label>
-            <input type="text" v-model="residence.municipio">
+            <input
+              type="text"
+              v-model="residence.municipio"
+              pattern="^[A-Za-z ]+$"
+              title="Solo se permiten letras">
             <label for="">ZONA</label>
-            <input type="text" v-model="residence.zona">
+            <input
+              type="text"
+              v-model="residence.zona"
+              pattern="^[A-Za-z0-9-]+$"
+              title="Solo se permiten letras, números y guion (-)">
             <label for="">AVENIDA/CALLE</label>
-            <input type="text" v-model="residence.av_calle">
+            <input
+              type="text"
+              v-model="residence.av_calle"
+              pattern="^[A-Za-z0-9-]+$"
+              title="Solo se permiten letras, números y guion (-)">
             <label for="">NRO PUERTA</label>
-            <input type="text" v-model="residence.nro_puerta">
+            <input
+              type="text"
+              v-model="residence.nro_puerta"
+              pattern="^[0-9]+$"
+              title="Solo se permiten números">
             <label for="">CARPETA</label>
-            <input placeholder="Nombre de la carpeta" type="text" list="carpeta" v-model="patient.nombre_carpeta">
+            <input
+              placeholder="Nombre de la carpeta"
+              type="text" list="carpeta"
+              v-model="patient.nombre_carpeta"
+              pattern="^[A-Za-z0-9- ]+$"
+              title="Solo se permiten letras, números y guión (-)">>
             <datalist id="carpeta">
               <option :value="item.nombre_carpeta" v-for="item in resultFolder" :key="item.nombre_carpeta">{{ item.nombre_carpeta }}</option>
             </datalist>
-<!--             <label for="">COLOR</label>
-            <input type="text" v-model="patient.color"> -->
             <label for="">TIPO DE SANGRE</label>
             <select name="" id="" v-model="patient.tipo_sangre">
               <option value="O-">O-</option>
@@ -81,9 +120,17 @@
               <option value="A+">A+</option>
             </select>
             <label for="">PESO</label>
-            <input type="text" v-model="patient.peso">
+            <input
+              type="text"
+              v-model="patient.peso"
+              pattern="^[0-9.,]+$"
+              title="Solo se permiten números, (.) y (,)">
             <label for="">ESTATURA</label>
-            <input type="text" v-model="patient.estatura">
+            <input
+              type="text"
+              v-model="patient.estatura"
+              pattern="^[0-9.,]+$"
+              title="Solo se permiten números, (.) y (,)">
           </section>
       </fieldset>
       <div class="actions-form-modal">

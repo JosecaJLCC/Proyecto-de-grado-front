@@ -6,7 +6,6 @@
         <svg v-if="cambioIcon" v-on:click="mostrarSidebar" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
           <svg v-else v-on:click="mostrarSidebar" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-menu-2 icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 6l16 0" /><path d="M4 12l16 0" /><path d="M4 18l16 0" /></svg>
       </transition>
-
       <h3 class="title-sidebar">
         SOFTWARE DE CONTROL DE PREVENCION DEL USO INDEBIDO DEL SISTEMA UNICO DE SALUD
       </h3>
@@ -42,7 +41,6 @@
           class="logo-sidebar"
           :style="{ width: tamanioLogo, height: tamanioLogo }"
         />
-        <!-- <h3 v-if="mostrarTitulo">"{{ establecimiento }}"</h3> -->
       </section>
 
       <nav class="nav-sidebar">
@@ -90,13 +88,13 @@
               <span>Pacientes</span>
             </RouterLink>
           </li>
-          <li>
+          <li v-if="esAdmin">
             <RouterLink class="routes-sidebar" :to="{ name: 'historial-personal' }">
               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-first-aid-kit icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 8v-2a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v2" /><path d="M4 8m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M10 14h4" /><path d="M12 12v4" /></svg>
               <span>Personal</span>
             </RouterLink>
           </li>
-          <li>
+          <li v-if="esAdmin">
             <RouterLink class="routes-sidebar" :to="{ name: 'historial-usuario' }">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +117,7 @@
               <span>Usuarios</span>
             </RouterLink>
           </li>
-          <li>
+          <li v-if="esAdmin">
             <RouterLink class="routes-sidebar" :to="{ name: 'historial-establecimiento' }">
               <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-medical-cross icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M13 3a1 1 0 0 1 1 1v4.535l3.928 -2.267a1 1 0 0 1 1.366 .366l1 1.732a1 1 0 0 1 -.366 1.366l-3.927 2.268l3.927 2.269a1 1 0 0 1 .366 1.366l-1 1.732a1 1 0 0 1 -1.366 .366l-3.928 -2.269v4.536a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-4.536l-3.928 2.268a1 1 0 0 1 -1.366 -.366l-1 -1.732a1 1 0 0 1 .366 -1.366l3.927 -2.268l-3.927 -2.268a1 1 0 0 1 -.366 -1.366l1 -1.732a1 1 0 0 1 1.366 -.366l3.928 2.267v-4.535a1 1 0 0 1 1 -1h2z" /></svg>
               <span>Establecimientos</span>
@@ -131,20 +129,25 @@
               <span>Microred</span>
             </RouterLink>
           </li> -->
-          <li>
+          <li v-if="esAdmin">
             <RouterLink class="routes-sidebar" :to="{ name: 'reportes' }">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-dots icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 3v18h18" /><path d="M9 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M19 7m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M14 15m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M10.16 10.62l2.34 2.88" /><path d="M15.088 13.328l2.837 -4.586" /></svg>
               <span>Reportes</span>
             </RouterLink>
           </li>
-          <li>
+          <li v-if="esAdmin">
             <RouterLink class="routes-sidebar" :to="{ name: 'auditoria' }">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-shield-half icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11.998 2l.032 .002l.086 .005a1 1 0 0 1 .342 .104l.105 .062l.097 .076l.016 .015l.247 .21a11 11 0 0 0 7.189 2.537l.342 -.01a1 1 0 0 1 1.005 .717a13 13 0 0 1 -9.208 16.25a1 1 0 0 1 -.502 0a13 13 0 0 1 -9.209 -16.25a1 1 0 0 1 1.005 -.717a11 11 0 0 0 7.791 -2.75l.046 -.036l.053 -.041a1 1 0 0 1 .217 -.112l.075 -.023l.036 -.01a1 1 0 0 1 .12 -.022l.086 -.005zm.002 2.296l-.176 .135a13 13 0 0 1 -7.288 2.572l-.264 .006l-.064 .31a11 11 0 0 0 1.064 7.175l.17 .314a11 11 0 0 0 6.49 5.136l.068 .019z" /></svg>
               <span>Auditoria</span>
             </RouterLink>
           </li>
+
         </ul>
       </nav>
+      <footer v-if="cambioIcon" class="footer">
+        <p>© 2025 Centro de Salud Copacabana</p>
+        <!-- <p>Todos los derechos reservados</p> -->
+      </footer>
     </div>
   </div>
 </template>
@@ -174,8 +177,8 @@ let mostrarDropDown = ref(false)
 /* Datos de usuario desde auth.js de store */
 import { useUsuarioStore } from '@/store/usuario.js'
 let authStore = useUsuarioStore()
-let usuario = computed(() => authStore.usuario)
-console.log('usuario sidebar', usuario.value)
+let usuario = computed(() => authStore.usuario);
+const esAdmin = computed(() => usuario.value?.id_rol === 1)
 /* faltan detalles */
 let nombre_usuario = computed(() => usuario.value?.nombre_usuario ?? 'x')
 let nombre_rol = computed(() => usuario.value?.nombre_rol ?? 'x')
@@ -194,7 +197,6 @@ watch(
 /*  */
 const desplegarDropDown = () => {
   mostrarDropDown.value = !mostrarDropDown.value
-  console.log("dropdown", mostrarDropDown.value)
 }
 
 /* al pulsar el boton de cerrar sesion se ejecutara esta funcion */
@@ -304,6 +306,8 @@ const mostrarSidebar = () => {
   top: 15dvh;
   padding-top: 10px;
   z-index: 100;
+  justify-content: center;
+  /* align-items: center; */
 }
 
 .section-logo-sidebar {
@@ -325,8 +329,6 @@ const mostrarSidebar = () => {
   transition: all 0.3s ease;
 }
 
-
-
 .routes-sidebar {
   display: flex;
   align-items: center;
@@ -343,6 +345,15 @@ const mostrarSidebar = () => {
   background-color: rgb(224, 63, 62);
 }
 
+.footer {
+  margin-top: auto;     /* ✅ ESTO LO PEGA ABAJO */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+}
+
 @media (max-width: 620px) {
   /* El titulo del header desaparecera */
   .title-sidebar {
@@ -357,6 +368,10 @@ const mostrarSidebar = () => {
   .header-sidebar{
     justify-content: space-between;
   }
+  .footer{
+    display:none;
+  }
+
 }
 
 .fade-enter-active, .fade-leave-active {
@@ -368,4 +383,6 @@ const mostrarSidebar = () => {
 .fade-enter-to, .fade-leave-from {
   opacity: 1;
 }
+
+
 </style>

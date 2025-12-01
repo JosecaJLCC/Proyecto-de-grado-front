@@ -9,6 +9,7 @@
             <label for="">CI</label>
             <input
               type="text"
+              placeholder="Ingrese el CI"
               v-model="person.ci"
               pattern="^[A-Za-z0-9 ]+$"
               title="Solo se permiten letras y números">
@@ -60,7 +61,6 @@
             <label for="">MICRORED DE SALUD</label>
             <select name="" id="" v-model="patient.id_microred">
               <option :value="item.codigo" v-for="item in resultMicrored" :key="item.codigo">{{ item.nombre_microred }}</option>
-
             </select>
             <label for="">DEPARTAMENTO</label>
               <select name="" id="" v-model="residence.departamento">
@@ -104,7 +104,7 @@
               type="text"
               list="carpeta"
               v-model="patient.nombre_carpeta"
-              pattern="^[A-Za-z0-9-]+$"
+              pattern="^[A-Za-z0-9- ]+$"
               title="Solo se permiten letras, números y guión (-)">
             <datalist id="carpeta">
               <option :value="item.nombre_carpeta" v-for="item in resultFolder" :key="item.nombre_carpeta">{{ item.nombre_carpeta }}</option>

@@ -7,7 +7,11 @@
         </legend>
           <section class="register-form-modal">
             <label for="">NOMBRE DEL ESTABLECIMIENTO</label>
-            <input type="text" v-model="establishment.nombre_establecimiento">
+            <input
+              type="text"
+              v-model="establishment.nombre_establecimiento"
+              pattern="^[A-Za-z0-9 ]+$"
+              title="Solo se permiten letras y números">
             <label for="">TIPO DE ESTABLECIMIENTO</label>
             <select v-model="establishment.tipo_establecimiento" name="" id="">
               <option value="CENTRO DE SALUD">CENTRO DE SALUD</option>
@@ -30,11 +34,23 @@
               <option value="CHUQUISACA">CHUQUISACA</option>
             </select>
             <label for="">MUNICIPIO</label>
-            <input type="text" v-model="direction.municipio">
+            <input
+              type="text"
+              v-model="residence.municipio"
+              pattern="^[A-Za-z ]+$"
+              title="Solo se permiten letras">
             <label for="">ZONA</label>
-            <input type="text" v-model="direction.zona">
+            <input
+              type="text"
+              v-model="residence.zona"
+              pattern="^[A-Za-z0-9-]+$"
+              title="Solo se permiten letras, números y guion (-)">
             <label for="">AVENIDA/CALLE</label>
-            <input type="text" v-model="direction.av_calle">
+            <input
+              type="text"
+              v-model="residence.av_calle"
+              pattern="^[A-Za-z0-9-]+$"
+              title="Solo se permiten letras, números y guion (-)">
           </section>
 
       </fieldset>

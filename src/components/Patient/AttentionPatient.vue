@@ -31,14 +31,14 @@
 
 <script setup>
 import '@/assets/styles/modalForm.css';
-import { onMounted, reactive, ref, computed} from 'vue';
+import { onMounted, onUnmounted, reactive, ref, computed} from 'vue';
 import Swal from 'sweetalert2';
 import { staffService } from '@/services/Personal.js';
 import { attentionService } from '@/services/Atencion.js';
 import { useUsuarioStore } from '@/store/usuario.js';
+
 let authStore = useUsuarioStore()
 let usuario = computed(() => authStore.usuario)
-
 
 let attention=reactive({
   id_area:0,
@@ -60,6 +60,8 @@ let props = defineProps({
   }
 });
 attention.id_paciente=props.id;
+
+
 
 const sendValueModal = () => {
   emits('modifyModalAttention', false)

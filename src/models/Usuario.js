@@ -10,6 +10,7 @@ export class Usuario {
       const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/user/profile`, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      console.log("mi data de token: ",data)
       return data.data; // Retorna directamente los datos.
     } catch (error) {
       console.log("Error al obtener el perfil", error);

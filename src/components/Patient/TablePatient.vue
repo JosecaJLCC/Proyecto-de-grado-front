@@ -16,6 +16,8 @@
             placeholder="Ingrese su CI"
             class="input-text-search"
             v-model="searchCi"
+            pattern="^[A-Za-z0-9 ]+$"
+            title="Solo se permiten letras y números"
           />
           <svg
             xmlns="http://www.w3.org/2000/svg"

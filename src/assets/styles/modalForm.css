@@ -12,6 +12,7 @@ max-height: 85dvh;
 background-color: var(--color-white);
 border-radius: 20px;
 padding: 10px;
+
 }
 
 .fieldset-form-modal{
@@ -19,7 +20,7 @@ display: flex;
 flex-direction: column;
 background-color: var(--color-white);
 border: none;
-row-gap: 20px;
+row-gap: 10px;
     /* 👇 Control de altura y scroll interno */
 max-height: 65dvh; /* ocupa como máximo el 90% de la pantalla */
 overflow-y: auto; /* scroll vertical si se desborda */
@@ -31,6 +32,7 @@ justify-content: center;
 align-items: center;
 width: 100%;
 padding-bottom: 10px;
+/* background-color: red; */
 }
 
 .title-form-modal {
@@ -103,6 +105,11 @@ background-color: var(--color-primary);
 .btn-accept:hover{
 background-color: var(--color-primary-transparent);
 transition: .3s;
+}
+
+.btn-upload-pdf{
+  background-color: var(--color-green);
+  transition: .3s;
 }
 
 /* svg{

@@ -32,6 +32,11 @@ const createMedicalDescription = async(id, attention)=>{
   return data;
 }
 
+const showPrescription = async(id)=>{
+  const {data} = await axios.get(API_URL+`/show-prescription/${id}`);
+  return data.data;
+}
+
 const updateMedicalDescription = async(id, attention)=>{
   const {data} = await axios.patch(API_URL+`/update-medical-description/${id}`, attention);
   return data;
@@ -44,7 +49,8 @@ export const attentionService = {
   showMedication,
   updateAttention,
   updateMedicalDescription,
-  createMedicalDescription
+  createMedicalDescription,
+  showPrescription
 /*   diagnosticAttention */
 }
 

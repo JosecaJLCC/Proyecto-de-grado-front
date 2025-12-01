@@ -54,6 +54,11 @@ const searchUser = async(ci) => {
   return data;
 }
 
+const showUserAuthors= async(id) => {
+  const {data} = await axios.get(API_URL+`/author/${id}`, )
+  return data.data;
+}
+
 export const userService = {
   createUser,
   showUser,
@@ -64,5 +69,6 @@ export const userService = {
   login,
   chooseEstablishment,
   setSession,
-  searchUser
+  searchUser,
+  showUserAuthors
 }

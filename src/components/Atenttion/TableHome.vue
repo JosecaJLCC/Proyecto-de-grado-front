@@ -5,9 +5,11 @@
         <h2 class="btn-add-item">FECHA: {{ date }}</h2>
         <section class="input-table">
           <input type="text"
-          placeholder="Ingrese el CI"
-          class="input-text-search"
-          v-model="searchCi">
+            placeholder="Ingrese el CI"
+            class="input-text-search"
+            v-model="searchCi"
+            pattern="^[A-Za-z0-9 ]+$"
+            title="Solo se permiten letras y números">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -63,7 +65,7 @@
                 <td
                   :style="{backgroundColor:'var(--color-primary)'}"
                   data-title="ESTADO"
-                  v-else-if="item.estado_atencion=='FINALIZADO'">
+                  v-else-if="item.estado_atencion=='FINALIZADA'">
                   {{ item.estado_atencion }}
                 </td>
                 <td

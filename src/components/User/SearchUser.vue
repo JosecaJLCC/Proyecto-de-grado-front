@@ -8,7 +8,12 @@
 
           <section class="register-form-modal">
             <label for="">DOCUMENTO DE IDENTIDAD</label>
-            <input type="text" v-model="ci" placeholder="Ingrese solo el número">
+            <input
+              type="text"
+              v-model="ci"
+              placeholder="Ingrese solo el número"
+              pattern="^[A-Za-z0-9 ]+$"
+              title="Solo se permiten letras y números">
             <button class="form-btn" v-on:click="verifyUser">BUSCAR</button>
           </section>
       </fieldset>

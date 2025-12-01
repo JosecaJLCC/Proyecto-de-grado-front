@@ -7,15 +7,35 @@
         </legend>
           <section class="register-form-modal">
             <label for="">CI</label>
-            <input type="text" v-model="person.ci">
+            <input
+              type="text"
+              v-model="person.ci"
+              pattern="^[A-Za-z0-9 ]+$"
+              title="Solo se permiten letras y números">
             <label for="">NOMBRES</label>
-            <input type="text" v-model="person.nombre">
+            <input
+              type="text"
+              v-model="person.nombre"
+              pattern="^[A-Za-z ]+$"
+              title="Solo se permiten letras">
             <label for="">AP. PATERNO</label>
-            <input type="text" v-model="person.paterno">
+            <input
+              type="text"
+              v-model="person.paterno"
+              pattern="^[A-Za-z ]+$"
+              title="Solo se permiten letras">
             <label for="">AP. MATERNO</label>
-            <input type="text" v-model="person.materno">
+            <input
+              type="text"
+              v-model="person.materno"
+              pattern="^[A-Za-z ]+$"
+              title="Solo se permiten letras">
             <label for="">TELEFONO</label>
-            <input type="text" v-model="person.nro_telf">
+            <input
+              type="text"
+              v-model="person.nro_telf"
+              pattern="^[0-9]+$"
+              title="Solo se permiten números">
             <label for="">ESTADO CIVIL</label>
             <select name="" id="" v-model="person.estado_civil">
               <option value="SOLTERO">SOLTERO/A</option>
@@ -51,14 +71,29 @@
                 <option value="CHUQUISACA">CHUQUISACA</option>
               </select>
             <label for="">MUNICIPIO</label>
-            <input type="text" v-model="residence.municipio">
+            <input
+              type="text"
+              v-model="residence.municipio"
+              pattern="^[A-Za-z ]+$"
+              title="Solo se permiten letras">
             <label for="">ZONA</label>
-            <input type="text" v-model="residence.zona">
+            <input
+              type="text"
+              v-model="residence.zona"
+              pattern="^[A-Za-z0-9-]+$"
+              title="Solo se permiten letras, números y guion (-)">
             <label for="">AVENIDA/CALLE</label>
-            <input type="text" v-model="residence.av_calle">
+            <input
+              type="text"
+              v-model="residence.av_calle"
+              pattern="^[A-Za-z0-9-]+$"
+              title="Solo se permiten letras, números y guion (-)">
             <label for="">NRO PUERTA</label>
-            <input type="text" v-model="residence.nro_puerta">
-
+            <input
+              type="text"
+              v-model="residence.nro_puerta"
+              pattern="^[0-9]+$"
+              title="Solo se permiten números">
             <label for="">MICRORED DE SALUD</label>
             <select name="" id="" v-model="staff.id_microred">
               <option :value="item.codigo" v-for="item in resultMicrored" :key="item.codigo">{{ item.nombre_microred }}</option>
@@ -68,15 +103,32 @@
               <option :value="item.id" v-for="item in resultProfession" :key="item.id">{{ item.nombre_profesion }}</option>
               <option value="OTRO">OTRO</option>
             </select>
-            <input v-if="profesionValue" placeholder="Ingrese la profesion" type="text" v-model="staff.nombre_profesion">
+            <input
+              v-if="profesionValue"
+              placeholder="Ingrese la profesion"
+              type="text"
+              v-model="staff.nombre_profesion"
+              pattern="^[A-Za-z ]+$"
+              title="Solo se permiten letras">
             <label for="">AREA</label>
             <select name="" id="" v-model="staff.id_area" @change="chooseWorkArea">
               <option :value="item.id" v-for="item in resultWorkArea" :key="item.id">{{ item.nombre_area }}</option>
               <option value="OTRO">OTRO</option>
             </select>
-            <input v-if="workAreaValue" placeholder="Ingrese el area de trabajo" type="text" v-model="staff.nombre_area">
+            <input
+              v-if="workAreaValue"
+              placeholder="Ingrese el area de trabajo"
+              type="text"
+              v-model="staff.nombre_area"
+              pattern="^[A-Za-z ]+$"
+              title="Solo se permiten letras">
             <label for="">CARGO</label>
-            <input placeholder="Ingrese el cargo" type="text" list="cargo" v-model="staff.cargo">
+            <input
+              placeholder="Ingrese el cargo"
+              type="text" list="cargo"
+              v-model="staff.cargo"
+              pattern="^[A-Za-z ]+$"
+              title="Solo se permiten letras">
             <datalist id="cargo">
               <option :value="item.cargo" v-for="item in resultPosition" :key="item.cargo">{{ item.cargo }}</option>
             </datalist>
