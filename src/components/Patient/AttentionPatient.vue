@@ -61,15 +61,42 @@ let props = defineProps({
 });
 attention.id_paciente=props.id;
 
+/* lista de atenciones en tiempo real */
+let atenciones=ref([])
 
+/* funcion que consulta cada 5s */
+let intervalId=null;
+
+const cargarAtenciones = async () => {
+  try {
+    const res = await attentionService.showAttention();
+    if(res.ok){
+      atenciones.value = res.data;
+      console.log("Actualizado en tiempo real:", atenciones.value);
+    }
+  } catch (error) {
+    console.error("Error en polling:", error);
+  }
+};
+
+
+
+onMounted(async()=>{
+  resultArea.value=await staffService.showWorkArea();
+  /* primera carga */
+  cargarAtenciones();
+  /* polling cada 5 segundos */
+  intervalId=setInterval(cargarAtenciones, 5000)
+})
+
+// limpiar el intervalo al salir del componente
+onUnmounted(() => {
+  clearInterval(intervalId);
+});
 
 const sendValueModal = () => {
   emits('modifyModalAttention', false)
 }
-
-onMounted(async()=>{
-  resultArea.value=await staffService.showWorkArea();
-})
 
 const createAttention=async()=>{
   if(!attention.id_area || !attention.turno){
@@ -100,6 +127,8 @@ const createAttention=async()=>{
           text: "Tus datos fueron registrados",
           icon: "success"
         });
+        /* refrescar de inmediato despues de registrar */
+        await cargarAtenciones();
         sendValueModal();
       }else{
         console.log(result.value)

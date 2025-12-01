@@ -329,6 +329,7 @@ let resultPrescription = ref([])
 let userAuthors=ref([])
 let result = ref([])
 
+
 onMounted(async () => {
   try {
     if(props.attention.estado_atencion=="EN ESPERA"){
@@ -407,11 +408,16 @@ const createMedicalDescription = async () => {
           id_usuario_rol_farmacia: usuario.value.id
         }
       )
+      if (result.value.ok) {
+        Swal.fire({
+          title: '¡Registro Exitoso!',
+          text: 'Tus datos fueron actualizados',
+          icon: 'success',
+        })
+      }
       sendValueModal()
     }
-    else if(props.attention.estado_atencion=="FINALIZADA"){
-      console.log("EL PACIENTE FINALIZÓ LA ATENCIÓN");
-    }
+
   } catch (error) {
     console.log('Error en crear la receta y diagnostico', error)
   }

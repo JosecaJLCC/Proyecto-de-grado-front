@@ -50,12 +50,17 @@ const setSession = async(user) => {
 }
 
 const searchUser = async(ci) => {
-  const {data} = await axios.get(API_URL+`/search/${ci}`, )
+  const {data} = await axios.get(API_URL+`/search/${ci}` )
   return data;
 }
 
 const showUserAuthors= async(id) => {
-  const {data} = await axios.get(API_URL+`/author/${id}`, )
+  const {data} = await axios.get(API_URL+`/author/${id}`)
+  return data.data;
+}
+
+const showTurn= async(id) => {
+  const {data} = await axios.get(API_URL+`/show-turn/`)
   return data.data;
 }
 

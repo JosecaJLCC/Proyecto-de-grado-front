@@ -114,10 +114,9 @@
 <script setup>
 import '@/assets/styles/table.css'
 import '@/assets/styles/tableComponent.css'
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { attentionService } from '@/services/Atencion.js';
 import DiagnosticAttention from './DiagnosticAttention.vue';
-
 
 let date = new Date();
 date = date.toISOString().split("T")[0];
@@ -129,6 +128,7 @@ let searchCi = ref("");
 let modalVisibleAttention=ref(false);
 let attentionProp=ref("");
 let result = ref({})
+let resultTurn=ref({})
 
 const filterData = computed(() => {
   const ci = searchCi.value.trim();
@@ -152,10 +152,30 @@ const showAttention = async () => {
   }
 }
 
-onMounted(async () => {
-  showAttention();
-});
+const showTurn = async () => {
+  try {
+    resultTurn.value = await attentionService.showTurn();
+    console.log("mi result de turno: ",resultTurn)
+  } catch (error) {
+    console.log('Error al verificar turno:', error)
+  }
+}
 
+// ✅ POLLING (cada 5 segundos)
+let intervalId = null;
+
+onMounted(async () => {
+  await showAttention();
+  await showTurn();
+  intervalId = setInterval(() => {
+    showTurn();
+    showAttention();
+  }, 5000);
+});
+// LIMPIAR INTERVALO AL SALIR DEL COMPONENTE
+onUnmounted(() => {
+  if (intervalId) clearInterval(intervalId);
+});
 
 /* boton de ver atencion */
 const viewAttention = (item) =>{
