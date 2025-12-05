@@ -271,9 +271,9 @@ const createStaff = async() =>{
     })
 
     if (resultSwal.isConfirmed) {
-      console.log("mi staff", staff);
+      
       result.value = await staffService.createStaff(staffClass);
-      console.log("ok: ",result.value)
+
       if(result.value.ok){
         Swal.fire({
           title: "¡Registro Exitoso!",
@@ -282,7 +282,7 @@ const createStaff = async() =>{
         });
         sendValueModal();
       }else{
-        console.log(result.value)
+
         Swal.fire({
           title: "¡Registro no realizado!",
           text: result.value.message,

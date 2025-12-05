@@ -36,19 +36,19 @@
             <label for="">MUNICIPIO</label>
             <input
               type="text"
-              v-model="residence.municipio"
+              v-model="direction.municipio"
               pattern="^[A-Za-z ]+$"
               title="Solo se permiten letras">
             <label for="">ZONA</label>
             <input
               type="text"
-              v-model="residence.zona"
+              v-model="direction.zona"
               pattern="^[A-Za-z0-9-]+$"
               title="Solo se permiten letras, números y guion (-)">
             <label for="">AVENIDA/CALLE</label>
             <input
               type="text"
-              v-model="residence.av_calle"
+              v-model="direction.av_calle"
               pattern="^[A-Za-z0-9-]+$"
               title="Solo se permiten letras, números y guion (-)">
           </section>

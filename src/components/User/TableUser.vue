@@ -180,7 +180,7 @@ watch(statusSelect, (newValue) => {
 const showUser = async (status) => {
   try {
     result.value = await userService.showUser(status)
-    console.log('mi result show user', result.value)
+    
     // Asignar aunque esté vacío
     data.value = Array.isArray(result.value) ? result.value : [result.value]
     originalData.value = [...data.value]
@@ -195,7 +195,7 @@ onMounted(async () => {
 /* boton de ver usuario*/
 const viewUser = (item) =>{
   userProp.value=item;
-  console.log("staff prop: ", userProp.value)
+
   modalVisibleView.value=true;
 }
 /* ocultar vista usuario*/
@@ -236,7 +236,7 @@ const deleteUser = async(id) => {
   if (resultSwal.isConfirmed) {
     try {
       resultDelete.value = await userService.deleteUser(id);
-      console.log("eliminado",resultDelete.value)
+
       if(resultDelete.value.ok){
         showUser(statusSelect.value);
         Swal.fire({

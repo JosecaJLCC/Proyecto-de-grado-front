@@ -42,6 +42,22 @@ const updateMedicalDescription = async(id, attention)=>{
   return data;
 }
 
+const showTurn = async()=>{
+  const {data} = await axios.get(API_URL+`/show-turn`);
+  return data;
+}
+
+const showStatus = async()=>{
+  const {data} = await axios.get(API_URL+`/show-status`);
+  return data.data;
+}
+
+
+const showReport = async(fechas)=>{
+  const {data} = await axios.patch(API_URL+`/show-report`, fechas);
+  return data;
+}
+
 export const attentionService = {
   createAttention,
   showAttention,
@@ -50,7 +66,10 @@ export const attentionService = {
   updateAttention,
   updateMedicalDescription,
   createMedicalDescription,
-  showPrescription
+  showPrescription,
+  showTurn,
+  showStatus,
+  showReport
 /*   diagnosticAttention */
 }
 

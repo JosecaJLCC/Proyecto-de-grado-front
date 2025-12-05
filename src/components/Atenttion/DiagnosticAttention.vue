@@ -21,7 +21,8 @@
             </div>
           </div>
           <hr>
-          <input v-if="attention.estado_atencion=='EN ESPERA'"
+          <input v-if="(props.attention.estado_atencion=='EN ESPERA' ||
+          props.attention.estado_atencion=='INCOMPLETA') && esAdmin"
             placeholder=" Diagnóstico"
             type="text"
             list="diagnostico"
@@ -38,14 +39,15 @@
           </datalist>
 
           <textarea
-            v-if="attention.estado_atencion=='EN ESPERA'"
+            v-if="(props.attention.estado_atencion=='EN ESPERA' ||
+            props.attention.estado_atencion=='INCOMPLETA') && esAdmin"
             placeholder=" Descripción del diagnóstico"
             v-model="diagnostico.descripcion"></textarea>
 
           <span v-else>DESCRIPCIÓN: <strong>{{ descripcion }}</strong></span>
           <hr>
           <!-- <div class="table-wrapper"> -->
-            <table v-if="props.attention.estado_atencion=='EN ESPERA' || props.attention.estado_atencion=='INCOMPLETA'" class="content-table">
+            <table v-if="(props.attention.estado_atencion=='EN ESPERA' || props.attention.estado_atencion=='INCOMPLETA') && esAdmin" class="content-table">
               <thead>
                 <tr>
                   <th>MEDICAMENTO</th>
@@ -63,6 +65,7 @@
                       type="text"
                       list="medicamento"
                       v-model="receta[nro].nombre_medicamento"
+                      @blur="validarDuplicado(nro)"
                     />
                     <datalist id="medicamento">
                       <option :value="item.nombre_medicamento" v-for="item in resultMedication" :key="item.id">
@@ -208,7 +211,8 @@
           CANCELAR
         </button>
         <button
-          v-show="props.attention.estado_atencion=='EN ESPERA'"
+          v-show="(props.attention.estado_atencion=='EN ESPERA' ||
+          props.attention.estado_atencion=='INCOMPLETA') && esAdmin"
           class="form-btn btn-attention"
           type="button"
           v-on:click="addMedication">
@@ -239,8 +243,9 @@
           MEDICAMENTO
         </button>
         <button
-          v-show="props.attention.estado_atencion=='EN ESPERA' ||
-          props.attention.estado_atencion=='EN ATENCIÓN'"
+          v-show="(props.attention.estado_atencion=='EN ESPERA' && esAdmin)||
+          props.attention.estado_atencion=='EN ATENCIÓN' ||
+          (props.attention.estado_atencion=='INCOMPLETA' && esAdmin)"
           class="form-btn btn-accept"
           type="submit">
           <svg
@@ -303,6 +308,9 @@ import { useUsuarioStore } from '@/store/usuario.js'
 import { userService } from '@/services/Usuario'
 let authStore = useUsuarioStore()
 let usuario = computed(() => authStore.usuario)
+
+let esAdmin = computed(() => usuario.value?.id_rol === 1 || usuario.value?.id_rol==2)
+
 let nombre_diagnostico=ref("")
 let descripcion=ref("")
 let usuario_farmacia=ref("");
@@ -332,7 +340,9 @@ let result = ref([])
 
 onMounted(async () => {
   try {
-    if(props.attention.estado_atencion=="EN ESPERA"){
+    if(props.attention.estado_atencion=="EN ESPERA" ||
+      props.attention.estado_atencion=="INCOMPLETA"
+    ){
       resultDiagnosis.value = await attentionService.showDiagnosis();
       resultMedication.value = await attentionService.showMedication();
     }
@@ -345,22 +355,44 @@ onMounted(async () => {
       descripcion.value=resultPrescription.value[0].descripcion;
       usuario_diagnostico=userAuthors.value[0].usuario_diagnostico;
       usuario_farmacia=userAuthors.value[0].usuario_farmacia;
-      console.log("MOUNTED ATTENDED: ", userAuthors.value);
+
     }
   } catch (error) {
     console.log('error en el diagnostico: ', error)
   }
 })
 
+/*  */
+const validarDuplicado = (index) => {
+  const actual = receta[index].nombre_medicamento?.trim().toLowerCase()
+
+  const existe = receta.some((item, i) =>
+    i !== index &&
+    item.nombre_medicamento?.trim().toLowerCase() === actual
+  )
+
+  if (existe && actual !== "") {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Medicamento duplicado',
+      text: 'Existen medicamentos duplicados',
+    })
+
+    // Limpia el duplicado
+    receta[index].nombre_medicamento = ''
+  }
+}
+
+/*  */
 
 let addMedication = () => {
-  receta.push({
+  const nuevo = {
     nombre_medicamento: '',
     indicacion: '',
     recetada: 0,
     dispensada: 0,
-  })
-  return
+  }
+  receta.push(nuevo)
 }
 
 let deleteMedication = () => {
@@ -372,10 +404,10 @@ const sendValueModal = () => {
   emits('modifyModalAttention', false)
 }
 const createMedicalDescription = async () => {
-
   try {
-    if(props.attention.estado_atencion=="EN ESPERA"){
-      console.log('mi receta y diagnostico:', receta, diagnostico)
+    if(props.attention.estado_atencion=="EN ESPERA" ||
+      props.attention.estado_atencion=="INCOMPLETA"
+    ){
       if (!diagnostico.nombre_diagnostico) {
         Swal.fire({
           icon: 'error',
@@ -384,13 +416,16 @@ const createMedicalDescription = async () => {
         })
         return
       }
+      if(receta.length<=0){
+        estado_atencion="FINALIZADA"
+      }
       result.value = await attentionService.createMedicalDescription(props.attention.id, {
         diagnostico,
         receta,
         estado_atencion,
         id_usuario_rol_diagnostico:usuario.value.id
       })
-      console.log('ok: ', result.value)
+
       if (result.value.ok) {
         Swal.fire({
           title: '¡Registro Exitoso!',
@@ -477,9 +512,10 @@ const descargarPDF = () => {
 }
 
 .author{
+  padding-top:15px;
   display: flex;
   flex-direction: column;
-  font-size: 10px;
+  font-size: 15px;
 }
 
 .title-form-modal{

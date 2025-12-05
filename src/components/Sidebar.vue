@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <header class="header-sidebar">
       <!-- <transition name="fade"> -->
       <transition name="fade" mode="out-in">
@@ -7,7 +7,7 @@
           <svg v-else v-on:click="mostrarSidebar" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-menu-2 icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 6l16 0" /><path d="M4 12l16 0" /><path d="M4 18l16 0" /></svg>
       </transition>
       <h3 class="title-sidebar">
-        SOFTWARE DE CONTROL DE PREVENCION DEL USO INDEBIDO DEL SISTEMA UNICO DE SALUD
+        SOFTWARE DE CONTROL DE PREVENCIÓN DEL USO INDEBIDO DEL SISTEMA ÚNICO DE SALUD
       </h3>
       <section class="user-sidebar">
         <div class="profile-section">
@@ -20,7 +20,7 @@
             <p>{{ nombre_usuario }}</p>
             <p>{{ nombre_rol }}</p>
             <p>{{ nombre_establecimiento }}</p>
-            <a href="">
+            <a href="" v-on:click.prevent="updateUser">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-settings"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
               <span>Actualizar perfil</span>
             </a>
@@ -135,12 +135,12 @@
               <span>Reportes</span>
             </RouterLink>
           </li>
-          <li v-if="esAdmin">
+          <!-- <li v-if="esAdmin">
             <RouterLink class="routes-sidebar" :to="{ name: 'auditoria' }">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-shield-half icon-sidebar"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11.998 2l.032 .002l.086 .005a1 1 0 0 1 .342 .104l.105 .062l.097 .076l.016 .015l.247 .21a11 11 0 0 0 7.189 2.537l.342 -.01a1 1 0 0 1 1.005 .717a13 13 0 0 1 -9.208 16.25a1 1 0 0 1 -.502 0a13 13 0 0 1 -9.209 -16.25a1 1 0 0 1 1.005 -.717a11 11 0 0 0 7.791 -2.75l.046 -.036l.053 -.041a1 1 0 0 1 .217 -.112l.075 -.023l.036 -.01a1 1 0 0 1 .12 -.022l.086 -.005zm.002 2.296l-.176 .135a13 13 0 0 1 -7.288 2.572l-.264 .006l-.064 .31a11 11 0 0 0 1.064 7.175l.17 .314a11 11 0 0 0 6.49 5.136l.068 .019z" /></svg>
               <span>Auditoria</span>
             </RouterLink>
-          </li>
+          </li> -->
 
         </ul>
       </nav>
@@ -149,17 +149,25 @@
         <!-- <p>Todos los derechos reservados</p> -->
       </footer>
     </div>
+
+    <EditUser
+      class="content-edit"
+      v-if="modalVisibleEdit"
+      @modifyModalEdit="hideModalEdit"
+      :id="idProp"
+    />
   </div>
 </template>
 
 <script setup>
+import '../assets/styles/tableComponent.css';
+import EditUser from './User/EditUser.vue'
 import { ref, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
 /* Para cambio de rutas cuando se cierra cesion */
 let router = useRouter()
 /* uso de variables globales con pinia */
 import { useSidebarStore } from '@/store/sidebar.js'
-/* fsdgfhghdsdfgfghkjhgsfdffghjkj */
 let sidebarStore = useSidebarStore()
 /* el ancho del div del sidebar */
 let tamanioSidebar = computed(() => sidebarStore.tamanioSidebar)
@@ -185,6 +193,19 @@ let nombre_rol = computed(() => usuario.value?.nombre_rol ?? 'x')
 let nombre_establecimiento = computed(() => usuario.value?.nombre_establecimiento ?? 'x')
 
 let perfil = computed(() => usuario.value?.perfil ?? 'usuario.png')
+
+/* editar usuario */
+let modalVisibleEdit=ref(false)
+let idProp=ref(0)
+const updateUser = () => {
+  idProp.value=usuario.value.id;
+  modalVisibleEdit.value = true
+  desplegarDropDown();
+}
+/* ocultar modal de editar usuario */
+const hideModalEdit=(valor)=>{
+  modalVisibleEdit.value=valor;
+}
 
 watch(
   tamanioSidebar,
@@ -212,6 +233,22 @@ const mostrarSidebar = () => {
 </script>
 
 <style scoped>
+.content-edit{
+  position: absolute; /* o fixed, si prefieres */
+  top: 0;
+  left: 0;
+  width: 100%;
+  margin-top:15dvh;
+  min-height: 85dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-white);
+  background-color: var(--color-black-transparent); /* blanco semitransparente */
+  backdrop-filter: blur(5px); /* 🔥 Aquí se hace el desenfoque */
+  -webkit-backdrop-filter: blur(5px); /* compatibilidad con Safari */
+  z-index: 10;
+}
 /* Header */
 .header-sidebar {
   display: flex;
@@ -274,7 +311,7 @@ const mostrarSidebar = () => {
   z-index: 1;
   row-gap: 10px;
   color: var(--color-black);
-  border: 2px solid green;
+
   /* padding: 10px; */
 }
 
@@ -287,7 +324,6 @@ const mostrarSidebar = () => {
   column-gap: 10px;
   padding: 10px;
   width: 100%;
-
 }
 
 .dropdown-header-content a:hover {

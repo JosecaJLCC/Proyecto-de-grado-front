@@ -59,7 +59,7 @@ let props = defineProps({
   },
 })
 roles.value = props.data
-console.log('mis props: ', props.data)
+
 
 onMounted(async () => {
   try {
@@ -71,12 +71,7 @@ onMounted(async () => {
 
 const setSession = async () => {
   try {
-    console.log(
-      'mi result setsession:',
-      usuario_rol.value,
-      establecimiento.value.id,
-      establecimiento.value.nombre_establecimiento,
-    )
+
     if(!establecimiento.value || !usuario_rol.value){
       Swal.fire({
         icon: "warning",
@@ -90,7 +85,7 @@ const setSession = async () => {
       id_establecimiento: establecimiento.value.id,
       nombre_establecimiento: establecimiento.value.nombre_establecimiento,
     })
-    console.log('mi result setsession eeh2', result.value)
+    
     if (result.value.ok) {
       let resultSwal = await Swal.fire({
         title: '¿Iniciar Sesión?',

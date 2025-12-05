@@ -63,7 +63,6 @@ const iniciarSesion = async () => {
     try {
         result.value = await userService.login({nombre_usuario: nombre_usuario.value, clave: clave.value })
           if (result.value.ok) {
-            console.log("ok: ", result.value.data)
             result.value=result.value.data;
             modalVisibleChoose.value = !modalVisibleChoose.value;
           }
@@ -172,6 +171,7 @@ const ocultarModalChoose = (valor) => {
 #button-login:hover {
   background-color: var(--color-secondary);
   transition: 0.5s;
+  cursor:pointer;
 }
 
 .input-login{

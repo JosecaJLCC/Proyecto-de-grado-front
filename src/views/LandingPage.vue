@@ -10,24 +10,44 @@
     <!-- MAIN -->
     <main>
 
-      <!-- CARRUSEL -->
-      <section class="carousel">
-        <img :src="imagenes[indice]" class="carousel-img" />
-      </section>
+      <!-- SLIDER AUTOMÁTICO -->
+      <!-- SLIDER MEJORADO -->
+<section class="carousel">
+  <transition name="fade-zoom" mode="out-in">
+    <img
+      :key="currentImage"
+      :src="images[currentImage]"
+      class="carousel-img"
+    />
+  </transition>
 
-      <!-- MISIÓN Y VISIÓN -->
+  <!-- OSCURECER SUAVEMENTE LA IMAGEN -->
+  <div class="overlay"></div>
+
+  <!-- INDICADORES -->
+  <div class="indicators">
+    <span
+      v-for="(img, index) in images"
+      :key="index"
+      :class="{ active: index === currentImage }"
+      @click="currentImage = index"
+    ></span>
+  </div>
+</section>
+
+      <!-- MISIÓN Y VISIÓN LADO A LADO -->
       <section class="about">
-        <div class="about-text">
-          <h2>Nuestra Misión</h2>
+        <div class="about-card">
+          <h2>Misión</h2>
           <p>
-            El Centro de Salud Copacabana tiene como misión brindar atención integral
-            de primer nivel con calidad, calidez y compromiso.
+            Brindar atención integral de primer nivel, enfocada en la promoción, prevención, diagnóstico y tratamiento oportuno, satisfaciendo las necesidades de los usuarios mediante una atención humanizada, eficaz, accesible y de calidad, con profesionales capacitados y motivados
           </p>
+        </div>
 
-          <h2>Nuestra Visión</h2>
+        <div class="about-card">
+          <h2>Visión</h2>
           <p>
-            Consolidarse como un referente en la atención primaria de salud,
-            garantizando servicios eficientes y humanizados.
+            Mejorar la calidad de vida de la comunidad, garantizando servicios de salud con calidez y consolidándose como un referente en la atención primaria de salud, siendo un modelo de excelencia y compromiso con los usuarios.
           </p>
         </div>
       </section>
@@ -44,94 +64,200 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
-const imagenes = [
-  new URL('../assets/slide1.jpg', import.meta.url),
-  new URL('../assets/slide2.jpg', import.meta.url),
-  new URL('../assets/slide3.jpg', import.meta.url),
+const images = [
+  new URL('../assets/copacabana1.jpeg', import.meta.url).href,
+  new URL('../assets/copacabana2.jpeg', import.meta.url).href,
+  new URL('../assets/copacabana3.jpeg', import.meta.url).href
 ]
 
-const indice = ref(0)
+const currentImage = ref(0)
+let interval = null
 
 onMounted(() => {
-  setInterval(() => {
-    indice.value = (indice.value + 1) % imagenes.length
-  }, 3000)
+  interval = setInterval(() => {
+    currentImage.value = (currentImage.value + 1) % images.length
+  }, 3000) // ✅ cada 3 segundos
+})
+
+onUnmounted(() => {
+  if (interval) clearInterval(interval)
 })
 </script>
 
 <style scoped>
+/* GENERAL */
 .landing {
   min-height: 100vh;
-  font-family: Arial, Helvetica, sans-serif;
-  color: #333;
-
-  background-image: url("../assets/CapacabanaLogo.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 350px;
-  background-attachment: fixed;
-
-  background-color: #f4f6f9; /* respaldo si no carga la imagen */
+  display: flex;
+  flex-direction: column;
 }
 
 /* HEADER */
 .header {
-  height: 70px;
-  background: #1e40af;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 30px;
+  padding: 15px 40px;
+  background-color: rgb(0, 128, 128);
   color: white;
+  position: fixed;
+  z-index:1000;
+  width: 100dvw;
 }
 
 .logo {
-  width: 50px;
+  height: 60px;
+  border-radius: 50%;
 }
 
 .btn-login {
-  background: #22c55e;
+  background-color: var(--color-secondary);
+  color: var(--color-white);
   padding: 10px 20px;
   border-radius: 8px;
-  color: white;
   text-decoration: none;
   font-weight: bold;
+  cursor:pointer;
+  transition: 0.5s;
 }
 
-/* CARRUSEL */
+.btn-login:hover{
+ color: var(--color-primary);
+ background-color: var(--color-white);
+ transition: 0.5s;
+}
+
+/* SLIDER */
+/* SLIDER */
 .carousel {
-  height: 80vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #0f172a;
+  width: 100%;
+  height: 420px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 0 25px 25px;
 }
 
 .carousel-img {
-  width: 90%;
-  max-height: 500px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-/* ABOUT */
+/* ANIMACIÓN SUAVE */
+.fade-zoom-enter-active,
+.fade-zoom-leave-active {
+  transition: all 1s ease;
+}
+
+.fade-zoom-enter-from {
+  opacity: 0;
+  transform: scale(1.1);
+}
+
+.fade-zoom-enter-to {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.fade-zoom-leave-from {
+  opacity: 1;
+}
+
+.fade-zoom-leave-to {
+  opacity: 0;
+}
+
+/* OVERLAY OSCURO */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    rgba(0, 0, 0, 0.25),
+    rgba(0, 0, 0, 0.6)
+  );
+  z-index: 1;
+}
+
+/* INDICADORES */
+.indicators {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 2;
+}
+
+.indicators span {
+  width: 12px;
+  height: 12px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicators span.active {
+  background: white;
+  transform: scale(1.3);
+}
+
+
+
+/* MISIÓN Y VISIÓN */
 .about {
-  padding: 80px 40px;
-  text-align: center;
+  display: flex;
+  gap: 30px;
+  padding: 60px 40px;
+  background: #f5f5f5;
 }
 
-.about-text {
-  max-width: 700px;
-  margin: auto;
+.about-card {
+  flex: 1;
+  background: white;
+  padding: 35px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.about-card:hover{
+ transform: scale(1.05); /* crece 5% */
+}
+
+.about-card h2 {
+  color: rgb(0, 128, 128);
+  margin-bottom: 15px;
 }
 
 /* FOOTER */
 .footer {
-  background-color: #1e293b;
-  color: white;
+  margin-top: auto;
+  background: rgb(0, 128, 128);
   text-align: center;
-  padding: 20px;
+  padding: 15px;
+  color: white;
+}
+
+p{
+  color: var(--color-black)
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .about {
+    flex-direction: column;
+  }
+
+  .carousel {
+    height: 260px;
+  }
 }
 </style>

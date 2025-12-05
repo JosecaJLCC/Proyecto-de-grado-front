@@ -96,7 +96,7 @@ const createUser = async () => {
           'Content-Type': 'multipart/form-data',
         },
       })
-      console.log("result add user: ",result.value)
+      
       if(result.value.ok){
         Swal.fire({
           title: '¡Registro Exitoso!',
@@ -129,7 +129,7 @@ const verifyUser = async () => {
   }
   try {
     resultSearch.value = await userService.searchUser(ci.value)
-    console.log('myRes', resultSearch.value)
+
     if(!resultSearch.value.ok){
       Swal.fire({
         title: '¡Algo salió mal!',

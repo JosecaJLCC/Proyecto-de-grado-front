@@ -1,5 +1,24 @@
 <template>
   <div class="container-table" >
+
+    <section class="status-attention">
+      <div class="status en-espera">
+        <span class="">EN ESPERA: </span>
+        <span class="">{{ status.estado_en_espera }}</span>
+      </div>
+      <div class="status en-atencion">
+        <span class="">EN ATENCIÓN: </span>
+        <span class="">{{ status.estado_en_atencion }}</span>
+      </div>
+      <div class="status finalizada">
+        <span class="">FINALIZADA: </span>
+        <span class="">{{ status.estado_finalizada }}</span>
+      </div>
+      <div class="status incompleta">
+        <span class="">INCOMPLETA: </span>
+        <span class="">{{ status.estado_incompleta }}</span>
+      </div>
+    </section>
     <div class="header-table">
       <section class="search-table">
         <h2 class="btn-add-item">FECHA: {{ date }}</h2>
@@ -114,9 +133,10 @@
 <script setup>
 import '@/assets/styles/table.css'
 import '@/assets/styles/tableComponent.css'
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref, reactive } from 'vue';
 import { attentionService } from '@/services/Atencion.js';
 import DiagnosticAttention from './DiagnosticAttention.vue';
+import { userService } from '@/services/Usuario';
 
 let date = new Date();
 date = date.toISOString().split("T")[0];
@@ -129,6 +149,14 @@ let modalVisibleAttention=ref(false);
 let attentionProp=ref("");
 let result = ref({})
 let resultTurn=ref({})
+let resultStatus=ref({})
+
+let status=reactive({
+  estado_en_espera:0,
+  estado_en_atencion:0,
+  estado_incompleta:0,
+  estado_finalizada:0,
+})
 
 const filterData = computed(() => {
   const ci = searchCi.value.trim();
@@ -143,7 +171,7 @@ const filterData = computed(() => {
 const showAttention = async () => {
   try {
     result.value = await attentionService.showAttention()
-    console.log('mi result show attention', result.value)
+
     // Asignar aunque esté vacío
     data.value = Array.isArray(result.value) ? result.value : [result.value]
     originalData.value = [...data.value]
@@ -155,9 +183,22 @@ const showAttention = async () => {
 const showTurn = async () => {
   try {
     resultTurn.value = await attentionService.showTurn();
-    console.log("mi result de turno: ",resultTurn)
+    console.log("turn: ",resultTurn.value)
   } catch (error) {
     console.log('Error al verificar turno:', error)
+  }
+}
+
+const showStatus = async () => {
+  try {
+    resultStatus.value = await attentionService.showStatus();
+    console.log("status: ",resultStatus.value)
+    status.estado_en_espera=resultStatus.value[0].espera
+    status.estado_en_atencion=resultStatus.value[0].atencion
+    status.estado_finalizada=resultStatus.value[0].finalizada
+    status.estado_incompleta=resultStatus.value[0].incompleta
+  } catch (error) {
+    console.log('Error al verificar estado:', error)
   }
 }
 
@@ -167,9 +208,11 @@ let intervalId = null;
 onMounted(async () => {
   await showAttention();
   await showTurn();
+  await showStatus();
   intervalId = setInterval(() => {
     showTurn();
     showAttention();
+    showStatus();
   }, 5000);
 });
 // LIMPIAR INTERVALO AL SALIR DEL COMPONENTE
@@ -180,7 +223,7 @@ onUnmounted(() => {
 /* boton de ver atencion */
 const viewAttention = (item) =>{
   attentionProp.value=item;
-  console.log("item enviado: ", attentionProp.value)
+
   modalVisibleAttention.value=true;
 }
 /* ocultar vista de atencion */
@@ -193,12 +236,9 @@ const hideModalAttention = (valor) =>{
 
 <style scoped>
 .table-wrapper {
-    /* border: 2px solid green; */
-    /* max-height: 400px;   */ /* puedes cambiar a 500px si quieres */
     overflow-y: auto;
     overflow-x: hidden;
   }
-
 
 /* Opcional: mejora visual del scroll */
 .table-wrapper::-webkit-scrollbar {
@@ -211,7 +251,6 @@ const hideModalAttention = (valor) =>{
 }
 .date-header-table{
   background-color: rgb(0, 128, 128);
-
   color: white;
   padding: 5px;
   border-radius: 20px;
@@ -220,4 +259,44 @@ const hideModalAttention = (valor) =>{
 .td-status{
   color: rgb(0, 128, 128)
 }
+
+.status-attention{
+  display: flex;
+
+  flex-grow:1;
+
+  width: 100%;
+  padding: 10px 0px 0px 0px
+}
+
+.status-attention .status{
+  display: flex;
+  justify-content: center;
+  flex-grow:1;
+  color: white;
+  width: 100%;
+
+}
+
+.status span{
+  font-size: 20px;
+}
+
+.en-espera{
+  background-color: var(--color-yellow);
+}
+
+.en-atencion{
+  background-color: var(--color-blue);
+}
+
+.finalizada{
+  background-color: var(--color-primary);
+}
+
+.incompleta{
+  background-color: var(--color-secondary);
+}
+
 </style>
+

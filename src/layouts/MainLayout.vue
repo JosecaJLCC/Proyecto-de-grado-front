@@ -23,7 +23,6 @@ let router = useRouter()
 onMounted(async () => {
   await authStore.cargarUsuario()
   if (!authStore.usuario) {
-    console.log('siii')
     // Si no está autenticado, redirige al login
     router.push({ name: 'login' })
   }
@@ -44,7 +43,6 @@ watch(
 .container-mainlayout {
   width: 100%;
   min-height: 100dvh;
-  /* border: 2px solid blue; */
 }
 
 .sidebar-layout{
@@ -57,10 +55,8 @@ watch(
   background-position: center;
   background-repeat: no-repeat;
   display: flex;
-  /* border: 2px solid red; */
   height: 85dvh;
   width: 100%;
-  /* border: 2px solid green; */
 }
 @media (max-width: 620px) {
   .main-layout {

@@ -1,4 +1,4 @@
-import { Domicilio } from "./Domicilio";
+import { Domicilio } from "./Domicilio.js";
 
 export class Persona {
   constructor(ci, nombre, paterno, materno, nacionalidad,

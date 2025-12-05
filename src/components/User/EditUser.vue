@@ -57,7 +57,7 @@ let archivoImagen = ref(null)
 const emits = defineEmits(['modifyModalEdit']);
 let props = defineProps({
   id: {
-    type: String,
+    type: Number,
     required: true,
   },
 });

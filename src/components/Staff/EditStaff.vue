@@ -270,9 +270,9 @@ const editEstablishment = async() =>{
 
     if (resultSwal.isConfirmed) {
       result.value = await staffService.updateStaff(props.id, staffClass);
-      console.log("my result", result.value)
+      
       if(result.value.ok){
-        console.log("myRes",result)
+
         Swal.fire({
           title: "¡Cambio exitoso!",
           text: "Tus datos fueron corregidos",

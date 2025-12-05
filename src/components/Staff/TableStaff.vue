@@ -175,7 +175,7 @@ watch(statusSelect, (newValue) => {
 const showStaff = async (status) => {
   try {
     result.value = await staffService.showStaff(status)
-    console.log('mi result show staff', result.value)
+    
     data.value = Array.isArray(result.value) ? result.value : [result.value]
     originalData.value = [...data.value]
   } catch (error) {
@@ -189,7 +189,7 @@ onMounted(async () => {
 /* boton de ver personal */
 const viewStaff = (item) =>{
   staffProp.value=item;
-  console.log("staff prop: ", staffProp.value)
+
   modalVisibleView.value=true;
 }
 /* ocultar vista personal */
@@ -208,7 +208,7 @@ const hideModalAdd = (valor) => {
 }
 /* boton de editar personal */
 const editStaff = (id) => {
-  console.log("edit id", id)
+
   idProp.value=id;
   modalVisibleEdit.value = true
 }
@@ -231,9 +231,9 @@ const deleteStaff = async(id) => {
   })
   if (resultSwal.isConfirmed) {
     try {
-      console.log('mi id:', id)
+
       resultDelete.value = await staffService.deleteStaff(id);
-      console.log("eliminado",resultDelete.value)
+
       showStaff(statusSelect.value);
       Swal.fire({
         title: "¡Eliminado!",

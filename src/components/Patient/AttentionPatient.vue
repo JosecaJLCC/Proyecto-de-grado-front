@@ -72,7 +72,6 @@ const cargarAtenciones = async () => {
     const res = await attentionService.showAttention();
     if(res.ok){
       atenciones.value = res.data;
-      console.log("Actualizado en tiempo real:", atenciones.value);
     }
   } catch (error) {
     console.error("Error en polling:", error);
@@ -120,7 +119,7 @@ const createAttention=async()=>{
     })
     if (resultSwal.isConfirmed) {
       result.value = await attentionService.createAttention(attention);
-      console.log("ok: ",result.value)
+      
       if(result.value.ok){
         Swal.fire({
           title: "¡Registro Exitoso!",
@@ -131,7 +130,7 @@ const createAttention=async()=>{
         await cargarAtenciones();
         sendValueModal();
       }else{
-        console.log(result.value)
+
         Swal.fire({
           title: "¡Registro no realizado!",
           text: result.value.message,

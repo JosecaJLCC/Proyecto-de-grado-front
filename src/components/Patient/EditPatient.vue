@@ -197,7 +197,7 @@ let props = defineProps({
     required: true,
   },
 });
-console.log("mi id",props.id)
+
 const sendValueModal = () => {
   emits('modifyModalEdit', false)
 }
@@ -238,7 +238,7 @@ const editEstablishment = async() =>{
                   patient.peso, patient.estatura,
                   patient.tipo_sangre
   );
-  console.log("paciente: ",patientClass);
+
   try {
     let resultSwal = await Swal.fire({
       title: "¿Estas seguro?",
@@ -252,9 +252,9 @@ const editEstablishment = async() =>{
 
     if (resultSwal.isConfirmed) {
       result.value = await patientService.updatePatient(id, patientClass);
-      console.log("my result", result.value)
+
       if(result.value.ok){
-        console.log("myRes",result)
+
         Swal.fire({
           title: "¡Cambio exitoso!",
           text: "Tus datos fueron corregidos",

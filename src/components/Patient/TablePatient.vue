@@ -168,6 +168,12 @@ import AttentionPatient from '@/components/Patient/AttentionPatient.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import Swal from 'sweetalert2'
 
+import { useUsuarioStore } from '@/store/usuario.js'
+let authStore = useUsuarioStore()
+let usuario = computed(() => authStore.usuario);
+const esAdmin = computed(() => usuario.value?.id_rol === 1 || usuario.value?.id_rol==2)
+
+
 let data = ref([])
 let originalData = ref([])
 let searchCi = ref('')
@@ -202,7 +208,7 @@ watch(statusSelect, (newValue) => {
 const showPatient = async (status) => {
   try {
     result.value = await patientService.showPatient(status)
-    console.log('mi result show patient', result.value)
+
     // Asignar aunque esté vacío
     data.value = Array.isArray(result.value) ? result.value : [result.value]
     originalData.value = [...data.value]
@@ -227,7 +233,7 @@ const hideModalAttention=(valor)=>{
 /* boton de ver paciente*/
 const viewPatient = (item) => {
   patientProp.value = item
-  console.log('paciente prop: ', patientProp.value)
+
   modalVisibleView.value = true
 }
 /* ocultar vista paciente */
@@ -269,7 +275,7 @@ const deletePatient = async (id) => {
   if (resultSwal.isConfirmed) {
     try {
       resultDelete.value = await patientService.deletePatient(id)
-      console.log('eliminado', resultDelete.value)
+
       if (resultDelete.value.ok) {
         showPatient(statusSelect.value)
         Swal.fire({
@@ -291,7 +297,7 @@ const deletePatient = async (id) => {
 }
 
 const reactivatePatient=async(id)=>{
-  console.log("id del paciente: ",id)
+
   const resultSwal = await Swal.fire({
     title: "¿Estás seguro?",
     text: "Se reactivará la microred",

@@ -175,7 +175,7 @@ watch(statusSelect, (newValue) => {
 const showMicrored = async (status) => {
   try {
     result.value = await microredService.showMicrored(status)
-    console.log('mi result show microred', result.value)
+    
     // Asignar aunque esté vacío
     data.value = Array.isArray(result.value) ? result.value : [result.value]
     originalData.value = [...data.value]

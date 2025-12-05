@@ -189,7 +189,7 @@ onMounted(async () => {
 /* boton de ver cs*/
 const viewEstablishment=(item)=>{
   establishmentProp.value=item;
-  console.log("establishment prop: ", establishmentProp.value)
+  
   modalVisibleView.value=true;
 }
 /* ocultar vista cs */

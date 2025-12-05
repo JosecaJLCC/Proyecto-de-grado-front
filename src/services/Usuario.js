@@ -59,10 +59,7 @@ const showUserAuthors= async(id) => {
   return data.data;
 }
 
-const showTurn= async(id) => {
-  const {data} = await axios.get(API_URL+`/show-turn/`)
-  return data.data;
-}
+
 
 export const userService = {
   createUser,
@@ -75,5 +72,6 @@ export const userService = {
   chooseEstablishment,
   setSession,
   searchUser,
-  showUserAuthors
+  showUserAuthors,
+
 }

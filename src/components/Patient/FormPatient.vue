@@ -172,7 +172,7 @@ onMounted(  async()=>{
 })
 
 const createPatient = async() =>{
-  console.log("crear paciente: ",residence, person, patient)
+  
   if(!residence.departamento || !residence.municipio ||
     !residence.zona || !residence.av_calle ||
     !residence.nro_puerta || !person.ci || !person.nombre ||
@@ -205,7 +205,7 @@ const createPatient = async() =>{
                   residence.nro_puerta,
                   patient.id_microred, patient.nombre_carpeta.toUpperCase()
   );
-  console.log("paciente: ",patientClass);
+
   try {
     let resultSwal = await Swal.fire({
       title: "¿Estás seguro?",
@@ -219,7 +219,7 @@ const createPatient = async() =>{
 
     if (resultSwal.isConfirmed) {
       result.value = await patientService.createPatient(patientClass);
-      console.log("ok: ",result.value)
+
       if(result.value.ok){
         Swal.fire({
           title: "¡Registro Exitoso!",
@@ -228,7 +228,7 @@ const createPatient = async() =>{
         });
         sendValueModal();
       }else{
-        console.log(result.value)
+
         Swal.fire({
           title: "¡Registro no realizado!",
           text: result.value.message,
