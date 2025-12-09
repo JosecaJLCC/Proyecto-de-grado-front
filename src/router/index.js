@@ -31,7 +31,11 @@ const router = createRouter({
           path: 'nuevo-registro',
           name: 'nuevo-registro',
           component: ()=>import('@/views/PatientView.vue'),
-
+        },
+        {
+          path: 'historial-paciente',
+          name: 'historial-paciente',
+          component: ()=>import('@/views/HistoryPatient.vue'),
         },
         {
           path: 'historial-usuario',

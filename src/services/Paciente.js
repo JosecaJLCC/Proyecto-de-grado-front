@@ -32,6 +32,11 @@ const reactivatePatient = async(id) =>{
   return data;
 }
 
+const showHistoryPatient = async() =>{
+  const {data} = await axios.get(API_URL+`/show-history`)
+  return data.data;
+}
+
 export const patientService = {
   createPatient,
   showPatient,
@@ -39,4 +44,5 @@ export const patientService = {
   deletePatient,
   reactivatePatient,
   showFolder,
+  showHistoryPatient
 }

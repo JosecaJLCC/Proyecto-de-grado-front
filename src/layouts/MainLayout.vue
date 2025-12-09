@@ -60,7 +60,7 @@ watch(
 }
 @media (max-width: 620px) {
   .main-layout {
-    padding-left: 50px !important;
+    padding-left: 0px !important;
   }
 }
 </style>
