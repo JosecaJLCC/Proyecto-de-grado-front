@@ -67,8 +67,13 @@ import '@/assets/styles/modalForm.css';
 import { microredService } from '@/services/Microred.js';
 import { establishmentService } from '@/services/Establecimiento.js';
 import { Establecimiento } from '@/models/Establecimiento.js';
-import { ref, onMounted, reactive} from 'vue';
+import { ref, onMounted, reactive, computed} from 'vue';
 import Swal from 'sweetalert2';
+
+/* Datos de usuario desde auth.js de store */
+import { useUsuarioStore } from '@/store/usuario.js'
+let authStore = useUsuarioStore()
+let usuario = computed(() => authStore.usuario);
 
 let direction = reactive({
   departamento:"",
@@ -115,7 +120,8 @@ const createEstablishment = async() =>{
                           direction.av_calle.toUpperCase(),
                           establishment.nombre_establecimiento.toUpperCase(),
                           establishment.tipo_establecimiento.toUpperCase(),
-                          establishment.id_microred
+                          establishment.id_microred,
+                          usuario.value.id
                         );
   try {
     let resultSwal = await Swal.fire({
@@ -130,6 +136,7 @@ const createEstablishment = async() =>{
 
     if (resultSwal.isConfirmed) {
       result.value = await establishmentService.createEstablishment(establishmentClass);
+
       if(result.value.ok){
         Swal.fire({
           title: "¡Registro Exitoso!",

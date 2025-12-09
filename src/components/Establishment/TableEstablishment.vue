@@ -141,6 +141,11 @@ import ViewEstablishment from '@/components/Establishment/ViewEstablishment.vue'
 import { computed, onMounted, ref, watch } from 'vue'
 import Swal from 'sweetalert2'
 
+/* Datos de usuario desde auth.js de store */
+import { useUsuarioStore } from '@/store/usuario.js'
+let authStore = useUsuarioStore()
+let usuario = computed(() => authStore.usuario);
+
 let data = ref([])
 let originalData = ref([])
 let searchName = ref('')
@@ -189,7 +194,7 @@ onMounted(async () => {
 /* boton de ver cs*/
 const viewEstablishment=(item)=>{
   establishmentProp.value=item;
-  
+
   modalVisibleView.value=true;
 }
 /* ocultar vista cs */
@@ -229,7 +234,7 @@ const deleteEstablishment = async(id) => {
   })
   if (resultSwal.isConfirmed) {
     try {
-      resultDelete.value = await establishmentService.deleteEstablishment(id);
+      resultDelete.value = await establishmentService.deleteEstablishment(id, {id_usuario_rol:usuario.value.id});
       if(resultDelete.value.ok){
         showEstablishment(statusSelect.value);
         Swal.fire({
@@ -263,7 +268,7 @@ const reactivateEstablishment=async(id)=>{
   })
   if (resultSwal.isConfirmed) {
     try {
-      resultReactivate.value = await establishmentService.reactivateEstablishment(id);
+      resultReactivate.value = await establishmentService.reactivateEstablishment(id, {id_usuario_rol:usuario.value.id});
       if(resultReactivate.value.ok){
         showEstablishment(statusSelect.value);
         Swal.fire({

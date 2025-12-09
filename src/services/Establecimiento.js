@@ -12,8 +12,8 @@ const showEstablishment = async(estado_establecimiento)=>{
   return data.data;
 }
 
-const deleteEstablishment = async(id) =>{
-  const {data} = await axios.patch(API_URL+`/delete/${id}`)
+const deleteEstablishment = async(id, id_usuario_rol) =>{
+  const {data} = await axios.patch(API_URL+`/delete/${id}`, id_usuario_rol)
   return data;
 }
 
@@ -22,8 +22,8 @@ const updateEstablishment = async(id, establishment) =>{
   return data;
 }
 
-const reactivateEstablishment = async(id) =>{
-  const {data} = await axios.patch(API_URL+`/reactivate/${id}`)
+const reactivateEstablishment = async(id, id_usuario_rol) =>{
+  const {data} = await axios.patch(API_URL+`/reactivate/${id}`, id_usuario_rol)
   return data;
 }
 

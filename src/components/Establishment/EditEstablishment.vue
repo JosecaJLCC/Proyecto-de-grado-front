@@ -64,10 +64,15 @@
 <script setup>
 import '@/assets/styles/modalForm.css';
 import { microredService } from '@/services/Microred.js';
-import { ref, onMounted, reactive} from 'vue';
+import { ref, onMounted, reactive, computed} from 'vue';
 import Swal from 'sweetalert2';
 import { Establecimiento } from '@/models/Establecimiento.js';
 import { establishmentService } from '@/services/Establecimiento';
+
+/* Datos de usuario desde auth.js de store */
+import { useUsuarioStore } from '@/store/usuario.js'
+let authStore = useUsuarioStore()
+let usuario = computed(() => authStore.usuario);
 
 let direction = reactive({
   departamento:"",
@@ -119,7 +124,8 @@ const editEstablishment = async() =>{
                           direction.av_calle.toUpperCase(),
                           establishment.nombre_establecimiento.toUpperCase(),
                           establishment.tipo_establecimiento.toUpperCase(),
-                          establishment.id_microred
+                          establishment.id_microred,
+                          usuario.value.id
                         );
   console.log("class ",establishmentClass)
   try {
