@@ -144,7 +144,7 @@
                 </RouterLink>
               </li>
               <li>
-                <RouterLink class="routes-sidebar sub" :to="{ name: 'historial-usuario' }">
+                <RouterLink class="routes-sidebar sub" :to="{ name: 'historial-actividad' }">
                   <span>Registro de actividad</span>
                 </RouterLink>
               </li>
@@ -203,6 +203,7 @@ let mostrarDropDown = ref(false)
 
 /* Datos de usuario desde auth.js de store */
 import { useUsuarioStore } from '@/store/usuario.js'
+import { userService } from '@/services/Usuario';
 let authStore = useUsuarioStore()
 let usuario = computed(() => authStore.usuario);
 const esAdmin = computed(() => usuario.value?.id_rol === 1)
@@ -252,7 +253,8 @@ const desplegarDropDown = () => {
 }
 
 /* al pulsar el boton de cerrar sesion se ejecutara esta funcion */
-const cerrarSesion = () => {
+const cerrarSesion = async() => {
+  const resultLogout=await userService.logout({id_usuario_rol: usuario.value.id});
   authStore.cerrarSesion()
   router.push({ name: 'login' })
 }

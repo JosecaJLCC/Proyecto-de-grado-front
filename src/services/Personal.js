@@ -12,8 +12,8 @@ const showStaff = async(estado_personal)=>{
   return data.data;
 }
 
-const deleteStaff = async(id) =>{
-  const {data} = await axios.patch(API_URL+`/delete/${id}`)
+const deleteStaff = async(id, id_usuario_rol) =>{
+  const {data} = await axios.patch(API_URL+`/delete/${id}`, id_usuario_rol)
   return data;
 }
 
@@ -22,8 +22,8 @@ const updateStaff = async(id, staff) =>{
   return data;
 }
 
-const reactivateStaff = async(id) =>{
-  const {data} = await axios.patch(API_URL+`/reactivate/${id}`)
+const reactivateStaff = async(id, id_usuario_rol) =>{
+  const {data} = await axios.patch(API_URL+`/reactivate/${id}`, id_usuario_rol)
   return data;
 }
 

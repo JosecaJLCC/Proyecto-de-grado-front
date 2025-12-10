@@ -142,6 +142,10 @@ import ViewStaff from '@/components/Staff/ViewStaff.vue';
 import { computed, onMounted, ref, watch } from 'vue'
 import Swal from 'sweetalert2'
 
+import { useUsuarioStore } from '@/store/usuario.js'
+let authStore = useUsuarioStore()
+let usuario = computed(() => authStore.usuario);
+
 let data = ref([])
 let originalData = ref([])
 let searchCi = ref('')
@@ -175,7 +179,7 @@ watch(statusSelect, (newValue) => {
 const showStaff = async (status) => {
   try {
     result.value = await staffService.showStaff(status)
-    
+
     data.value = Array.isArray(result.value) ? result.value : [result.value]
     originalData.value = [...data.value]
   } catch (error) {
@@ -232,7 +236,7 @@ const deleteStaff = async(id) => {
   if (resultSwal.isConfirmed) {
     try {
 
-      resultDelete.value = await staffService.deleteStaff(id);
+      resultDelete.value = await staffService.deleteStaff(id, {id_usuario_rol: usuario.value.id});
 
       showStaff(statusSelect.value);
       Swal.fire({
@@ -258,7 +262,7 @@ const reactivateStaff=async(id)=>{
   })
   if (resultSwal.isConfirmed) {
     try {
-      resultReactivate.value = await staffService.reactivateStaff(id);
+      resultReactivate.value = await staffService.reactivateStaff(id, {id_usuario_rol: usuario.value.id});
       if(resultReactivate.value.ok){
         showStaff(statusSelect.value);
         Swal.fire({

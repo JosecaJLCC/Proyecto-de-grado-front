@@ -1,8 +1,9 @@
 <template>
-  <h1>Welcome to audit</h1>
+  <ActivityUser/>
 </template>
 
 <script setup>
+  import ActivityUser from '@/components/User/ActivityUser.vue';
 </script>
 
 <style>

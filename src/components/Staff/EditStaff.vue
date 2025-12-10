@@ -148,11 +148,16 @@
 
 <script setup>
 import '@/assets/styles/modalForm.css';
-import { ref, onMounted, reactive} from 'vue';
+import { ref, onMounted, reactive, computed} from 'vue';
 import Swal from 'sweetalert2';
 import { Personal } from '@/models/Personal.js';
 import { microredService } from '@/services/Microred.js';
 import { staffService } from '@/services/Personal.js';
+
+import { useUsuarioStore } from '@/store/usuario.js'
+let authStore = useUsuarioStore()
+let usuario = computed(() => authStore.usuario);
+
 let person=reactive({
   ci:"",
   nombre:"",
@@ -255,7 +260,8 @@ const editEstablishment = async() =>{
     staff.id_microred, staff.cargo.toUpperCase(),
     staff.id_profesion, staff.nombre_profesion.toUpperCase(),
     staff.id_area, staff.nombre_area.toUpperCase(),
-    staff.nro_matricula, staff.fecha_ingreso
+    staff.nro_matricula, staff.fecha_ingreso,
+    usuario.value.id
   );
   try {
     let resultSwal = await Swal.fire({
@@ -270,7 +276,7 @@ const editEstablishment = async() =>{
 
     if (resultSwal.isConfirmed) {
       result.value = await staffService.updateStaff(props.id, staffClass);
-      
+
       if(result.value.ok){
 
         Swal.fire({

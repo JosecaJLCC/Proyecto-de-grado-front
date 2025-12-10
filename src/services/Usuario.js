@@ -12,6 +12,11 @@ const showUser = async(estado_usuario) => {
   return data.data;
 }
 
+const logsShow = async() => {
+  const {data} = await axios.get(API_URL+`/logs-show`);
+  return data.data;
+}
+
 const updateUser = async(id, user) => {
   const {data} = await axios.patch(API_URL+`/update/${id}`, user)
   return data;
@@ -29,6 +34,11 @@ const reactivateUser = async(id) => {
 
 const login = async(user) => {
   const {data} = await axios.post(API_URL+'/login', user);
+  return data;
+}
+
+const logout = async(user) => {
+  const {data} = await axios.post(API_URL+'/logout', user);
   return data;
 }
 
@@ -69,6 +79,8 @@ export const userService = {
   reactivateUser,
   profileUser,
   login,
+  logout,
+  logsShow,
   chooseEstablishment,
   setSession,
   searchUser,

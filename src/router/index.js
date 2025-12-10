@@ -45,6 +45,13 @@ const router = createRouter({
 
         },
         {
+          path: 'historial-actividad',
+          name: 'historial-actividad',
+          component: ()=>import('@/views/AuditView.vue'),
+            meta: { rol: 1 } // SOLO ADMIN
+
+        },
+        {
           path: 'historial-personal',
           name: 'historial-personal',
           component: ()=>import('@/views/StaffView.vue'),
